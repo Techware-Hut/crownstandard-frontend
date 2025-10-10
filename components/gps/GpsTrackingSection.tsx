@@ -38,11 +38,11 @@ export default function GpsTrackingSection() {
     <div className="mt-8 space-y-8">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">GPS Tracking</h2>
+        <h2 className="text-2xl font-bold text-gray-900">GPS Tracking</h2>
       </div>
 
       {/* GPS Tracking Card */}
-      <div className="p-10 bg-[#F6F4EF] rounded-3xl flex flex-col items-center justify-center text-center">
+      <div className="p-10 bg-[#F6F4EF] rounded-xl flex flex-col items-center justify-center text-center">
         <p className="text-base text-gray-600">
           Current Status:{" "}
           <span

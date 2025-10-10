@@ -77,7 +77,7 @@ export default function ServiceBookingForm({ service }: { service: NormalizedSer
                     <div className="grid gap-6 md:grid-cols-2">
                         {/* Property Information card */}
                         <div className="p-6 bg-white border shadow-sm rounded-2xl md:p-8">
-                            <h2 className="text-2xl font-semibold text-gray-900 md:text-3xl">Property Information</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">Property Information</h2>
                             <p className="mt-1 text-sm text-gray-500">Fill in your preferred date, time, and location</p>
 
                             <div className="grid gap-4 mt-6 md:grid-cols-2">
@@ -290,7 +290,7 @@ export default function ServiceBookingForm({ service }: { service: NormalizedSer
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr),minmax(320px,420px)]">
                         {/* LEFT: Booking form */}
                         <div className="p-6 md:p-8">
-                            <h2 className="text-2xl font-semibold text-gray-900 md:text-3xl">Booking Details</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">Booking Details</h2>
                             <p className="mt-1 text-sm text-gray-500">Fill in your preferred date, time, and location</p>
 
                             {/* Top row: date, time, duration */}

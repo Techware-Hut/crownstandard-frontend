@@ -16,7 +16,7 @@ export default function RatesSection() {
     <div className="mt-8 space-y-8">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">Your Hourly Rates</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Your Hourly Rates</h2>
         <p className="mt-1 text-sm text-gray-500">
           Set competitive rates for your cleaning services. Crown Standard keeps{" "}
           <span className="font-medium text-gray-700">25% commission</span> on bookings,
@@ -25,9 +25,9 @@ export default function RatesSection() {
       </div>
 
       {/* Rates Management Section */}
-      <div className="p-6 bg-[#F6F4EF] rounded-3xl">
+      <div className="p-6 bg-[#F6F4EF] rounded-xl">
         {/* Inner Summary Banner */}
-        <div className="bg-[#111827] text-white rounded-lg p-4 flex flex-wrap items-center justify-center gap-6 text-sm md:text-base">
+        <div className="bg-[#111827] text-white rounded-lg p-4 flex flex-wrap items-center justify-center gap-2 sm:gap-6 text-sm md:text-base">
           <p>
             <span className="text-gray-200">Minimum rate:</span>{" "}
             <span className="text-[#E9B949] font-semibold">$25/hour</span>

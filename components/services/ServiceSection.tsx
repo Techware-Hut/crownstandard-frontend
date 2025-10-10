@@ -23,15 +23,15 @@ export default function ServiceSection() {
     return (
         <div className="mt-8">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="sm:flex items-center justify-between mb-6">
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-900">Your Services</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">Your Services</h2>
                     <p className="text-sm text-gray-500">
                         Manage your cleaning service offerings
                     </p>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-2 sm:gap-3 mt-3 sm:mt-0 flex-wrap">
                     <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-300 rounded-full hover:bg-gray-50">
                         <Filter className="w-4 h-4" /> Filter By
                     </button>
@@ -55,7 +55,7 @@ export default function ServiceSection() {
             </div>
 
             {/* Services List / Empty State */}
-            <div className="p-6 bg-[#F6F4EF] rounded-3xl min-h-[250px]">
+            <div className="bg-[#F3F1ED] p-2 py-4 sm:p-6 rounded-xl min-h-[250px] ">
                 {services.length > 0 ? (
                     <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {services.map((service) => (
@@ -64,8 +64,8 @@ export default function ServiceSection() {
                                 className="flex items-center justify-between p-4 transition-shadow bg-white shadow-sm rounded-2xl hover:shadow-md"
                             >
                                 {/* Left: Image + Details */}
-                                <div className="flex items-center gap-4">
-                                    <div className="relative w-16 h-16 overflow-hidden rounded-md ring-1 ring-gray-200">
+                                <div className="flex sm:items-center gap-4 md:gap-5">
+                                    <div className="relative w-16 h-20 sm:h-16 overflow-hidden rounded-md ring-1 ring-gray-200">
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={service.coverImageUrl}
@@ -74,7 +74,7 @@ export default function ServiceSection() {
                                         />
                                     </div>
 
-                                    <div>
+                                    <div className="grid items-center flex-1 grid-cols-1 gap-1 sm:gap-2 md:grid-cols-5 md:gap-4">
                                         <p className="font-semibold text-gray-900">{service.name}</p>
                                         <p className="text-sm text-gray-500">
                                             {service.badge ?? service.category}
@@ -82,16 +82,16 @@ export default function ServiceSection() {
                                         <p className="text-xs text-gray-400">
                                             {service.location || "—"}
                                         </p>
+                                        {/* Right: Price */}
+                                        <div className="text-base font-semibold text-gray-900 whitespace-nowrap">
+                                            {formatMoney(service.pricing.amount, service.pricing.currency)}{" "}
+                                            <span className="text-xs text-gray-500">
+                                                {formatPriceUnit(service.pricing.unit)}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Right: Price */}
-                                <div className="text-base font-semibold text-gray-900 whitespace-nowrap">
-                                    {formatMoney(service.pricing.amount, service.pricing.currency)}{" "}
-                                    <span className="text-xs text-gray-500">
-                                        {formatPriceUnit(service.pricing.unit)}
-                                    </span>
-                                </div>
                             </div>
                         ))}
                     </div>

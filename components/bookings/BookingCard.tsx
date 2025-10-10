@@ -7,7 +7,7 @@ interface BookingCardProps {
 
 export default function BookingCard({ booking }: BookingCardProps) {
   return (
-    <div className="flex items-center justify-between px-5 py-4 bg-[#F6F4EF] rounded-2xl shadow-sm">
+    <div className="flex items-center justify-between px-5 py-4 bg-white rounded-xl shadow-sm">
       <div className="flex items-center gap-4">
         <div className="relative w-16 h-16 overflow-hidden rounded-md">
           <Image

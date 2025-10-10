@@ -10,7 +10,7 @@ export default function EarningsSection() {
     <div className="mt-8 space-y-8">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">Earnings Breakdown</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Earnings Breakdown</h2>
         <p className="mt-1 text-sm text-gray-500">
           Detailed view of your earnings and commission structure.
         </p>
@@ -34,7 +34,7 @@ export default function EarningsSection() {
       </div>
 
       {/* Earnings Section */}
-      <div className="p-6 bg-[#F6F4EF] rounded-3xl min-h-[200px] flex flex-col items-center justify-center text-center">
+      <div className="p-2 py-4 sm:p-6 bg-[#F6F4EF] rounded-xl min-h-[200px] flex flex-col items-center justify-center text-center">
         {hasEarnings ? (
           <div>
             <h3 className="text-lg font-semibold text-gray-900">

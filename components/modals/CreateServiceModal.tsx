@@ -54,7 +54,7 @@ export default function CreateServiceModal({
       {/* Modal Container */}
       <div className="relative w-[90%] max-w-lg bg-white rounded-2xl shadow-xl flex flex-col mt-auto mb-auto">
         {/* Header */}
-        <div className="z-10 flex items-center justify-between p-6 pb-3 bg-white border-b rounded-t-2xl">
+        <div className="z-10 flex items-center justify-between p-4 sm:p-6 pb-3 bg-white border-b rounded-t-2xl">
           <div>
             <h2 className="text-lg font-bold text-gray-900 text-start">Create New Service</h2>
             <p className="text-sm text-gray-500">
@@ -70,7 +70,7 @@ export default function CreateServiceModal({
         </div>
 
         {/* Body */}
-        <div className="p-6 space-y-5 overflow-y-auto text-left">
+        <div className="p-4 sm:p-6 space-y-3 sm:space-y-5 overflow-y-auto text-left">
           <div>
             <label className="block mb-1 text-sm font-medium text-gray-700">
               Service Title
@@ -173,7 +173,7 @@ export default function CreateServiceModal({
           </button>
           <button
             onClick={handleSubmit}
-            className="px-6 py-2 text-sm font-medium text-white rounded-full bg-amber-600 hover:bg-amber-700"
+            className="px-6 py-2 text-sm font-medium text-white rounded-full bg-[#b9903c] hover:bg-[#111827]"
           >
             Create Service
           </button>

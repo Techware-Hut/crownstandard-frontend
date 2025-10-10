@@ -99,8 +99,8 @@ function ProviderDashboard() {
 
 
     return (
-        <main className="relative min-h-screen bg-white">
-            <div className="relative z-10 px-6 py-8 mx-auto max-w-7xl lg:px-8">
+        <main className="pt-6 md:pt-8 lg:pt-16 relative min-h-screen bg-white">
+            <div className="relative z-10 container 3xl:max-w-[1280px]">
                 {/* Header */}
                 <header className="mb-6">
                     <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900">
@@ -110,18 +110,18 @@ function ProviderDashboard() {
                 </header>
 
                 {/* Tabs */}
-                <nav className="flex flex-wrap justify-between gap-2 mb-3">
+                <nav className="flex flex-wrap justify-left md:justify-between gap-1 lg:gap-2 mb-3">
                     {TABS.map((t) => {
                         const active = tab === t.key;
                         return (
-                            <div key={t.key} className="relative flex-1">
+                            <div key={t.key} className="relative md:flex-1">
                                 <button
                                     onClick={() => {
                                         setTab(t.key);
                                         router.push(`/provider/dashboard?tab=${t.key}`, { scroll: false });
                                     }}
                                     className={[
-                                        "px-5 py-2 rounded-md text-md font-medium border transition relative w-full",
+                                        "px-5 md:px-2 lg:px-5 py-2 rounded-md text-sm lg:text-md font-medium border transition relative w-full",
                                         active
                                             ? "bg-gray-900 text-white border-gray-900 shadow-sm"
                                             : "bg-[#b9903c] text-white hover:bg-[#111827]",
@@ -203,7 +203,7 @@ function OverviewTab() {
             </section>
 
             {/* Quick Actions */}
-            <section className="grid grid-cols-1 gap-6 mb-10 sm:grid-cols-2 xl:grid-cols-4">
+            <section className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <ActionCard
                     title="Manage Services"
                     subtitle="Add, edit, your cleaning services"
@@ -223,23 +223,23 @@ function OverviewTab() {
             </section>
 
             {/* Recent Bookings */}
-            <section className="mb-24">
+            <section className="section">
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <h2 className="text-xl font-semibold text-gray-900">Recent Bookings</h2>
+                        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">Recent Bookings</h2>
                         <p className="text-sm text-gray-500">
                             Your latest cleaning service appointments
                         </p>
                     </div>
                     {bookings.length > 0 && (
-                        <button className="px-4 py-2 text-sm text-gray-700 font-semibold bg-[#F3F1ED] rounded-full hover:bg-[#e0dad0]">
+                        <button className="px-4 py-2 text-sm text-gray-700 font-semibold bg-[#F3F1ED] rounded-full hover:bg-[#e0dad0] shrink-0">
                             View All
                         </button>
                     )}
                 </div>
 
                 {/* Single booking row */}
-                <div className="bg-[#F3F1ED] p-2 py-12 rounded-xl">
+                <div className="bg-[#F3F1ED] p-2 py-4 sm:p-6 rounded-xl">
                     {bookings.length > 0 ? (
                         // Booking cards
                         bookings.map((booking) => (
@@ -247,8 +247,8 @@ function OverviewTab() {
                                 key={booking.id}
                                 className="mb-2 overflow-hidden bg-white border shadow-sm rounded-2xl"
                             >
-                                <div className="flex items-center gap-5 px-5 py-4">
-                                    <div className="relative w-16 h-16 overflow-hidden ring-1 ring-gray-200">
+                                <div className="flex sm:items-center gap-4 md:gap-5 md:px-5 p-4">
+                                    <div className="relative w-16 h-20 sm:h-16 overflow-hidden ring-1 ring-gray-200">
                                         <Image
                                             src={booking.image}
                                             alt={booking.title}
@@ -264,12 +264,10 @@ function OverviewTab() {
                                             </p>
                                             <p className="text-xs text-gray-500 mt-0.5">{booking.type}</p>
                                         </div>
-
-                                        <p className="text-sm text-gray-600">{booking.location}</p>
-                                        <p className="text-sm text-gray-600">{booking.datetime}</p>
-                                        <p className="font-bold text-gray-900 justify-self-end">
-                                            {booking.price}
-                                        </p>
+                                            <p className="text-sm text-gray-600">{booking.location}</p>
+                                            <p className="text-sm text-gray-600">{booking.datetime}</p>
+                                            <p className="font-bold text-gray-900 justify-self-end">
+                                            {booking.price}</p>
                                     </div>
                                 </div>
                             </div>

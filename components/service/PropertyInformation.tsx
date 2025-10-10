@@ -16,7 +16,7 @@ export default function PropertyInformation() {
         <div className="grid gap-6 md:grid-cols-2">
           {/* Left card: Property Information */}
           <div className="p-6 bg-white border shadow-sm rounded-2xl md:p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 md:text-3xl">
+            <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
               Property Information
             </h2>
             <p className="mt-1 text-sm text-gray-500">

@@ -11,7 +11,7 @@
 .btn-dark { @apply text-white bg-brand-dark; }
 .btn-ghost { @apply bg-white border text-brand-dark border-black/10; }
 .section { @apply w-full py-14 md:py-20; }
-.container { @apply w-full px-4 mx-auto max-w-content; }
+.container { @apply w-full px-4 mx-auto }
 .card {
   @apply p-6 bg-white rounded-2xl shadow-soft md:p-8;
 }

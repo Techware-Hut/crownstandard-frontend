@@ -22,7 +22,7 @@ export default function SupportPage() {
     ];
 
     return (
-        <div className="container flex flex-col bg-white">
+        <div className="container 3xl:max-w-[1280px] flex flex-col bg-white">
             {/* ===== Header Section ===== */}
             <div className="pt-12">
                 <h1 className="text-2xl font-bold text-gray-900 md:text-3xl lg:text-4xl">Support Center</h1>
@@ -64,7 +64,7 @@ export default function SupportPage() {
             <div className="flex flex-wrap gap-4 py-12 lg:gap-8">
                 {/* Left – Booking Details */}
                 <div className="flex-1 bg-[#F3F1ED] p-4 lg:p-8 rounded-xl border border-gray-100">
-                    <h2 className="text-xl font-bold text-gray-900 md:text-2xl">Booking Details</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 md:text-2xl">Booking Details</h2>
                     <p className="mb-6 text-sm text-gray-500">
                         Fill in your preferred date, time, and location
                     </p>

@@ -28,21 +28,21 @@ export default function NotificationCard({
 
     return (
         <div
-            className={`flex flex-col justify-between rounded-xl p-6 transition border ${unread
+            className={`flex flex-col justify-between rounded-xl p-4 md:p-6 transition border ${unread
                     ? "bg-[#1D2432] text-white border-transparent"
                     : "bg-[#F7F5F0] border-gray-100 text-[#1D2432]"
                 }`}
         >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start justify-between gap-4 flex-wrap">
                 {/* Icon */}
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#B89029]">
                     <Bell className="w-6 h-6 text-white" />
                 </div>
 
                 {/* Text Content */}
-                <div className="flex-1">
+                <div className="sm:flex-1 order-2 flex-shrink-0 basis-full sm:basis-1/2">
                     <h3
-                        className={`text-base font-bold ${unread ? "text-white" : "text-[#1D2432]"
+                        className={`text-lg font-bold ${unread ? "text-white" : "text-[#1D2432]"
                             }`}
                     >
                         {title}
@@ -57,7 +57,7 @@ export default function NotificationCard({
 
                 {/* Tag with subtle tinted background */}
                 <span
-                    className={`px-3 py-[3px] text-xs font-medium rounded-full ${typeStyles[type]}`}
+                    className={`px-3 py-[3px] sm:order-2 text-xs font-medium rounded-full ${typeStyles[type]}`}
                 >
                     {type}
                 </span>

@@ -46,8 +46,8 @@ const bookings: Booking[] = [
 
 export default function DashboardPage() {
     return (
-        <main className="relative min-h-screen pt-6 bg-white md:pt-8 lg:pt-16">
-            <div className="container relative z-10">
+        <main className="pt-6 md:pt-8 lg:pt-16 relative min-h-screen bg-white">
+            <div className="relative z-10 container 3xl:max-w-[1280px]">
                 {/* Header */}
                 <header className="mb-8">
                     <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl lg:text-4xl">
@@ -98,7 +98,7 @@ export default function DashboardPage() {
                 <section className="pb-0 section">
                     <div className="items-center justify-between mb-4 sm:flex">
                         <div>
-                            <h2 className="text-2xl font-bold text-gray-900 md:text-3xl lg:text-4xl">Recent Bookings</h2>
+                            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">Recent Bookings</h2>
                             <p className="text-sm text-gray-500">
                                 Your latest cleaning service appointments
                             </p>
@@ -111,7 +111,7 @@ export default function DashboardPage() {
                     </div>
 
                     {/* Single booking row */}
-                    <div className="bg-[#F3F1ED] p-2 py-4 sm:py-6 lg:py-12 rounded-xl">
+                    <div className="bg-[#F3F1ED] p-2 py-4 sm:p-6 rounded-xl">
                         {bookings.length > 0 ? (
                             // Booking cards
                             bookings.map((booking) => (
@@ -119,8 +119,8 @@ export default function DashboardPage() {
                                     key={booking.id}
                                     className="mb-2 overflow-hidden bg-white border shadow-sm rounded-2xl"
                                 >
-                                    <div className="flex gap-3 px-5 py-4 sm:items-center sm:gap-5">
-                                        <div className="relative w-16 overflow-hidden h-30 sm:h-16 ring-1 ring-gray-200">
+                                    <div className="flex sm:items-center gap-4 md:gap-5 md:px-5 p-4">
+                                        <div className="relative w-16 h-20 sm:h-16 overflow-hidden ring-1 ring-gray-200">
                                             <Image
                                                 src={booking.image}
                                                 alt={booking.title}

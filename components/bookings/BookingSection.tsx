@@ -24,7 +24,7 @@ export default function BookingSection() {
   return (
     <div className="mt-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="sm:flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Your Bookings</h2>
           <p className="text-sm text-gray-500">
@@ -32,7 +32,7 @@ export default function BookingSection() {
           </p>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3 mt-3 sm:mt-0">
           <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-300 rounded-full hover:bg-gray-50">
             <Filter className="w-4 h-4" /> Filter By
           </button>
@@ -43,7 +43,7 @@ export default function BookingSection() {
       </div>
 
       {/* Booking List / Empty State */}
-      <div className="p-6 bg-[#F6F4EF] rounded-3xl min-h-[200px] flex flex-col items-center justify-center">
+      <div className="p-2 py-4 sm:p-6 bg-[#F6F4EF] rounded-xl min-h-[200px] flex flex-col items-center justify-center">
         {bookings.length > 0 ? (
           <div className="w-full space-y-4">
             {bookings.map((b) => (

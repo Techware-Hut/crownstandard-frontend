@@ -52,7 +52,7 @@ export default function NotificationsPage() {
         <div className="min-h-screen px-6 py-10 mx-auto max-w-7xl">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-semibold text-gray-900">
+                <h1 className="text-2xl font-bold text-gray-900">
                     All Notifications
                 </h1>
                 {/* {
@@ -83,7 +83,7 @@ export default function NotificationsPage() {
                     </p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                <div className="grid grid-cols-1 gap-2 sm:gap-3 lg:gap-5 lg:grid-cols-2">
                     {notifications.map((n, i) => (
                         <NotificationCard key={i} {...n} />
                     ))}
