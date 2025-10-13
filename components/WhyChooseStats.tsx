@@ -31,7 +31,7 @@ export default function WhyChooseStats({
         {/* <div className="absolute inset-0 bg-gradient-to-b from-[rgba(41,48,58,0.38)] to-[#1F2937]" /> */}
       </div>
 
-      <div className="container">
+      <div className="container 3xl:max-w-[1280px]">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl">Why Choose Crown Standard?</h2>
           <p className="mt-2 mb-5 text-sm md:text-base text-white/85">

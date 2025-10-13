@@ -8,7 +8,7 @@ type Props = {
 export default function CTASection({ patternUrl }: Props) {
   return (
     <section className="relative py-12 md:py-20">
-      <div className="container">
+      <div className="container 3xl:max-w-[1280px]">
         <div className="relative py-16 overflow-hidden text-center text-white rounded-2xl bg-brand-dark md:py-20">
           {/* pattern top-left */}
           <Image

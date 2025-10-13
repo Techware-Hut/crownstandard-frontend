@@ -16,7 +16,7 @@ export default function ServiceOverviewCard({ service }: { service: NormalizedSe
 
   return (
     <section className="mt-8 rounded-2xl">
-      <div className="grid gap-6 md:grid-cols-[360px,1fr]">
+      <div className="grid gap-6 lg:gap-10 md:grid-cols-[360px,1fr]">
         {/* Left: Image with badge */}
         <div className="relative">
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border bg-white">
@@ -47,7 +47,7 @@ export default function ServiceOverviewCard({ service }: { service: NormalizedSe
 
           {/* Title + short description */}
           <div>
-            <h1 className="text-2xl font-semibold md:text-3xl">{service.name}</h1>
+            <h1 className="text-2xl font-bold lg:text-3xl">{service.name}</h1>
             <p className="max-w-2xl mt-2 text-gray-600">{service.shortDescription}</p>
           </div>
 

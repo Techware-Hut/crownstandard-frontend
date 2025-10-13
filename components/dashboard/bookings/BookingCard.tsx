@@ -11,15 +11,15 @@ export default function BookingCard({ booking }: { booking: BookingCus }) {
       }`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">{booking.serviceName}</h2>
+          <h2 className="text-lg font-bold text-gray-900">{booking.serviceName}</h2>
           <p className="text-sm text-gray-600">
             See what customers and other users have said about your services
           </p>
         </div>
         <span
-          className={`px-3 py-1 text-xs font-medium rounded-full ${
+          className={`px-3 py-1 text-xs font-medium  w-fit rounded-full ${
             isPending
               ? "bg-amber-100 text-amber-700"
               : "bg-green-100 text-green-700"

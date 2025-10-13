@@ -85,7 +85,7 @@ function WorkCard({
 export default function HowCrownWorks() {
   return (
     <section className="pt-14 md:pt-20">
-      <div className="container">
+      <div className="container 3xl:max-w-[1280px]">
         {/* section header */}
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl text-slate-900">

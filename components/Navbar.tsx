@@ -18,7 +18,7 @@ export default function Navbar() {
         scrolled ? "bg-white/85 backdrop-blur-md shadow-soft" : "bg-transparent"
       }`}
     >
-      <div className="container flex items-center justify-between py-3">
+      <div className="container 3xl:max-w-[1280px] flex items-center justify-between py-3">
         <Link href="/" className="flex items-center gap-3">
           <div className="relative w-8 h-8 overflow-hidden rounded-md ring-1 ring-black/10">
             {/* small mark (optional) */}

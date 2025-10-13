@@ -38,25 +38,25 @@ export default function ReviewsPage() {
     <div className="relative">
 
 
-      <div className="relative z-10 min-h-screen px-6 py-10 mx-auto max-w-7xl">
+      <div className="relative z-10 container 3xl:max-w-[1280px] px-6 pt-6 md:pt-8 lg:pt-16 pb-10">
         {/* Header */}
         <ReviewsHeader />
 
         {/* Summary Card */}
-        <div className="mt-8 mb-10">
+        <div className="mt-8 mb-12">
           <ReviewsSummaryCard totalReviews={24} avgRating={4.6} />
         </div>
 
         {/* Reviews Section */}
         <section>
-          <h2 className="text-2xl font-bold text-[#1D2432]">
+          <h2 className="text-xl md:text-2xl font-bold text-[#1D2432]">
             Reviews About My Services
           </h2>
           <p className="mb-6 text-sm text-gray-500">
             See what customers and other users have said about your services
           </p>
 
-          <div className="bg-[#F5F3EF] p-6 rounded-2xl">
+          <div className="bg-[#F5F3EF] p-4 sm:p-6 rounded-2xl">
             <div className="space-y-4">
               {reviews.map((review) => (
                 <ReviewItem key={review.id} {...review} />

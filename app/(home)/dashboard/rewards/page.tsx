@@ -6,7 +6,7 @@ import RewardCard from "@/components/Rewards/RewardCard";
 
 export default function RewardsPage() {
     return (
-        <div className="min-h-screen px-5 py-8 mx-auto space-y-8 max-w-7xl">
+        <div className="min-h-screen container 3xl:max-w-[1280px] space-y-8">
             {/* Header */}
             <RewardHeader />
 

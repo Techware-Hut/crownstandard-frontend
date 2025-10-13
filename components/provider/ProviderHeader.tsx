@@ -31,7 +31,7 @@ export default function ProviderHeader() {
     return (
         <div className="grid md:grid-cols-[1fr_1fr] gap-6">
             {/* Left: Provider Info */}
-            <div className="relative flex items-center justify-between p-6 overflow-hidden rounded-lg bg-[#F6F4EF]">
+            <div className="relative flex items-center justify-between p-4 sm:p-6 overflow-hidden rounded-lg bg-[#F6F4EF]">
                 <div className="flex flex-wrap items-center gap-4">
                     {/* Avatar */}
                     <div className="flex items-center justify-center mt-1 overflow-hidden bg-gray-100 border-4 border-gray-400 rounded-full">
@@ -47,7 +47,7 @@ export default function ProviderHeader() {
 
                     {/* Info */}
                     <div>
-                        <h2 className="text-lg font-bold text-gray-900">Sofia</h2>
+                        <h2 className="text-xl font-bold text-gray-900">Sofia</h2>
 
                         {/* Rating */}
                         <div className="flex items-center gap-1 mt-1">
@@ -57,13 +57,13 @@ export default function ProviderHeader() {
                         </div>
 
                         {/* Contact Info */}
-                        <div className="mt-3 space-y-1 text-sm text-gray-700">
-                            <div className="flex items-center gap-2">
+                        <div className="mt-3 space-y-1 text-sm text-gray-700 flex flex-wrap gap-2">
+                            <div className="flex items-center gap-2 sm:w-1/2 w-full">
                                 <Phone className="w-4 h-4 text-[#C5A04B]" />
                                 <span className="font-semibold text-gray-900">+1 (555) 123-4567</span>
                             </div>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 sm:w-1/2 w-full">
                                 <Mail className="w-4 h-4 text-[#C5A04B]" />
                                 <a
                                     href="mailto:sofia.styles@example.com"
@@ -73,7 +73,7 @@ export default function ProviderHeader() {
                                 </a>
                             </div>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 sm:w-1/2 w-full">
                                 <MapPin className="w-4 h-4 text-[#C5A04B]" />
                                 <span>Los Angeles, CA</span>
                             </div>
@@ -91,18 +91,18 @@ export default function ProviderHeader() {
             </div>
 
             {/* Right: Starting Rate */}
-            <div className="relative p-6 overflow-hidden text-white rounded-lg bg-[#1E2432]">
+            <div className="relative p-4 sm:p-6 overflow-hidden text-white rounded-lg bg-[#1E2432]">
                 <div className="relative z-10">
                     <div className="flex items-center gap-2 mb-1">
                         <span className="inline-flex items-center justify-center text-brand-gold">
                             <Banknote />
                         </span>
-                        <p className="text-lg font-semibold text-brand-gold">Starting Rate</p>
+                        <p className="text-xl font-bold text-brand-gold">Starting Rate</p>
                     </div>
                     <p className="mb-4 text-xs text-gray-400">
                         Base cleaning rate. Additional rate may apply.
                     </p>
-                    <p className="text-3xl font-semibold">$60.00/hour</p>
+                    <p className=" text-2xl lg:text-3xl font-semibold">$60.00/hour</p>
                 </div>
 
                 {/* Decorative pattern */}

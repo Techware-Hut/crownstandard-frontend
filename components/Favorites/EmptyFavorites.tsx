@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function EmptyFavorites() {
   return (
-    <div className="flex items-center justify-center py-32">
+    <div className="flex items-center justify-center py-8 md:py-10 py-32">
       <div className="w-full rounded-2xl bg-[#F5F3EF] text-center px-8 py-20">
         <h3 className="text-xl font-bold text-[#1D2432]">
           No favorite cleaners yet

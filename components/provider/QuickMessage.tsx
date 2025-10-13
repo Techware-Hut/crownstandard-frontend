@@ -9,7 +9,7 @@ export default function QuickMessage() {
   ];
 
   return (
-    <div className="mt-8 bg-[#F3F1ED] rounded-lg p-6">
+    <div className="mt-8 bg-[#F3F1ED] rounded-lg p-4 sm:p-6">
       <h3 className="mb-4 text-xl font-bold text-gray-900">Quick Message</h3>
 
       <ul className="divide-y divide-gray-200">

@@ -72,7 +72,7 @@ export default function HowToGetStartedPage() {
                 page="Getting Started Guide"
             />
             <div className="section mx-auto max-w-7xl">
-                <div className="container">
+                <div className="container 3xl:max-w-[1280px]">
                     {/* Two main cards */}
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
                         {/* Customers */}
@@ -380,7 +380,7 @@ export default function HowToGetStartedPage() {
                         <div className="absolute inset-0 bg-black opacity-[88%]" />
                     </div>
 
-                    <div className="container">
+                    <div className="container 3xl:max-w-[1280px]">
                         <div className="max-w-4xl mx-auto text-center">
                             <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl">
                                 Important Information

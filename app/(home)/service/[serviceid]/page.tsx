@@ -45,14 +45,14 @@ export default async function ServiceDetailPage({
 
             {/* Light beige content section */}
             <section className="section bg-white">
-                <div className="container">
+                <div className="container 3xl:max-w-[1280px]">
                     <ServiceOverviewCard service={service} />
                 </div>
             </section>
             <section className="relative">
                 {/* Beige top section */}
                 <div className="section bg-[#F4F1EC]">
-                    <div className="relative z-20 container">
+                    <div className="relative z-20 container 3xl:max-w-[1280px]">
                         <BookingDetails service={service} />
                     </div>
                 </div>
