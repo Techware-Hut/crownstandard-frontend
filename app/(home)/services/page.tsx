@@ -140,7 +140,7 @@ export default function ServicesPage() {
             <div className="h-32 sm:h-40 lg:h-[200px] w-full bg-[#BB9239]" />
 
             {/* search & filters card */}
-            <section className="relative z-10 container -mt-20">
+            <section className="relative z-10 container 3xl:max-w-[1280px] -mt-20">
                 <div className="px-4 lg:px-8 py-4 lg:py-10 bg-white shadow-sm rounded-2xl ring-1 ring-gray-200">
                     {/* top row: search + hide/show filter */}
                     <div className="flex items-start justify-between">
@@ -280,7 +280,7 @@ export default function ServicesPage() {
 
             {/* results */}
             <section className="section">
-                <div className="container">
+                <div className="container 3xl:max-w-[1280px]">
                 {loading ? (
                     <>
                         <p className="mb-6 text-gray-600" role="status" aria-live="polite">

@@ -37,7 +37,7 @@ export default function ReviewsSummaryCard({
 
   return (
     <div
-      className="relative overflow-hidden rounded-2xl p-5 shadow-sm bg-[#F2F0EC]"
+      className="relative overflow-hidden rounded-2xl p-5 shadow-sm bg-[#F2F0EC] md:w-1/2"
     >
       {/* soft radial highlight */}
       <div
@@ -48,11 +48,11 @@ export default function ReviewsSummaryCard({
 
       <div className="relative z-10 flex items-start justify-between">
         <div>
-          <p className="text-sm font-semibold text-gray-900">
+          <p className="text-xl font-semibold text-gray-900">
             Reviews Received
           </p>
 
-          <p className="mt-2 text-3xl font-extrabold text-gray-900">
+          <p className="my-2 text-3xl font-bold text-[#b9903c]">
             {totalReviews}
           </p>
 
@@ -70,5 +70,6 @@ export default function ReviewsSummaryCard({
         </div>
       </div>
     </div>
+    
   );
 }

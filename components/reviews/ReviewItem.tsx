@@ -47,16 +47,16 @@ export default function ReviewItem({
 
   return (
     <div className="flex items-start justify-between p-5 bg-white border border-gray-100 shadow-sm rounded-xl">
-      <div className="flex items-start gap-4">
+      <div className="flex flex-col sm:flex-row items-start gap-4">
         {/* Avatar */}
-        <div className="flex items-center justify-center w-10 h-10 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full">
+        <div className="flex items-center justify-center w-10 h-10 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full shrink-0">
           {initials}
         </div>
 
         {/* Review content */}
         <div>
-          <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold text-gray-900">{name}</p>
+          <p className="text-sm font-semibold text-gray-900 mb-1">{name}</p>
+          <div className="flex items-center gap-2 mb-4">
             <div className="flex items-center gap-1 text-[#B89029]">
               {renderStars()}
             </div>

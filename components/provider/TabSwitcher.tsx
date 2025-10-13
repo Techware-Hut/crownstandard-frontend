@@ -7,7 +7,7 @@ interface TabSwitcherProps {
 
 export default function TabSwitcher({ activeTab, setActiveTab }: TabSwitcherProps) {
   return (
-    <div className="flex items-center gap-5 mt-8">
+    <div className="flex items-center gap-2 sm:gap-3 md:gap-5 mt-8">
       {/* Services Tab */}
       <button
         onClick={() => setActiveTab("services")}

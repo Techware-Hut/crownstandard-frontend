@@ -27,7 +27,7 @@ export default function FAQSection() {
 
   return (
     <section className="py-16 bg-background pb-0">
-      <div className="container">
+      <div className="container 3xl:max-w-[1280px]">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
             Frequently Asked Questions

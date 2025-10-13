@@ -45,8 +45,8 @@ export default function ProviderProfilePage() {
   ];
 
   return (
-    <div className="px-6 py-8 mx-auto max-w-7xl">
-      <h1 className="mb-6 text-2xl font-semibold">Provider Profile</h1>
+    <div className="pt-6 md:pt-8 lg:pt-16 pb-10 container 3xl:max-w-[1280px]">
+      <h1 className="mb-6 text-2xl lg:text-3xl font-bold">Provider Profile</h1>
 
       <ProviderHeader />
       <QuickMessage />
@@ -55,13 +55,13 @@ export default function ProviderProfilePage() {
       <hr className="mt-3" />
 
       {activeTab === "services" ? (
-        <div className="grid gap-6 mt-8 md:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3">
           {services.map((svc) => (
             <ServiceCard key={svc.id} service={svc} />
           ))}
         </div>
       ) : (
-        <div className="bg-[#F3F1ED] p-6 mt-8 rounded-2xl">
+        <div className="bg-[#F3F1ED] p-4 sm:p-6 mt-8 rounded-2xl">
           <div className="space-y-4">
             {reviews.map((review) => (
               <ReviewItem key={review.id} {...review} />

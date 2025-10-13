@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function BottomCTA() {
     return (
         <section className="relative section">
-            <div className="container">
+            <div className="container 3xl:max-w-[1280px]">
                 {/* Dark rounded panel */}
                 <div className="relative overflow-visible rounded-2xl bg-[#1F2937] text-white">
                     {/* Geometric line art */}

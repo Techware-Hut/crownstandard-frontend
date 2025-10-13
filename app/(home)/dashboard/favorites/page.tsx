@@ -65,10 +65,10 @@ export default function FavoritesPage() {
     ];
 
     return (
-        <div className="min-h-screen px-6 py-10 mx-auto max-w-7xl">
+        <div className="min-h-screen px-6 pt-6 md:pt-8 lg:pt-16  container 3xl:max-w-[1280px]">
             {/* Header */}
-            <header className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-900">My Favorite Cleaners</h1>
+            <header className="lg:mb-8">
+                <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">My Favorite Cleaners</h1>
             </header>
 
             {favorites.length === 4 ? (

@@ -22,7 +22,7 @@ export default function AboutTwoCards({ backgroundUrl }: Props) {
         <div className="absolute inset-0 bg-[#c69e4b] mix-blend-multiply" />
       </div>
 
-      <div className="container grid gap-6 md:grid-cols-2">
+      <div className="container 3xl:max-w-[1280px] grid gap-6 md:grid-cols-2">
         <Card
           title="For Customers"
           items={[

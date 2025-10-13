@@ -93,7 +93,7 @@ export default function WhyChooseGrid({ patternUrl }: Props) {
 
     return (
         <section className="section bg-[#F6F1E5]">
-            <div className="container">
+            <div className="container 3xl:max-w-[1280px]">
                 <div className="text-center">
                     <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl text-slate-900">
                         Why Choose Crown Standard?

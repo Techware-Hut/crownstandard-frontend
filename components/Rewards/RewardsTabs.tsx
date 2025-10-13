@@ -15,12 +15,12 @@ export default function RewardsTabs() {
     return (
         <div className="pt-10">
             {/* --- Tab Header --- */}
-            <div className="relative flex gap-2">
+            <div className="relative flex gap-2 flex-wrap">
                 {tabs.map((tab, i) => (
                     <button
                         key={i}
                         onClick={() => setActive(i)}
-                        className={`relative flex-1 py-3 text-sm font-medium rounded-md transition-colors duration-200 ${i === active
+                        className={`relative sm:flex-1 p-3 text-sm sm:text-base font-medium rounded-md transition-colors duration-200 ${i === active
                                 ? "bg-[#1D2432] text-white"
                                 : "bg-[#B89029] text-white/90 hover:bg-[#a47f24]"
                             }`}
@@ -40,7 +40,7 @@ export default function RewardsTabs() {
             <hr className="mt-4 bg-gray-900" />
 
             {/* --- Tab Content --- */}
-            <div className="mt-12">
+            <div className="mt-12 pb-8 sm:pb-10 lg:pb-24">
                 {active === 0 && <RewardsCatalogue />}
                 {active === 1 && <ReferFriends />}
                 {active === 2 && <PointsHistory />}
@@ -52,14 +52,14 @@ export default function RewardsTabs() {
 function RewardsCatalogue() {
     return (
         <section>
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900">
                 Rewards Catalogue
             </h2>
             <p className="mb-6 text-sm text-gray-500">
                 Redeem your points for exciting discounts and offers.
             </p>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {[1, 2, 3].map((i) => (
                     <RewardCard key={i} />
                 ))}
@@ -70,11 +70,11 @@ function RewardsCatalogue() {
 
 function ReferFriends() {
     return (
-        <section className="space-y-5">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <section>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900">
                 Refer Friends &amp; Earn
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 mb-6">
                 Invite your friends to join Crown Standard. You’ll earn bonus points for
                 every successful referral.
             </p>
@@ -118,9 +118,9 @@ function PointsHistory() {
     ];
 
     return (
-        <section className="space-y-6">
-            <h2 className="text-lg font-semibold text-gray-900">Points History</h2>
-            <p className="text-sm text-gray-500">Track your recent transactions.</p>
+        <section>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900">Points History</h2>
+            <p className="text-sm text-gray-500 mb-6">Track your recent transactions.</p>
 
             <div className="overflow-hidden border rounded-xl">
                 <table className="w-full text-sm text-left text-gray-700 bg-white">

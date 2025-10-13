@@ -30,7 +30,7 @@ export default function Header() {
         scrolled ? "shadow-soft" : ""
       }`}
     >
-      <div className="w-full px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div className="w-full container 3xl:max-w-[1280px]">
         {/* Top row */}
         <div className="flex items-center justify-between py-3">
           {/* Brand */}
