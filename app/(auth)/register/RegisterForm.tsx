@@ -22,7 +22,7 @@ export default function RegisterForm({ type }: { type: string }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -35,13 +35,12 @@ export default function RegisterForm({ type }: { type: string }) {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Registration failed");
+      if (!res.ok) throw new Error(data?.message ?? "Registration failed");
 
-      // If backend returns token or success message
       alert("Registration successful!");
       router.push(`/login?type=${type}`);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
     }

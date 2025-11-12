@@ -25,18 +25,13 @@ export default function LoginClient({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      const body = {
-        email,
-        password,
-        role: type, // 👈 role = type
-        type,       // 👈 type sent separately too
-      };
+      const body = { email, password, role: type }; // ❌ removed duplicate `type`
 
       const res = await fetch(`${API_BASE}/auth/login`, {
         method: "POST",
@@ -45,20 +40,14 @@ export default function LoginClient({
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Login failed");
+      if (!res.ok) throw new Error(data?.message ?? "Login failed");
 
-      // ✅ Save token and user info locally
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // ✅ Redirect based on role/type
-      if (type === "provider") {
-        router.push("/provider/dashboard");
-      } else {
-        router.push("/dashboard");
-      }
-    } catch (err: any) {
-      setError(err.message);
+      router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
     }
