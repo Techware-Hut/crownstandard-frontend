@@ -4,6 +4,7 @@ import { ShieldCheck, Star, Users } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Image from "next/image";
+import RegisterForm from "./RegisterForm";
 
 export default async function RegisterPage({
     searchParams,
@@ -94,62 +95,7 @@ export default async function RegisterPage({
                     {/* Role selector (updates search param) */}
                     <RoleToggle value={type} />
 
-                    <form className="mt-4 space-y-4" action={"/api/register"} method="post">
-                        <input type="hidden" name="type" value={type} />
-                        <Input
-                            name="name"
-                            placeholder="Full Name"
-                            aria-label="Full Name"
-                            icon={
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5Z" stroke="#9CA3AF" />
-                                    <path d="M4 22c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke="#9CA3AF" />
-                                </svg>
-                            }
-                        />
-                        <Input
-                            name="email"
-                            type="email"
-                            placeholder="Email Address"
-                            aria-label="Email Address"
-                            icon={
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                    <path d="M4 6h16v12H4z" stroke="#9CA3AF" />
-                                    <path d="m4 7 8 6 8-6" stroke="#9CA3AF" />
-                                </svg>
-                            }
-                        />
-                        <Input
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                            aria-label="Password"
-                            autoComplete="new-password"
-                            icon={
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                    <rect x="3" y="10" width="18" height="11" rx="2" stroke="#9CA3AF" />
-                                    <path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="#9CA3AF" />
-                                </svg>
-                            }
-                        />
-                        <Input
-                            name="confirmPassword"
-                            type="password"
-                            placeholder="Confirm Password"
-                            aria-label="Confirm Password"
-                            autoComplete="new-password"
-                            icon={
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                    <rect x="3" y="10" width="18" height="11" rx="2" stroke="#9CA3AF" />
-                                    <path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="#9CA3AF" />
-                                </svg>
-                            }
-                        />
-
-                        <Button type="submit" variant="gold" full className="rounded-full">
-                            Sign In
-                        </Button>
-                    </form>
+                    <RegisterForm type={type} />
 
                     {/* Divider */}
                     <div className="relative my-4">

@@ -123,7 +123,6 @@ Project : mosaic-biz-hub Updated Desgin for food/food from shop to look like foo
     6. Added support for back and forward browser navigation.
     7. Ensured design consistency across all tabs (Bookings, Services, Availability, Rates, Earnings, GPS).
     8. Built and styled all tab content sections as per Figma (with responsive layouts).
-----------------------------------------(not listed)
     9. Integrated mock data and placeholder states for empty sections.
     10. Maintained unified color scheme, spacing, and rounded aesthetics across the dashboard.
     11. Created and SubsLayout base layouts with proper background and illustration placement.
@@ -176,9 +175,9 @@ Project : mosaic-biz-hub Updated Desgin for food/food from shop to look like foo
     8. Added empty state screens for no favorites or no reviews cases.
     9. Unified theme and palette (amber, beige, charcoal) across all pages.
     10. Standardized container width (max-w-7xl) for consistent layout.
-    11. Ensured hidden scrollbars and no global scroll, only inner-section scrolling.
-    12. Finalized typography, spacing, and hover/active states for polished visual consistency.
-    13. Prepared structure for Bookings, Profile, and Transactions pages next.
+11. Ensured hidden scrollbars and no global scroll, only inner-section scrolling.
+12. Finalized typography, spacing, and hover/active states for polished visual consistency.
+13. Prepared structure for Bookings, Profile, and Transactions pages next.
 
 
 
@@ -203,13 +202,112 @@ Project : mosaic-biz-hub Updated Desgin for food/food from shop to look like foo
     3. Fully designed the Booking model with OTP verification, pricing snapshot, cancellation policy snapshot, tip summary, payout info, and photos schema.
     4. Removed scheduleWindowMins and added durationHours to Booking.
     5. implemented the PhotoSchema logic for before/after cleaning images.
+----------------------------------------(not listed)
     6. Ensured currency fields are present in Service, Booking, and tipSummary.
     7. Provided a complete walkthrough of the Booking lifecycle and logic.
     8. Prepared to start the PaymentTransaction model next.
-    9. Created a detailed Master Project Prompt to resume work easily in future sessions.
-    10. Implemented Forgot Password flow including model, route, and integration.
-    11. Linked login → customer dashboard and provider login → provider dashboard successfully.
+    9. Implemented Forgot Password flow including model, route, and integration.
+    10. Linked login → customer dashboard and provider login → provider dashboard successfully.
+
+
+13-10-2025
+
+    1. Created and configured all necessary project configuration files (environment setup, database connection, server initialization).
+    2. Developed complete authentication APIs and routes including user registration, login, profile retrieval (/me), profile update, password reset, and secure JWT handling.
+    3. Implemented Google OAuth authentication flow with token verification, user auto-registration/login, and profile syncing.
+    4. Built full Service Category module including model, CRUD APIs, routes, active/inactive toggling, and validation checks.
+    5. Added Admin API for approving service providers, enabling admin control over provider onboarding and service listing permissions.
+    6. Designed and implemented multiple core data models essential for the platform: ServiceCategory, ChatMessage, ChatThread, Invoice, Subscription, Coupon, Payout, AuditLog, Notification, Dispute, Review, and TipTransaction.
+    7. All Auth & Category APIs have been tested and verified via Postman
+
+
+15-10-2025
+
+
+    1. All core Mongoose models (Booking, PaymentTransaction, TipTransaction, Payout, Invoice, Dispute) finalized.
+    2. Role-based middleware implemented and integrated.
+    3. Booking creation API implemented with geocoding, radius validation, price validation, and OTP generation.
+    4. Payment intent API integrated with Stripe and PaymentTransaction creation.
+    5. Stripe webhook built to update transaction status and booking state.
+    6. OTP verification API implemented to start service (`accepted → in_progress`).
+    7. Complete booking API implemented (`in_progress → completed`) with payout scheduling and invoice generation.
+    8. Auto-invoice generation with unique invoice numbers.
+    9. Commission, provider share, and payout calculation added.
+    10. Tip transaction separated and schema finalized.
+    11. Location validation logic added using GeoJSON and 2dsphere index.
+    12. Address geocoding integrated for manual addresses.
+    13. Pricing now fetched directly from Service model.
+
+
+16-10-2025 
+
+    1. Designed payoutService.js with real Stripe integration.
+    2. Implemented calculatePayout (booking + tip, partial refund handling).
+    3. Implemented createPayout (schedule payout + EventBridge publish + audit log).
+    4. Implemented releasePayout (Stripe transfer + Booking update + audit log + retry/failure handling).
+    5. Handled 48h wait period and dispute checks before payout.
+    6. Published EventBridge events for payout lifecycle.
+    7. Integrated audit logging for all payout actions.
+
+
+17-10-2025
+
+    1. Folder structure for the payout module was created inside `/payout/`.
+    2. Core service layer implemented (`payoutService.js`, `bookingService.js`, `paymentService.js`, `tipService.js`, `disputeService.js`).
+    3. Multi-currency normalization logic added to handle tips/refunds in different currencies.
+    4. Workers implemented: `payoutWorker.js` and `retryWorker.js`.
+    5. Cron jobs integrated in `index.js` — payout worker runs every 1 hour, retry worker every 30 minutes.
+    6. Environment variables defined for Stripe, AWS, EventBridge, and currency conversion.
+    7. `index.js` made production-ready with background job scheduling and error handling.
+    8. Audit logging and event publishing completed for all payout lifecycle stages.
+    9. Local testing works without Docker; server runs directly with Node.
+    10. Deployment strategy planned — backend to Elastic Beanstalk, frontend to Amplify, payout via either current cron+worker setup or future EventBridge + Lambda model.
 
 
 
-CrownStandard : Integrated mock data and placeholder states for empty sections, Maintained unified color scheme, spacing, and rounded aesthetics across the dashboard, Created and SubsLayout base layouts with proper background and illustration placement, Set up overall structure for the subscription module under /app/(subs)/choose-plan, Implemented full Choose Your Plan page matching the design, Added gradient background (#1F2937 → #524A39 → #1F2937), Built responsive 3-column plan cards (Basic, Premium, Enterprise), Highlighted the center “Premium” card with darker gradient and scale effect, Styled typography, icons, and buttons to match design hierarchy, Added footer section with sign-in prompt and amber button, Built “Manage Services” page layout and linked it via “View All” button, Created responsive, centered modal component for “Create New Service, Designed “Profile Page” structure for Provider and Customer roles.
+
+1. Built the Support / Contact Page based on the Figma design.
+2. Integrated Lucide icons (Clock, ShieldCheck, Headphones) in feature cards.
+3. Created Booking Details form with inputs, select fields, and message area.
+4. Ensured responsive layout — form and contact info stack on smaller screens.
+5. Designed Rewards Page with 3 tabs in it total points, redemption section, and activity history.
+6. Built Favorites Page showing saved service Provider in a responsive grid with remove option.
+7. Created Reviews Page with customer reviews, rating stars, timestamps, and comments.
+8. Added empty state screens for no favorites or no reviews cases.
+9. Unified theme and palette (amber, beige, charcoal) across all pages.
+10. Standardized container width (max-w-7xl) for consistent layout.
+11. Meet with Oscar regarding Lift and Launch.
+
+
+
+24-10-2025
+
+    1. AuditLogService.js – Centralized audit logging finalized with full error safety and non-breaking behavior.
+    2. AmountUtils.js – Clean payout and commission calculations; removed unused currencyUtils dependency.
+    3. PaymentService.js – Handles payment validation, refund tracking, and payout transfer marking.
+    4. TipService.js – Complete lifecycle for tip transactions with audit logging and Stripe consistency.
+    5. DisputeService.js – Manages dispute resolution, refunds, payout holds, and re-enablement with transactions.
+    6. StripeUtils.js – Handles all Stripe operations (transfer, reversal, verification) with idempotency and audit.
+    7. PayoutService.js – Orchestrates payout creation, validation, status transitions, and event emission.
+    8. PayoutWorker.js – Executes Stripe transfers for scheduled payouts and updates related entities.
+    9. RetryWorker.js – Processes failed payouts with exponential backoff and marks permanent failures.
+    10. PayoutCron.js – Triggers payout and retry workflows on hourly and 30-minute schedules via node-cron.
+    11. Index.js Integration – Server boots cron automation after DB connection; Mongo connection fixed for workers.
+    12. Removed CurrencyUtils.js – Eliminated redundant conversion logic since Stripe handles all currency conversions.
+    13. All modules – Standardized error messages, audit actions, naming conventions, and transaction safety for production.
+
+
+Created and structured the Provider Profile page with tabs (Services / Reviews), Built type definitions for Review and added dummy review data, Developed modular components: ProviderHeader, QuickMessage, TabSwitcher, ServiceCard, and ReviewCard, Fine-tuned ProviderHeader — added Lucide icons for phone, email, location, and heart, Updated QuickMessage — added group hover effects with icon color and text transitions, Created complete My Bookings page layout and responsive structure, Implemented BookingCard component with dynamic status (Pending / Confirmed) and cancel logic, Removed unused sections (Provider Location & Entry Access Code) from My Bookings, Replaced dropdown with number input for Duration (hours) using state and matching styles, Designed and finalized the Pricing Summary section with base, subtotal, and total calculations using formatMoney, Ensured hidden scrollbars and no global scroll, only inner-section scrolling, Finalized typography, spacing, and hover/active states for polished visual consistency, Prepared structure for Bookings, Profile, and Transactions pages next.
+
+10-11-2025
+
+1. Created backend connection setup (API_BASE = http://localhost:5000) for API requests.
+2. Integrated Register Page with backend /auth/register endpoint using client-side fetch.
+3. Added proper JSON body with name, email, password, confirmPassword, and role.
+4. Displayed success/error messages and redirected to login after registration.
+5. Integrated Login Page with backend /auth/login endpoint using async fetch.
+6. Added both role and type fields in the request body (email, password, role, type).
+7. Stored JWT token and user details in localStorage after successful login.
+8. Redirected user based on role (/provider/dashboard or /dashboard).
+9. Displayed login error messages on failed authentication.
+10. Both Register and Login pages are now fully connected to the backend API.
