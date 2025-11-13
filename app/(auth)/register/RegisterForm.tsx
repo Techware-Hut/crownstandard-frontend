@@ -5,7 +5,7 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 
-const API_BASE = "http://crownstandrad.ca-central-1.elasticbeanstalk.com"; // later change to api.mosaicbizhub.com
+const API_BASE = "https://api.crownstandard.ca"; // later change to api.mosaicbizhub.com
 
 export default function RegisterForm({ type }: { type: string }) {
   const router = useRouter();
