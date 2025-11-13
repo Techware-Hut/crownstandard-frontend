@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://crownstandrad.ca-central-1.elasticbeanstalk.com"; // later change to your domain
+const API_BASE_URL = "https://api.crownstandard.ca"; // later change to your domain
 
 export async function apiRequest(path, options = {}) {
   const res = await fetch(`${API_BASE_URL}${path}`, {

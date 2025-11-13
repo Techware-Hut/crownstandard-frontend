@@ -10,7 +10,7 @@ import Link from "next/link";
 import ForgotPasswordModal from "@/components/auth/ForgotPasswordModal";
 import { useState } from "react";
 
-const API_BASE = "http://crownstandrad.ca-central-1.elasticbeanstalk.com";
+const API_BASE = "https://api.crownstandard.ca";
 
 export default function LoginClient({
   type,
