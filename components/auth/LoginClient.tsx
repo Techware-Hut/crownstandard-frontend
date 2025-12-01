@@ -10,7 +10,7 @@ import Link from "next/link";
 import ForgotPasswordModal from "@/components/auth/ForgotPasswordModal";
 import { useState } from "react";
 
-const API_BASE = "https://api.crownstandard.ca";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE 
 
 export default function LoginClient({
   type,
@@ -30,20 +30,18 @@ export default function LoginClient({
     setLoading(true);
     setError(null);
 
-    try {
-      const body = { email, password, role: type }; // ❌ removed duplicate `type`
+    try {      
+      const body = { email, password, role: type };
 
       const res = await fetch(`${API_BASE}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
+        credentials: "include", 
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message ?? "Login failed");
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
 
       router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
     } catch (err) {

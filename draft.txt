@@ -202,7 +202,6 @@ Project : mosaic-biz-hub Updated Desgin for food/food from shop to look like foo
     3. Fully designed the Booking model with OTP verification, pricing snapshot, cancellation policy snapshot, tip summary, payout info, and photos schema.
     4. Removed scheduleWindowMins and added durationHours to Booking.
     5. implemented the PhotoSchema logic for before/after cleaning images.
-----------------------------------------(not listed)
     6. Ensured currency fields are present in Service, Booking, and tipSummary.
     7. Provided a complete walkthrough of the Booking lifecycle and logic.
     8. Prepared to start the PaymentTransaction model next.
@@ -215,6 +214,7 @@ Project : mosaic-biz-hub Updated Desgin for food/food from shop to look like foo
     1. Created and configured all necessary project configuration files (environment setup, database connection, server initialization).
     2. Developed complete authentication APIs and routes including user registration, login, profile retrieval (/me), profile update, password reset, and secure JWT handling.
     3. Implemented Google OAuth authentication flow with token verification, user auto-registration/login, and profile syncing.
+----------------------------------------(not listed)
     4. Built full Service Category module including model, CRUD APIs, routes, active/inactive toggling, and validation checks.
     5. Added Admin API for approving service providers, enabling admin control over provider onboarding and service listing permissions.
     6. Designed and implemented multiple core data models essential for the platform: ServiceCategory, ChatMessage, ChatThread, Invoice, Subscription, Coupon, Payout, AuditLog, Notification, Dispute, Review, and TipTransaction.
@@ -311,3 +311,13 @@ Created and structured the Provider Profile page with tabs (Services / Reviews),
 8. Redirected user based on role (/provider/dashboard or /dashboard).
 9. Displayed login error messages on failed authentication.
 10. Both Register and Login pages are now fully connected to the backend API.
+
+
+
+4. Added & configured related backend routes under /api/chat using chat.routes.js.
+5. Conversation List page integrated with backend → threads now load dynamically.
+6. Chat Window implemented — messages sent/received in real-time using socket.
+7. Sidebar last message now updates instantly without page refresh.
+8. Messages correctly aligned based on sender (left = other, right = mine).
+9. Auto-scroll on new message implemented and working smoothly.
+10. Dynamic conversation/[id] page now loads correct chat history with live updates.

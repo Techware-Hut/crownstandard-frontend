@@ -11,8 +11,24 @@ export interface Message {
 export interface Chat {
   id: string;
   name: string;
-  online: boolean;
+  lastMessage?: string | { text: string; sender: string };
+  unreadCount?: number;
+  online?: boolean;
+}
+
+export interface Participant {
+  _id: string;
+  name: string;
+  role?: string;
+  profilePhoto?: string;
+}
+
+export interface ChatThreadUI {
+  id: string;
+  participants: Participant[];  // full list
+  name: string;                 // derived for UI only
   lastMessage: string;
-  unreadCount: number;
-  messages: Message[];
+  lastActivityAt: string | Date;
+  unreadCount?: number;
+  online?: boolean;
 }
