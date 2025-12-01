@@ -9,7 +9,7 @@ export default function ChatTest() {
   const THREAD = "692944cbbf91be9b3894e3d5"; // demo thread
 
   useEffect(() => {
-    const s = io("http://localhost:5000", {
+    const s = io(process.env.NEXT_PUBLIC_API_BASE, {
       transports: ["websocket"],
       withCredentials: true // ⬅ enables cookie auth for socket
     });
@@ -33,7 +33,7 @@ export default function ChatTest() {
 
   // ⬇ sending uses cookies → must include credentials
   const sendMessage = async (text) => {
-    await fetch(`http://localhost:5000/api/chat/messages/${THREAD}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/chat/messages/${THREAD}`, {
       method: "POST",
       credentials: "include", // ⬅ REQUIRED for cookie auth
       headers: {
