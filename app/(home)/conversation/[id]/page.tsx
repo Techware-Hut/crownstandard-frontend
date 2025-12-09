@@ -31,7 +31,7 @@ export default function ConversationDetailPage() {
           name: other?.name || "Unknown User",
           participants: t.participants,
           lastMessage: t.lastMessage?.text || "No messages yet",
-          lastActivityAt: t.lastActivityAt
+          lastActivityAt: t.lastActivityAt,
         };
       });
 

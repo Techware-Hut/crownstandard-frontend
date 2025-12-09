@@ -1,10 +1,19 @@
 import Link from "next/link";
 import type { Chat } from "@/types/conversation";
+import { chats } from "../data";
 
 export default function ChatList({
   chats,
   selectedId,
-}: { chats: Chat[]; selectedId?: string }) {
+}: { chats: Chat[]; selectedId?: string })
+
+
+
+{
+
+  console.log("--- ChatList Data Structure Start ---");
+    console.log("Full chats array received:", chats);
+    console.log("--- ChatList Data Structure End ---");
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 px-2 py-4 space-y-2 overflow-y-auto lg:px-4 scrollbar-hide">

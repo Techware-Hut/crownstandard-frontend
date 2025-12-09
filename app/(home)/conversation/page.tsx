@@ -32,8 +32,11 @@ export default function ConversationIndexPage() {
           lastMessage: t.lastMessage?.text || "No messages yet",
           lastActivityAt: t.lastActivityAt,
           participants: t.participants,
+          online: t.online || false,  
         };
       });
+
+      console.log(formatted,"formted")
 
       setThreads(formatted);
     } catch (err) {
