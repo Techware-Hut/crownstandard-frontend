@@ -33,51 +33,51 @@ const FILTER_TABS = [
 ];
 
 const SERVICES: Service[] = [
-    {
-        id: 1,
-        title: "Deluxe Apartment Cleaning",
-        slug: "Deluxe-Apartment-Cleaning",
-        description:
-            "Thorough cleaning for apartments, including kitchen, bathroom, and living areas. Perfect ...",
-        price: 30,
-        duration: "2h minimum",
-        location: "New York, NY",
-        rating: 3.8,
-        reviews: 57,
-        imageUrl: "/ServiceCleaning.png",
-        badge: "Residential",
-        provider: "SparklePro",
-    },
-    {
-        id: 2,
-        title: "Deluxe Apartment Cleaning",
-        slug: "Deluxe-Apartment-Cleaning-1",
-        description:
-            "Thorough cleaning for apartments, including kitchen, bathroom, and living areas. Perfect ...",
-        price: 30,
-        duration: "2h minimum",
-        location: "New York, NY",
-        rating: 4.8,
-        reviews: 57,
-        imageUrl: "/ServiceCleaning.png",
-        badge: "Residential",
-        provider: "SparklePro",
-    },
-    {
-        id: 3,
-        title: "Deluxe Apartment Cleaning",
-        slug: "Deluxe-Apartment-Cleaning-2",
-        description:
-            "Thorough cleaning for apartments, including kitchen, bathroom, and living areas. Perfect ...",
-        price: 30,
-        duration: "2h minimum",
-        location: "New York, NY",
-        rating: 4.8,
-        reviews: 57,
-        imageUrl: "/ServiceCleaning.png",
-        badge: "Residential",
-        provider: "SparklePro",
-    },
+    // {
+    //     id: 1,
+    //     title: "Deluxe Apartment Cleaning",
+    //     slug: "Deluxe-Apartment-Cleaning",
+    //     description:
+    //         "Thorough cleaning for apartments, including kitchen, bathroom, and living areas. Perfect ...",
+    //     price: 30,
+    //     duration: "2h minimum",
+    //     location: "New York, NY",
+    //     rating: 3.8,
+    //     reviews: 57,
+    //     imageUrl: "/ServiceCleaning.png",
+    //     badge: "Residential",
+    //     provider: "SparklePro",
+    // },
+    // {
+    //     id: 2,
+    //     title: "Deluxe Apartment Cleaning",
+    //     slug: "Deluxe-Apartment-Cleaning-1",
+    //     description:
+    //         "Thorough cleaning for apartments, including kitchen, bathroom, and living areas. Perfect ...",
+    //     price: 30,
+    //     duration: "2h minimum",
+    //     location: "New York, NY",
+    //     rating: 4.8,
+    //     reviews: 57,
+    //     imageUrl: "/ServiceCleaning.png",
+    //     badge: "Residential",
+    //     provider: "SparklePro",
+    // },
+    // {
+    //     id: 3,
+    //     title: "Deluxe Apartment Cleaning",
+    //     slug: "Deluxe-Apartment-Cleaning-2",
+    //     description:
+    //         "Thorough cleaning for apartments, including kitchen, bathroom, and living areas. Perfect ...",
+    //     price: 30,
+    //     duration: "2h minimum",
+    //     location: "New York, NY",
+    //     rating: 4.8,
+    //     reviews: 57,
+    //     imageUrl: "/ServiceCleaning.png",
+    //     badge: "Residential",
+    //     provider: "SparklePro",
+    // },
 ];
 
 export default function ServicesPage() {
