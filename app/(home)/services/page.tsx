@@ -32,7 +32,7 @@ const FILTER_TABS = [
     "Move In/Out",
 ];
 
-const SERVICES: Service[] = [
+const SERVICES: UiService[] = [
     {
         id: 1,
         title: "Deluxe Apartment Cleaning",
