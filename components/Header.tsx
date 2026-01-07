@@ -3,10 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+   const { user, isLoading, logout } = useAuth();
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);

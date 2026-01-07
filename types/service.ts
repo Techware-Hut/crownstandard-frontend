@@ -179,7 +179,7 @@ export function formatDuration(mins: number | null | undefined): string | null {
 // --------------- Dummy Data (for now) ---------------
 export const DUMMY_SERVICE: Service = {
   id: "svc_001" as ID,
-  name: "Deluxe Apartment Cleaning",
+  name: "Deluxe Apartment Cleaning test",
   category: "Home Services",
   badge: BadgeType.Residential,
   rating: 4.8,

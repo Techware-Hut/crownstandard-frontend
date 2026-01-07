@@ -1,23 +1,18 @@
 import Link from "next/link";
-import type { Chat } from "@/types/conversation";
-import { chats } from "../data";
+import type { ChatThreadUI } from "@/types/conversation";
 
 export default function ChatList({
   chats,
   selectedId,
-}: { chats: Chat[]; selectedId?: string })
-
-
-
-{
+}: { chats: ChatThreadUI[]; selectedId?: string }) {
 
   console.log("--- ChatList Data Structure Start ---");
-    console.log("Full chats array received:", chats);
-    console.log("--- ChatList Data Structure End ---");
+  console.log("Full chats array received:", chats);
+  console.log("--- ChatList Data Structure End ---");
+  
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 px-2 py-4 space-y-2 overflow-y-auto lg:px-4 scrollbar-hide">
-
         {chats.map((chat) => {
           console.log(chat);
           
@@ -30,12 +25,6 @@ export default function ChatList({
             .join("");
 
           const selected = selectedId === chat.id;
-
-          // ✔ FIX → Handle text OR { text, sender }
-          const lastText =
-            typeof chat.lastMessage === "string"
-              ? chat.lastMessage
-              : chat.lastMessage?.text ?? "No messages yet";
 
           return (
             <Link
@@ -64,7 +53,7 @@ export default function ChatList({
                   {chat.name}
                 </p>
                 <p className={`text-sm truncate ${selected ? "text-gray-300" : "text-gray-500"}`}>
-                  {lastText}
+                  {chat.lastMessage}
                 </p>
               </div>
 
@@ -79,7 +68,6 @@ export default function ChatList({
             </Link>
           );
         })}
-
       </div>
     </div>
   );

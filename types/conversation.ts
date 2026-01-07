@@ -14,7 +14,9 @@ export interface Chat {
   lastMessage?: string | { text: string; sender: string };
   unreadCount?: number;
   online?: boolean;
+  messages: Message[];
 }
+
 
 export interface Participant {
   _id: string;

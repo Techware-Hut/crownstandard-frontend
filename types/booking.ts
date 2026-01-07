@@ -19,6 +19,20 @@ export interface BookingCus {
   address: string;
   provider: string;
   instruction: string;
-  status: "Pending" | "Confirmed" | "Cancelled"; // optional: limit to known values
+  status: "Pending" | "Accepted" | "Cancelled" | "Completed";
+  paymentStatus: "Pending" | "succeeded" | "Refunded";
   cancelFee?: number;
+  pricingSnapshot?: {
+    currency: string;
+    basePrice: number;
+    priceUnit: string;
+    minHours: number;
+    totalHours: number;
+    quotedSubtotal: number;
+    discount: number;
+    totalPayable: number;
+    platformCommission: number;
+    providerShare: number;
+  };
 }
+

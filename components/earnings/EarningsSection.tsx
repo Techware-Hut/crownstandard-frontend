@@ -1,10 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { providerApi, EarningsData } from "@/lib/providerApi";
 
 export default function EarningsSection() {
   const [selectedRange, setSelectedRange] = useState<"week" | "month" | "year">("week");
-  const hasEarnings = false; // Toggle to true later when you fetch real data
+  const [earningsData, setEarningsData] = useState<EarningsData[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchEarnings = async (period: "weekly" | "monthly" | "yearly") => {
+    setLoading(true);
+    try {
+      const result = await providerApi.getEarnings(period);
+      if (result.success) {
+        setEarningsData(result.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch earnings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const periodMap = { week: "weekly", month: "monthly", year: "yearly" } as const;
+    fetchEarnings(periodMap[selectedRange]);
+  }, [selectedRange]);
+
+  const hasEarnings = earningsData.length > 0;
+  const totalEarnings = earningsData.reduce((sum, item) => sum + item.earnings, 0);
+  const totalTips = earningsData.reduce((sum, item) => sum + item.tips, 0);
+  const totalBookings = earningsData.reduce((sum, item) => sum + item.bookings, 0);
 
   return (
     <div className="mt-8 space-y-8">
@@ -35,14 +61,27 @@ export default function EarningsSection() {
 
       {/* Earnings Section */}
       <div className="p-2 py-4 sm:p-6 bg-[#F6F4EF] rounded-xl min-h-[200px] flex flex-col items-center justify-center text-center">
-        {hasEarnings ? (
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              Weekly Earnings Summary
+        {loading ? (
+          <p className="text-sm text-gray-600">Loading earnings...</p>
+        ) : hasEarnings ? (
+          <div className="w-full">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {selectedRange.charAt(0).toUpperCase() + selectedRange.slice(1)}ly Earnings Summary
             </h3>
-            <p className="mt-2 text-sm text-gray-600">
-              Coming soon – chart and detailed breakdown here.
-            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+              <div className="bg-white p-4 rounded-lg">
+                <p className="text-sm text-gray-600">Total Earnings</p>
+                <p className="text-xl font-bold text-gray-900">${totalEarnings.toFixed(2)}</p>
+              </div>
+              <div className="bg-white p-4 rounded-lg">
+                <p className="text-sm text-gray-600">Tips</p>
+                <p className="text-xl font-bold text-gray-900">${totalTips.toFixed(2)}</p>
+              </div>
+              <div className="bg-white p-4 rounded-lg">
+                <p className="text-sm text-gray-600">Bookings</p>
+                <p className="text-xl font-bold text-gray-900">{totalBookings}</p>
+              </div>
+            </div>
           </div>
         ) : (
           <>
