@@ -8,7 +8,7 @@ import ServiceCardSkeleton from "@/components/ServiceCardSkeleton";
 import { servicesApi } from "@/lib/servicesApi";
 
 type UiService = {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   description: string;
@@ -32,53 +32,6 @@ const FILTER_TABS = [
     "Move In/Out",
 ];
 
-const SERVICES: UiService[] = [
-    {
-        id: 1,
-        title: "Deluxe Apartment Cleaning",
-        slug: "Deluxe-Apartment-Cleaning",
-        description:
-            "Thorough cleaning for apartments, including kitchen, bathroom, and living areas. Perfect ...",
-        price: 30,
-        duration: "2h minimum",
-        location: "New York, NY",
-        rating: 3.8,
-        reviews: 57,
-        imageUrl: "/ServiceCleaning.png",
-        badge: "Residential",
-        provider: "SparklePro",
-    },
-    {
-        id: 2,
-        title: "Deluxe Apartment Cleaning",
-        slug: "Deluxe-Apartment-Cleaning-1",
-        description:
-            "Thorough cleaning for apartments, including kitchen, bathroom, and living areas. Perfect ...",
-        price: 30,
-        duration: "2h minimum",
-        location: "New York, NY",
-        rating: 4.8,
-        reviews: 57,
-        imageUrl: "/ServiceCleaning.png",
-        badge: "Residential",
-        provider: "SparklePro",
-    },
-    {
-        id: 3,
-        title: "Deluxe Apartment Cleaning",
-        slug: "Deluxe-Apartment-Cleaning-2",
-        description:
-            "Thorough cleaning for apartments, including kitchen, bathroom, and living areas. Perfect ...",
-        price: 30,
-        duration: "2h minimum",
-        location: "New York, NY",
-        rating: 4.8,
-        reviews: 57,
-        imageUrl: "/ServiceCleaning.png",
-        badge: "Residential",
-        provider: "SparklePro",
-    },
-];
 
 export default function ServicesPage() {
   const [activeTab, setActiveTab] = useState("All Services");
@@ -108,7 +61,7 @@ export default function ServicesPage() {
 
         const mapped: UiService[] = res.data.flatMap((provider, providerIndex) =>
           provider.services.map((service, serviceIndex) => ({
-            id: providerIndex * 1000 + serviceIndex + 1,
+            id: service._id, // ← IMPORTANT
             title: service.title,
             slug: service.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
         description: "Professional service provided by a verified vendor.",

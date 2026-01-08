@@ -3,7 +3,7 @@ import { renderStars } from "@/utils/renderStars";
 import Link from "next/link";
 
 export type Service = {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   description: string;
@@ -22,14 +22,13 @@ export default function ServiceCard({ service }: { service: Service }) {
 <article className="overflow-hidden bg-white border border-gray-200 shadow-sm rounded-xl">
     {/* Image - reduced height */}
     <div className="relative">
-        <Image
-            src={service.imageUrl}
-            alt={service.title}
-            width={640}
-            height={500}
-            className="object-cover w-full sm:object-contain md:object-cover h-48"
-            priority={service.id === 1}
-        />
+  <Image
+  src={service.imageUrl}
+  alt={service.title}
+  width={640}
+  height={500}
+  className="object-cover w-full sm:object-contain md:object-cover h-48"
+/>
         <span className="absolute left-3 top-3 rounded-full bg-[#C9A254] px-2 py-1 text-xs font-semibold text-white">
             {service.badge}
         </span>
@@ -71,7 +70,7 @@ export default function ServiceCard({ service }: { service: Service }) {
         </div>
 
         <Link
-            href={`/service/${service.slug}`}
+            href={`/service/${service.id}`}
             className="block w-full py-2 mt-3 text-sm font-medium text-center text-white bg-gray-900 rounded-lg hover:bg-black"
         >
             Book This Service
