@@ -6,7 +6,7 @@ import { useToast } from "../../../contexts/ToastContext";
 import DashboardAnalytics from "./DashboardAnalytics";
 
 
-const API_BASE = "http://localhost:5000";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 interface DashboardStats {
   users: {
