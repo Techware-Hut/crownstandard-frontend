@@ -163,6 +163,15 @@ export default function SupportPage() {
                                 </p>
                             </div>
 
+                                                        <div>
+                                <p className="text-lg font-medium">Phone</p>
+                                <p className="mt-1 text-base font-medium text-gray-500">
+                                    <span className="font-medium text-[#b9903c]">
+                                        (942) 882-7696
+                                    </span>
+                                </p>
+                            </div>
+
                             <div>
                                 <p className="text-lg font-medium">Business Hours</p>
                                 <p className="mt-1 text-base font-medium text-gray-500">
