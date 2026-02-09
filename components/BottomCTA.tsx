@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function BottomCTA() {
     return (
@@ -53,9 +54,9 @@ export default function BottomCTA() {
 
                             {/* Buttons */}
                             <div className="flex flex-col gap-3 mt-5 sm:mt-6 sm:flex-row sm:gap-4">
-                                <button className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold bg-[#BB9239] text-white shadow-sm hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#BB9239]/80">
+                                <Link href="/contact" className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold bg-[#BB9239] text-white shadow-sm hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#BB9239]/80">
                                     Contact Support
-                                </button>
+                                </Link>
                                 <button className="inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white transition-colors border rounded-full border-white/60 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
                                     Back to Home
                                 </button>

@@ -158,7 +158,7 @@ export default function SupportPage() {
                                 <p className="mt-1 text-base font-medium text-gray-500">
                                     For urgent matters email us directly at{" "}
                                     <span className="font-medium text-[#b9903c]">
-                                        support@crownstandard.ca
+                                        contact@crownstandard.com
                                     </span>
                                 </p>
                             </div>
@@ -175,8 +175,8 @@ export default function SupportPage() {
                             <div>
                                 <p className="text-lg font-medium">Business Hours</p>
                                 <p className="mt-1 text-base font-medium text-gray-500">
-                                    Monday–Friday: 8:00 A.M – 6:00 P.M <br />
-                                    Saturday: 9:00 A.M – 4:00 P.M <br />
+                                    Monday–Friday: 8:00 A.M – 4:00 P.M <br />
+                                    Saturday: 9:00 A.M – 3:00 P.M <br />
                                     Sunday: Closed
                                 </p>
                             </div>

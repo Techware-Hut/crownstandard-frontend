@@ -132,12 +132,17 @@ export default function ServicesPage() {
             </button>
           </div>
 
+
+    
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search services or providers…"
-            className="w-full px-4 py-2 mb-4 border rounded-lg"
+            className="w-[90%] px-4 py-2 mb-4 border rounded-lg"
           />
+
+          <button onClick={()=> setSearch(search)} className="ml-5 bg-[#E4E3E8] p-2 rounded-lg">Search</button>
+     
 
           {showFilters && (
             <div className="grid gap-4 md:grid-cols-3">
@@ -163,7 +168,7 @@ export default function ServicesPage() {
               </select>
 
               <div>
-                <label className="block mb-1 text-sm">Max Price: ${price}</label>
+                <label className="block mb-1 text-sm">Max Hourly Price: ${price}</label>
                 <input
                   type="range"
                   min={25}

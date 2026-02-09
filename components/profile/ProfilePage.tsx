@@ -44,9 +44,11 @@ export default function ProfilePage({ role }: ProfilePageProps) {
 
                         <div className="grid grid-cols-3 gap-2 lg:gap-4">
                             <InputField label="City" placeholder="City" />
-                            <InputField label="State" placeholder="State" />
-                            <InputField label="Zip Code" placeholder="Zip Code" />
+                            <InputField label="State / Province" placeholder="State" />
+                            <InputField label="Zip Code / Postal Code" placeholder="Zip Code / Postal Code" />
+  
                         </div>
+                        <InputField label="Country" placeholder="Country" />
                     </div>
 
                     {/* Right Avatar Section */}

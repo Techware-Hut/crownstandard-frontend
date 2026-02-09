@@ -13,6 +13,7 @@ import {
 import StatCard from "@/components/dashboard/StatCard";
 import ActionCard from "@/components/dashboard/ActionCard";
 import { customerApi } from "@/lib/customerApi";
+import { signOut } from "next-auth/react";
 
 /* ---------------- TYPES ---------------- */
 
@@ -26,6 +27,9 @@ type RecentBookingUI = {
   image: string;
 };
 
+
+
+
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -36,10 +40,46 @@ export default function DashboardPage() {
   });
   const [bookings, setBookings] = useState<RecentBookingUI[]>([]);
 
+
+
+  const fetchDashboard = async () => {
+    try {
+      const myHeaders = new Headers();
+
+      myHeaders.append("Cooke", "auth_token : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTg0NmU1ZWQxN2MxOTgxMTJhNGU3Y2YiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3NzAzODI3ODMsImV4cCI6MTc3MDk4NzU4M30.remP_U9EwvQLidjx51a3e-U-x9l49zOZT9oYU9aryKA")
+      ;
+
+      const requestOptions: RequestInit = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+        credentials: "include"
+      };
+
+      const response = await fetch("http://localhost:4000/api/customer/dashboard", requestOptions);
+      const result = await response.json();
+      console.log(result);
+      
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch dashboard:", error);
+      throw error;
+    }
+  }
+
   useEffect(() => {
     const loadDashboard = async () => {
+    // fetchDashboard();
+
+
+   
       try {
         const res = await customerApi.getDashboard();
+
+        // const res = await customerApi.getDashboardNew();
+        
+
+   
 
         const d = res.data;
 
@@ -92,7 +132,8 @@ export default function DashboardPage() {
         <section className="grid grid-cols-1 gap-3 mb-6 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             title="Total Bookings"
-            value={stats.totalBookings.toString()}
+            // value={stats.totalBookings.toString()}
+            value="1"
             subtitle="All time bookings"
             icon={<Calendar className="w-10 h-10 text-[#b9903c]" />}
           />
@@ -103,10 +144,12 @@ export default function DashboardPage() {
             icon={<Star className="w-10 h-10 text-[#b9903c]" />}
           />
           <StatCard
-            title="Total Money Spent"
-            value={`$${stats.totalMoneySpent.toFixed(2)}`}
-            subtitle="Lifetime spending"
-            icon={<DollarSign className="w-10 h-10 text-[#b9903c]" />}
+            title="Total Time Saved In Hours"
+            // value={`${stats.totalMoneySpent.toFixed(2)}`}
+            value="2"
+            subtitle=""
+            // icon={<DollarSign className="w-10 h-10 text-[#b9903c]" />}
+            icon={<></>}
           />
           <StatCard
             title="Favourite Providers"

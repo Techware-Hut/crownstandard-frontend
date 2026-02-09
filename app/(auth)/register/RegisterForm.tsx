@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
+
+
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE // later change to api.mosaicbizhub.com
 
@@ -18,6 +20,9 @@ export default function RegisterForm({ type }: { type: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -26,6 +31,8 @@ export default function RegisterForm({ type }: { type: string }) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    // console.log(formData)
 
     try {
       const res = await fetch(`${API_BASE}/auth/register`, {
@@ -45,6 +52,7 @@ export default function RegisterForm({ type }: { type: string }) {
       setLoading(false);
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="mt-4 space-y-4">

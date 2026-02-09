@@ -34,7 +34,7 @@ export default function RatesSection() {
           </p>
           <p>
             <span className="text-gray-200">Platform Fee:</span>{" "}
-            <span className="text-[#E9B949] font-semibold">25%</span>
+            <span className="text-[#E9B949] font-semibold">10%</span>
           </p>
           <p>
             <span className="text-gray-200">You keep:</span>{" "}

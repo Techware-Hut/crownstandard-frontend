@@ -11,6 +11,7 @@ export default function WhyChooseStats({
     { label: "Verified Cleaners", value: 850, suffix: "+" },
     { label: "Services Completed", value: 45000, suffix: "+" },
     { label: "Average Rating", value: 4.9 },
+
   ],
 }: {
   backgroundUrl: string;

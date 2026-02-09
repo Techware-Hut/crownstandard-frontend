@@ -188,10 +188,19 @@ const scheduledAt = useMemo(() => {
             </span>
           </div>
 
+          <div className="flex justify-between text-sm">
+            <span>
+              Tax
+            </span>
+            <span>
+              13%
+            </span>
+          </div>
+
           <div className="flex justify-between mt-2 font-semibold">
             <span>Total</span>
             <span>
-              {formatMoney(pricing.amount * duration, pricing.currency)}
+              {formatMoney((pricing.amount * duration) + ((pricing.amount * duration) * (13/100)) , pricing.currency)}
             </span>
           </div>
 

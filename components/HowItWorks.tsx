@@ -123,23 +123,23 @@ export default function HowCrownWorks() {
 
           <WorkCard
             variant="light"
-            title="For Customers"
+            title="For Service Provider"
             icon={<Briefcase className="h-7 w-7" strokeWidth={2} />}
             steps={[
               {
-                title: "Browse Services",
+                title: "Register & Get Approved",
                 desc:
-                  "Explore verified cleaners in your area with detailed profiles and reviews.",
+                  "Complete onboarding and verification to join a trusted professional network.",
               },
               {
-                title: "Book & Pay",
+                title: "Choose Work & Get Paid",
                 desc:
-                  "Select your preferred date, time, and service details. Pay securely online.",
+                  "Accept jobs that fit your availability and receive secure, on-time payments.",
               },
               {
-                title: "Relax & Enjoy",
+                title: "Build Your Reputation",
                 desc:
-                  "Track your booking, communicate with your cleaner, and enjoy the results.",
+                  "Deliver great service, gain customer ratings, and grow your long-term earnings.",
               },
             ]}
           />

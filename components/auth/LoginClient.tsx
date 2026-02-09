@@ -8,9 +8,13 @@ import Input from "@/components/ui/Input";
 import Image from "next/image";
 import Link from "next/link";
 import ForgotPasswordModal from "@/components/auth/ForgotPasswordModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE 
+
+
 
 export default function LoginClient({
   type,
@@ -24,6 +28,58 @@ export default function LoginClient({
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+
+  const { data, status, update } = useSession()
+
+
+// console.log(session.)
+
+
+
+  const googleSignIn = async (user : Session)=>{
+      try {
+          const res = await fetch(`${API_BASE}/auth/oauth/google`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email :  user.user?.email, name : user.user?.name, picture : user.user?.image, role: type }),
+              credentials: "include",
+          });
+
+          const responseData = await res.json();
+          console.log("OAuth response:", { status: res.status, data: responseData });
+          
+          if (!res.ok) throw new Error(responseData?.message ?? `Login failed (${res.status})`);
+
+          // Refresh the session to ensure authentication is updated
+          await update();
+          document.cookie = "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTg0NmU1ZWQxN2MxOTgxMTJhNGU3Y2YiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3NzAzODM3MzMsImV4cCI6MTc3MDk4ODUzM30.seJ06VxC42JLZUAEqYIC08Dug7TBYsyiTU8ZFPRS6HU"
+
+          router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
+      } catch (err) {
+          console.error("Google sign-in error:", err);
+          setError(err instanceof Error ? err.message : "Google sign-in failed");
+      }
+  }
+
+
+  
+    useEffect(()=>{
+     
+
+      
+        // Only proceed if session is authenticated and we haven't already processed it
+        if(status === "authenticated" && data && data.user?.email)
+        {
+            googleSignIn(data)
+        }
+
+      
+      
+    },[status, data, update, type])
+
+
+
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -164,7 +220,7 @@ export default function LoginClient({
 
           {/* Google */}
        {/* Google */}
-<Button type="button" variant="dark" full className="gap-2">
+<Button onClick={()=> signIn("google")} type="button" variant="dark" full className="gap-2">
   <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden>
     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>

@@ -16,6 +16,10 @@ const faqs = [
     q: "How long does the verification process take for service providers?",
     a: "Verification usually takes 2–3 business days once documents are submitted.",
   },
+  {
+    q: "What is the platform fee?",
+    a: "Platform fee is 10%"
+  }
 ];
 
 export default function FAQSection() {

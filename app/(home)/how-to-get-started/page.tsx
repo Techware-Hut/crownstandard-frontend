@@ -49,6 +49,7 @@ export default function HowToGetStartedPage() {
             items: [
                 { q: "What payment methods do you accept?", a: "Credit/debit cards and selected digital wallets." },
                 { q: "When am I charged?", a: "Customers are charged after the service is completed." },
+                {q : "Platform fess?", a : "10%"},
                 { q: "Are there hidden fees?", a: "No hidden fees. Taxes and any extras are shown before you confirm." },
                 { q: "Refunds if I’m not satisfied?", a: "Contact support within 24 hours; we’ll make it right per our policy." },
             ],

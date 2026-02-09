@@ -36,5 +36,5 @@ export const customerApi = {
   getDashboard: async (): Promise<CustomerDashboardResponse> => {
     const res = await axios.get("/customer/dashboard");
     return res.data;
-  },
+  }
 };

@@ -111,7 +111,7 @@ export default function AdminDashboard() {
         <DashboardCard title="Total Users" value={stats?.users.total} sub={`Active ${stats?.users.active}`} />
         <DashboardCard title="Services" value={stats?.services.active} sub={`Total ${stats?.services.total}`} />
         <DashboardCard title="Bookings" value={stats?.bookings.total} sub={`Completed ${stats?.bookings.completed}`} />
-        <DashboardCard title="Revenue" value={`₹${stats?.revenue.totalRevenue}`} sub={`Avg ₹${stats?.revenue.avgBookingValue}`} />
+        <DashboardCard title="Revenue" value={`CAD ${stats?.revenue.totalRevenue}`} sub={`Avg cad ${stats?.revenue.avgBookingValue}`} />
       </div>
       {/* RECENT ACTIVITY */}
       <div className="bg-white p-6 rounded-lg shadow">

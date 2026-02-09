@@ -2,21 +2,28 @@
 import "./globals.css";
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
+import Providers from './providers';
 
 export const metadata = {
     title: "Crown Standard",
     description: "Premium cleaning services by trusted professionals.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children, session }: { children: React.ReactNode; session: any }) {
     return (
         <html lang="en">
             <body className="min-h-screen antialiased bg-background text-foreground">
+            
                 <AuthProvider>
-                    <ToastProvider>
-                        <main>{children}</main>
-                    </ToastProvider>
+
+                        <ToastProvider>
+                                <Providers session={session}>
+                                    <main>{children}</main>
+                                </Providers>
+                        </ToastProvider>
+
                 </AuthProvider>
+          
             </body>
         </html>
     );
