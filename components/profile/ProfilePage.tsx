@@ -8,10 +8,41 @@ interface ProfilePageProps {
     role: "provider" | "customer";
 }
 
+const USA_STATES = [
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
+    "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+    "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+    "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+    "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+    "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+    "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+    "Wisconsin", "Wyoming"
+];
+
+const USA_CITIES = [
+    "New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio",
+    "San Diego", "Dallas", "San Jose", "Austin", "Jacksonville", "Fort Worth", "Columbus",
+    "Indianapolis", "Charlotte", "San Francisco", "Seattle", "Denver", "Boston"
+];
+
+const CANADA_PROVINCES = [
+    "Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador",
+    "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island",
+    "Quebec", "Saskatchewan", "Yukon"
+];
+
+const CANADA_CITIES = [
+    "Toronto", "Montreal", "Vancouver", "Calgary", "Edmonton", "Ottawa", "Winnipeg",
+    "Quebec City", "Hamilton", "Kitchener", "London", "Victoria", "Halifax", "St. John's"
+];
+
 export default function ProfilePage({ role }: ProfilePageProps) {
     const [editable, setEditable] = useState(false);
+    const [country, setCountry] = useState("USA");
 
     const isProvider = role === "provider";
+    const states = country === "USA" ? USA_STATES : CANADA_PROVINCES;
+    const cities = country === "USA" ? USA_CITIES : CANADA_CITIES;
 
     return (
         <main className="relative min-h-screen bg-white">
@@ -40,16 +71,34 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                             <InputField label="Email Address" placeholder="Enter email..." />
                             <InputField label="Phone Number" placeholder="+91 9876543210" />
                         </div>
-                        <select >
-                              <option value="USA">USA</option>
-                              <option value="CANADA">CANADA</option>
-                        </select>
+
+                        <div>
+                            <label className="block mb-1 text-sm font-medium text-gray-700">
+                                Country
+                            </label>
+                            <select 
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                className="w-full px-3 py-2 text-sm border rounded-md focus:ring-2 focus:ring-[#b9903c] focus:outline-none"
+                            >
+                                <option value="USA">USA</option>
+                                <option value="CANADA">CANADA</option>
+                            </select>
+                        </div>
                         <InputField label="Address" placeholder="Street address..." />
         
 
                         <div className="grid grid-cols-3 gap-2 lg:gap-4">
-                            <InputField label="City" placeholder="City" />
-                            <InputField label="State / Province" placeholder="State" />
+                            <SelectField 
+                                label="City" 
+                                placeholder="Select city"
+                                options={cities}
+                            />
+                            <SelectField 
+                                label={"State / Province"} 
+                                placeholder={country === "USA" ? "Select State / Province" : "Select province"}
+                                options={states}
+                            />
                             <InputField label="Zip Code / Postal Code" placeholder="Zip Code / Postal Code" />
   
                         </div>
@@ -107,6 +156,33 @@ function InputField({
                 placeholder={placeholder}
                 className="w-full px-3 py-2 text-sm border rounded-md focus:ring-2 focus:ring-[#b9903c] focus:outline-none"
             />
+        </div>
+    );
+}
+
+/* ---------- Reusable Select Field ---------- */
+function SelectField({
+    label,
+    placeholder,
+    options,
+}: {
+    label: string;
+    placeholder: string;
+    options: string[];
+}) {
+    return (
+        <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+                {label}
+            </label>
+            <select className="w-full px-3 py-2 text-sm border rounded-md focus:ring-2 focus:ring-[#b9903c] focus:outline-none">
+                <option value="">{placeholder}</option>
+                {options.map((option) => (
+                    <option key={option} value={option}>
+                        {option}
+                    </option>
+                ))}
+            </select>
         </div>
     );
 }
