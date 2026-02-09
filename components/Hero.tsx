@@ -9,7 +9,7 @@ export default function Hero() {
 
   const getDashboardLink = () => {
     if (!user) return "/login";
-    
+      
     switch (user.role) {
       case "customer":
         return "/dashboard";

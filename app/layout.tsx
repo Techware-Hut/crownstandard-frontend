@@ -9,7 +9,7 @@ export const metadata = {
     description: "Premium cleaning services by trusted professionals.",
 };
 
-export default function RootLayout({ children, session }: { children: React.ReactNode; session: any }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
             <body className="min-h-screen antialiased bg-background text-foreground">
@@ -17,7 +17,7 @@ export default function RootLayout({ children, session }: { children: React.Reac
                 <AuthProvider>
 
                         <ToastProvider>
-                                <Providers session={session}>
+                                <Providers>
                                     <main>{children}</main>
                                 </Providers>
                         </ToastProvider>
