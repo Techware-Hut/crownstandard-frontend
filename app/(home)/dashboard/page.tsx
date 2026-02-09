@@ -71,7 +71,7 @@ export default function DashboardPage() {
     const loadDashboard = async () => {
     // fetchDashboard();
 
-
+  
    
       try {
         const res = await customerApi.getDashboard();

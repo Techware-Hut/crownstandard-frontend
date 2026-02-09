@@ -6,6 +6,7 @@ import BannerSection from "@/components/BannerSection";
 import ServiceCard from "@/components/ServiceCard";
 import ServiceCardSkeleton from "@/components/ServiceCardSkeleton";
 import { servicesApi } from "@/lib/servicesApi";
+import Cookies from "js-cookie";
 
 type UiService = {
   id: string;
@@ -45,8 +46,21 @@ export default function ServicesPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [provider, setProvider] = useState(false)
+
+
+  const checkProvider = ()=>{
+
+    const isProvider = Cookies.get("user_role") === "provider" ? true : false;
+    setProvider(isProvider)
+
+  }
+
 
   useEffect(() => {
+
+
+
     const fetchServices = async () => {
       try {
         setLoading(true);
@@ -88,6 +102,7 @@ export default function ServicesPage() {
     };
 
     fetchServices();
+    checkProvider();
   }, [price, minRating, sortBy]);
 
   const filtered = services
@@ -203,7 +218,7 @@ export default function ServicesPage() {
               </p>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {filtered.map((service) => (
-                  <ServiceCard key={service.id} service={service} />
+                  <ServiceCard key={service.id} service={service} provider={provider} />
                 ))}
               </div>
             </>

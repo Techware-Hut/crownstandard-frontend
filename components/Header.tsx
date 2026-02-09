@@ -1,20 +1,55 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { useAuth } from "@/app/contexts/AuthContext";
+import Cookies from "js-cookie";
+
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-   const { user, isLoading, logout } = useAuth();
 
+  const [user, setUser] = useState(false)
+
+  const router = useRouter();
+
+ 
+  const signOut = ()=>{
+    localStorage.removeItem("user")
+    Cookies.remove("user_role")
+    Cookies.remove('user_id')
+    checkUser();
+    router.push("/")
+  
+
+  }
+
+
+  const dashboard = ()=>{
+
+  const type = Cookies.get("user_role")
+  router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
+
+  }
+  
+  const checkUser = ()=>{
+    if(localStorage.getItem("user"))
+          setUser(true)
+    else
+        setUser(false)
+  }
+   
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll);
+
+    checkUser();
+
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -67,18 +102,39 @@ export default function Header() {
 
           {/* Desktop auth */}
           <div className="items-center hidden gap-3 lg:flex">
-            <Link
-              href="/login?type=customer"
-              className="text-sm font-semibold px-4 py-2.5 rounded-full bg-slate-900 text-white hover:opacity-90 shadow-sm"
-            >
-              Customer Login
-            </Link>
-            <Link
-              href="/login?type=provider"
-              className="text-sm font-medium px-4 py-2.5 rounded-full bg-white text-cs-charcoal border border-cs-border hover:bg-cs-gold/20"
-            >
-              Provider Login
-            </Link>
+            {user ? (
+              <>
+
+              <button
+                onClick={dashboard}
+                className="text-sm font-semibold px-4 py-2.5 rounded-full bg-[#B8892D] text-white hover:opacity-90 shadow-sm"
+              >
+                Dashboard
+              </button>
+              <button
+                onClick={signOut}
+                className="text-sm font-semibold px-4 py-2.5 rounded-full bg-slate-900 text-white hover:opacity-90 shadow-sm"
+              >
+                Sign Out
+              </button>
+
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login?type=customer"
+                  className="text-sm font-semibold px-4 py-2.5 rounded-full bg-slate-900 text-white hover:opacity-90 shadow-sm"
+                >
+                  Customer Login
+                </Link>
+                <Link
+                  href="/login?type=provider"
+                  className="text-sm font-medium px-4 py-2.5 rounded-full bg-white text-cs-charcoal border border-cs-border hover:bg-cs-gold/20"
+                >
+                  Provider Login
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile hamburger */}
@@ -148,20 +204,34 @@ export default function Header() {
             </nav>
 
             <div className="grid gap-2 mt-3">
-              <Link
-                href="/login?type=customer"
-                className="rounded-full px-4 py-2.5 text-center text-sm font-semibold bg-slate-900 text-white hover:opacity-90 shadow-sm"
-                onClick={() => setOpen(false)}
-              >
-                Customer Login
-              </Link>
-              <Link
-                href="/login?type=provider"
-                className="rounded-full px-4 py-2.5 text-center text-sm font-medium bg-white text-cs-charcoal border border-cs-border hover:bg-cs-gold/20"
-                onClick={() => setOpen(false)}
-              >
-                Provider Login
-              </Link>
+              {user ? (
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    signOut();
+                  }}
+                  className="rounded-full px-4 py-2.5 text-center text-sm font-semibold bg-slate-900 text-white hover:opacity-90 shadow-sm"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <>
+                  <Link
+                    href="/login?type=customer"
+                    className="rounded-full px-4 py-2.5 text-center text-sm font-semibold bg-slate-900 text-white hover:opacity-90 shadow-sm"
+                    onClick={() => setOpen(false)}
+                  >
+                    Customer Login
+                  </Link>
+                  <Link
+                    href="/login?type=provider"
+                    className="rounded-full px-4 py-2.5 text-center text-sm font-medium bg-white text-cs-charcoal border border-cs-border hover:bg-cs-gold/20"
+                    onClick={() => setOpen(false)}
+                  >
+                    Provider Login
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

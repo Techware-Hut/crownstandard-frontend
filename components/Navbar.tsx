@@ -2,9 +2,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const { user, logout } = useAuth();
+
+  console.log("user", user)
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     onScroll();
@@ -37,8 +42,16 @@ export default function Navbar() {
         </nav>
 
         <div className="items-center hidden gap-3 md:flex">
-          <Link href="#" className="btn btn-dark">Customer Login</Link>
-          <Link href="#" className="btn btn-ghost">Provider Login</Link>
+          {user ? (
+            <button onClick={logout} className="btn btn-dark">
+              Sign Out
+            </button>
+          ) : (
+            <>
+              <Link href="#" className="btn btn-dark">Customer Login</Link>
+              <Link href="#" className="btn btn-ghost">Provider Login</Link>
+            </>
+          )}
         </div>
 
         {/* mobile menu (simple) */}

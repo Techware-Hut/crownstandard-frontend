@@ -53,7 +53,7 @@ export default function LoginClient({
 
           // Refresh the session to ensure authentication is updated
           await update();
-          document.cookie = "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTg0NmU1ZWQxN2MxOTgxMTJhNGU3Y2YiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3NzAzODM3MzMsImV4cCI6MTc3MDk4ODUzM30.seJ06VxC42JLZUAEqYIC08Dug7TBYsyiTU8ZFPRS6HU"
+          document.cookie = `auth_token=${responseData.token}`
 
           router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
       } catch (err) {
@@ -66,8 +66,6 @@ export default function LoginClient({
   
     useEffect(()=>{
      
-
-      
         // Only proceed if session is authenticated and we haven't already processed it
         if(status === "authenticated" && data && data.user?.email)
         {
@@ -100,6 +98,8 @@ export default function LoginClient({
       if (!res.ok) throw new Error(data?.message ?? "Login failed");
 
       router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
+
+      localStorage.setItem("user","true")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

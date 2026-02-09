@@ -17,7 +17,8 @@ export type Service = {
   provider: string;
 };
 
-export default function ServiceCard({ service }: { service: Service }) {
+export default function ServiceCard({ service, provider}: { service: Service, provider : boolean }) {
+
     return (
 <article className="overflow-hidden bg-white border border-gray-200 shadow-sm rounded-xl">
     {/* Image - reduced height */}
@@ -68,13 +69,14 @@ export default function ServiceCard({ service }: { service: Service }) {
                 <div className="text-xs text-gray-600">Starting rate</div>
             </div>
         </div>
-
-        <Link
-            href={`/service/${service.id}`}
-            className="block w-full py-2 mt-3 text-sm font-medium text-center text-white bg-gray-900 rounded-lg hover:bg-black"
-        >
-            Book This Service
-        </Link>
+        {!provider &&
+            <Link
+                href={`/service/${service.id}`}
+                className="block w-full py-2 mt-3 text-sm font-medium text-center text-white bg-gray-900 rounded-lg hover:bg-black"
+            >
+                Book This Service
+            </Link>
+        }
     </div>
 </article>
 
