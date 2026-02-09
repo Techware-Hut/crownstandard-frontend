@@ -132,8 +132,7 @@ export default function DashboardPage() {
         <section className="grid grid-cols-1 gap-3 mb-6 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             title="Total Bookings"
-            // value={stats.totalBookings.toString()}
-            value="1"
+            value={stats.totalBookings.toString()}
             subtitle="All time bookings"
             icon={<Calendar className="w-10 h-10 text-[#b9903c]" />}
           />
@@ -145,8 +144,8 @@ export default function DashboardPage() {
           />
           <StatCard
             title="Total Time Saved In Hours"
-            // value={`${stats.totalMoneySpent.toFixed(2)}`}
-            value="2"
+            value={`${stats.totalMoneySpent.toFixed(2)}`}
+            // value="2"
             subtitle=""
             // icon={<DollarSign className="w-10 h-10 text-[#b9903c]" />}
             icon={<></>}

@@ -77,7 +77,8 @@ const scheduledAt = useMemo(() => {
       // Redirect to payment route
       router.push(`/payment/${bookingRes.booking._id}`);
     } catch (err: any) {
-      setError(err.message || "Something went wrong");
+      // setError(err.message || "Something went wrong");
+      console.log(err)
     } finally {
       setLoading(false);
     }

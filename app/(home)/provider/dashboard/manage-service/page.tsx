@@ -18,7 +18,7 @@ export default function ManageServicePage() {
                 </header>
 
                 {/* Hourly Rate Section */}
-                <section className="p-6 text-white bg-gray-900 rounded-xl">
+                <section className="p-6 text-white  bg-gray-900 rounded-xl">
                     <div className="flex items-center justify-between">
                         <div>
                             <h3 className="flex items-center gap-2 text-xl font-bold text-[#b9903c]">

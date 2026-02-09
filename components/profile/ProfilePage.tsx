@@ -33,14 +33,19 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                         <div className="text-md font-bold text-[#b9903c]">
                             Account Type: {isProvider ? "Provider" : "Customer"}
                         </div>
-
+                    
+                   
                         <div className="grid grid-cols-1 gap-2 lg:gap-4 grid-cols-1">
                             <InputField label="Full Name" placeholder="Enter full name..." />
                             <InputField label="Email Address" placeholder="Enter email..." />
                             <InputField label="Phone Number" placeholder="+91 9876543210" />
                         </div>
-
+                        <select >
+                              <option value="USA">USA</option>
+                              <option value="CANADA">CANADA</option>
+                        </select>
                         <InputField label="Address" placeholder="Street address..." />
+        
 
                         <div className="grid grid-cols-3 gap-2 lg:gap-4">
                             <InputField label="City" placeholder="City" />
@@ -48,7 +53,7 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                             <InputField label="Zip Code / Postal Code" placeholder="Zip Code / Postal Code" />
   
                         </div>
-                        <InputField label="Country" placeholder="Country" />
+
                     </div>
 
                     {/* Right Avatar Section */}
@@ -110,7 +115,7 @@ function InputField({
 function ProviderExtras() {
     return (
         <>
-            <section className="p-6 mb-8 text-white bg-gray-900 rounded-xl">
+            <section className="p-6 mb-8 mt-5 text-white bg-gray-900 rounded-xl">
                 <div className="flex items-center justify-between">
                     <div>
                         <h3 className="flex items-center gap-2 text-sm font-semibold text-[#b9903c]">
