@@ -3,14 +3,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/app/contexts/AuthContext";
+import Cookies from "js-cookie";
 
 export default function Hero() {
   const { user } = useAuth();
 
   const getDashboardLink = () => {
-    if (!user) return "/login";
+
+    const user_role = Cookies.get("user_role")
+
+
+    if (!user_role) return "/login";
       
-    switch (user.role) {
+    switch (user_role) {
       case "customer":
         return "/dashboard";
       case "provider":
