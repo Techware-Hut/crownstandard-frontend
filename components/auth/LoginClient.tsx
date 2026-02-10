@@ -57,6 +57,7 @@ export default function LoginClient({
           document.cookie = `user_id=${responseData.user.id}`
           document.cookie = `user_role=${responseData.user.role}`
           localStorage.setItem("user","true")
+          localStorage.setItem('google', "true")
           router.push(responseData.user.role === "provider" ? "/provider/dashboard" : "/dashboard");
       } catch (err) {
           console.error("Google sign-in error:", err);
@@ -72,6 +73,8 @@ export default function LoginClient({
         if(status === "authenticated")
         {
             googleSignIn(data)
+
+            console.log(status)
 
         }
 

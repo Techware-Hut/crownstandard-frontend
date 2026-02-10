@@ -9,11 +9,13 @@ import { signIn, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
+import { useState } from "react";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 export default function RegisterPageClient() {
   const searchParams = useSearchParams();
+  const [error, setError] = useState<string | null>(null);
   const raw = searchParams.get("type");
   const type: UserType =
     raw === "provider" || raw === "customer" ? (raw as UserType) : "provider";
@@ -21,40 +23,41 @@ export default function RegisterPageClient() {
   const { data, status, update } = useSession();
   const router = useRouter();
 
-  const googleSignIn = async (user: Session) => {
-    try {
-      const res = await fetch(`${API_BASE}/auth/oauth/google`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: user.user?.email,
-          name: user.user?.name,
-          picture: user.user?.image,
-          role: type,
-        }),
-        credentials: "include",
-      });
 
-      const responseData = await res.json();
-      console.log("OAuth response:", { status: res.status, data: responseData });
 
-      if (!res.ok)
-        throw new Error(responseData?.message ?? `Login failed (${res.status})`);
+  const googleSignIn = async (user : Session)=>{
+      try {
+          const res = await fetch(`${API_BASE}/auth/oauth/google`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email :  user.user?.email, name : user.user?.name, picture : user.user?.image, role: type }),
+              credentials: "include",
+          });
 
-      await update();
+          const responseData = await res.json();
+          // console.log("OAuth response:", { status: res.status, data: responseData });
+          
+          if (!res.ok) throw new Error(responseData?.message ?? `Login failed (${res.status})`);
 
-      router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
-    } catch (err) {
-      console.error("Google sign-in error:", err);
-      alert(err instanceof Error ? err.message : "Google sign-in failed");
-    }
-  };
+          // Refresh the session to ensure authentication is updated
+          // await update();
+          document.cookie = `auth_token=${responseData.token}`
+          document.cookie = `user_id=${responseData.user.id}`
+          document.cookie = `user_role=${responseData.user.role}`
+          localStorage.setItem("user","true")
+          localStorage.setItem('google', "true")
+          router.push(responseData.user.role === "provider" ? "/provider/dashboard" : "/dashboard");
+      } catch (err) {
+          console.error("Google sign-in error:", err);
+          setError(err instanceof Error ? err.message : "Google sign-in failed");
+      }
+  }
 
   useEffect(() => {
-    if (status === "authenticated" && data && data.user?.email) {
+    if (status === "authenticated") {
       googleSignIn(data);
     }
-  }, [status, data, update, type]);
+  }, [status]);
 
   return (
     <>

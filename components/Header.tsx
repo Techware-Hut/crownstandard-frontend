@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { signIn, signOut, useSession } from "next-auth/react";
+
 
 
 export default function Header() {
@@ -16,10 +18,16 @@ export default function Header() {
   const router = useRouter();
 
  
-  const signOut = ()=>{
+  const logOut = ()=>{
     localStorage.removeItem("user")
     Cookies.remove("user_role")
     Cookies.remove('user_id')
+    if(localStorage.getItem("google")){
+        signOut();
+        localStorage.removeItem("google")
+    }
+
+
     checkUser();
     router.push("/")
   
@@ -36,7 +44,7 @@ export default function Header() {
   
   const checkUser = ()=>{
     if(localStorage.getItem("user"))
-          setUser(true)
+        setUser(true)
     else
         setUser(false)
   }
@@ -112,7 +120,7 @@ export default function Header() {
                 Dashboard
               </button>
               <button
-                onClick={signOut}
+                onClick={logOut}
                 className="text-sm font-semibold px-4 py-2.5 rounded-full bg-slate-900 text-white hover:opacity-90 shadow-sm"
               >
                 Sign Out
@@ -208,7 +216,7 @@ export default function Header() {
                 <button
                   onClick={() => {
                     setOpen(false);
-                    signOut();
+                    logOut();
                   }}
                   className="rounded-full px-4 py-2.5 text-center text-sm font-semibold bg-slate-900 text-white hover:opacity-90 shadow-sm"
                 >
