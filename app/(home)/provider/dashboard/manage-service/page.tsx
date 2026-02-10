@@ -2,11 +2,55 @@
 
 import { HandCoins, Pencil, Plus } from "lucide-react";
 import CreateServiceModal from "@/components/modals/CreateServiceModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { providerApi } from "@/lib/providerApi";
+
+type ServiceUI = {
+  id: string;
+  title: string;
+  category: string;
+  price: string;
+  rating: string;
+  image: string;
+  isActive: boolean;
+};
 
 export default function ManageServicePage() {
 
     const [open, setOpen] = useState(false);
+    const [services, setServices] = useState<ServiceUI[]>([]);
+    const [loading, setLoading] = useState(true);
+
+
+    const loadServices = async () => {
+        try {
+          setLoading(true);
+          const res = await providerApi.getMyServices();
+          
+          const mappedServices: ServiceUI[] = res.data.map((service) => ({
+            id: service._id,
+            title: service.title,
+            category: "Service",
+            price: `${service.currency} ${service.basePrice}/${service.priceUnit.replace('_', ' ')}`,
+            rating: service.ratingSummary?.count && service.ratingSummary.count > 0 
+              ? `${service.ratingSummary.avg.toFixed(1)} (${service.ratingSummary.count})`
+              : "No reviews",
+            image: service.media?.[0] || "/ServiceCleaning.png",
+            isActive: service.isActive,
+          }));
+    
+          setServices(mappedServices);
+        } catch (err) {
+          console.error("Failed to load services", err);
+        } finally {
+          setLoading(false);
+        }
+      }
+
+
+    useEffect(()=>{
+        loadServices();
+    },[])
 
     return (
         <main className="relative min-h-screen bg-white pt-6 md:pt-8 lg:pt-16 ">
@@ -71,6 +115,9 @@ export default function ManageServicePage() {
                     </div>
 
                     <div className="p-10 text-center bg-[#F6F4EF] rounded-xl">
+
+                    {services.length === 0?
+                        <>
                         <p className="font-medium text-gray-700">No services created yet</p>
                         <p className="mt-1 text-sm text-gray-500">
                             Create your first cleaning service to start receiving bookings
@@ -80,6 +127,48 @@ export default function ManageServicePage() {
                             className="px-6 py-3 mt-5 text-sm font-medium text-white rounded-full bg-[#b9903c] hover:bg-[#111827]">
                             Create Your First Service
                         </button>
+                        </>
+              
+                    :
+                    
+                    
+                        <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-3">
+
+                            {services.map((service) => (
+                                <div
+                                    key={service.id}
+                                    className="p-4 bg-white shadow-sm rounded-2xl hover:shadow-md"
+                                >
+                                    <div className="flex gap-4">
+                                    <div className="relative w-16 h-16 overflow-hidden rounded-md ring-1 ring-gray-200">
+                                        <img
+                                        src={service.image}
+                                        alt={service.title}
+                                        className="object-cover w-full h-full"
+                                        />
+                                    </div>
+
+                                    <div className="flex-1 space-y-1">
+                                        <p className="font-semibold text-gray-900">{service.title}</p>
+                                        <p className="text-sm text-gray-500">{service.category}</p>
+                                        <p className="text-xs text-gray-400">{service.rating}</p>
+                                        <div className="text-sm font-semibold text-gray-900">
+                                        {service.price}
+                                        </div>
+                                        <div className={`text-xs px-2 py-1 rounded-full w-fit ${
+                                        service.isActive 
+                                            ? 'bg-green-100 text-green-800' 
+                                            : 'bg-red-100 text-red-800'
+                                        }`}>
+                                        {service.isActive ? 'Active' : 'Inactive'}
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                ))}
+                            </div>
+                    }
+
                         <CreateServiceModal
                             open={open}
                             onClose={() => setOpen(false)}

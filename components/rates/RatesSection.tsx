@@ -19,7 +19,7 @@ export default function RatesSection() {
         <h2 className="text-2xl font-bold text-gray-900">Your Hourly Rates</h2>
         <p className="mt-1 text-sm text-gray-500">
           Set competitive rates for your cleaning services. Crown Standard keeps{" "}
-          <span className="font-medium text-gray-700">25% commission</span> on bookings,
+          <span className="font-medium text-gray-700">10% commission</span> on bookings,
           but you keep <span className="font-medium text-gray-700">100% of all tips!</span>
         </p>
       </div>
@@ -38,7 +38,7 @@ export default function RatesSection() {
           </p>
           <p>
             <span className="text-gray-200">You keep:</span>{" "}
-            <span className="text-[#E9B949] font-semibold">75% + 100% Tips!</span>
+            <span className="text-[#E9B949] font-semibold">90% + 100% Tips!</span>
           </p>
         </div>
 
