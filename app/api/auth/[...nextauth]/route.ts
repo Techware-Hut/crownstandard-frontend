@@ -10,33 +10,33 @@ const authOptions: NextAuthOptions = {
     }),
     // ...add more providers here
   ],
-  pages: {
-    signIn: "/googlelogin",
-    error: "/login",
-  },
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id
-      }
-      console.log(token)
-      return token
-    },
-    // async session({ session, token }) {
-    //   if (session.user) {
-    //     session.user.id = token.id as string
-    //   }
-    //   return session
-    // },
-  },
+  // pages: {
+  //   signIn: "/googlelogin",
+  //   error: "/login",
+  // },
+  // session: {
+  //   strategy: "jwt",
+  //   maxAge: 30 * 24 * 60 * 60, // 30 days
+  // },
+  // jwt: {
+  //   secret: process.env.NEXTAUTH_SECRET,
+  // },
+  // secret: process.env.NEXTAUTH_SECRET,
+  // callbacks: {
+  //   async jwt({ token, user }) {
+  //     if (user) {
+  //       token.id = user.id
+  //     }
+  //     console.log(token)
+  //     return token
+  //   },
+  //   // async session({ session, token }) {
+  //   //   if (session.user) {
+  //   //     session.user.id = token.id as string
+  //   //   }
+  //   //   return session
+  //   // },
+  // },
 }
 
 const handler = NextAuth(authOptions)

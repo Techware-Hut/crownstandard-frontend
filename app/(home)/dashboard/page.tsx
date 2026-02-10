@@ -73,8 +73,8 @@ export default function DashboardPage() {
   useEffect(() => {
 
 
-
-
+    
+  
     const loadDashboard = async () => {
   
       const user = Cookies.get("user_role") === "customer" ? true : false;

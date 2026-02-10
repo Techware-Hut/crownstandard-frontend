@@ -47,15 +47,17 @@ export default function LoginClient({
           });
 
           const responseData = await res.json();
-          console.log("OAuth response:", { status: res.status, data: responseData });
+          // console.log("OAuth response:", { status: res.status, data: responseData });
           
           if (!res.ok) throw new Error(responseData?.message ?? `Login failed (${res.status})`);
 
           // Refresh the session to ensure authentication is updated
-          await update();
+          // await update();
           document.cookie = `auth_token=${responseData.token}`
-
-          router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
+          document.cookie = `user_id=${responseData.user.id}`
+          document.cookie = `user_role=${responseData.user.role}`
+          localStorage.setItem("user","true")
+          router.push(responseData.user.role === "provider" ? "/provider/dashboard" : "/dashboard");
       } catch (err) {
           console.error("Google sign-in error:", err);
           setError(err instanceof Error ? err.message : "Google sign-in failed");
@@ -67,15 +69,15 @@ export default function LoginClient({
     useEffect(()=>{
      
 
-
-        if(status === "authenticated" && data && data.user?.email)
+        if(status === "authenticated")
         {
             googleSignIn(data)
+
         }
 
+
       
-      
-    },[status, data, update, type])
+    },[status])
 
 
 
