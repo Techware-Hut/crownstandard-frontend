@@ -19,6 +19,8 @@ import EarningsSection from "@/components/earnings/EarningsSection";
 import GpsTrackingSection from "@/components/gps/GpsTrackingSection";
 
 import { providerApi, ProviderDashboardResponse } from "@/lib/providerApi";
+import Cookies from "js-cookie";
+
 
 /* ---------------- TYPES ---------------- */
 
@@ -135,13 +137,25 @@ function OverviewTab() {
   const [dashboard, setDashboard] =
     useState<ProviderDashboardResponse["data"] | null>(null);
 
+
+    const router = useRouter();
+
   useEffect(() => {
     const loadDashboard = async () => {
+
+      const user = Cookies.get("user_role") === "provider" ? true : false;
+      if(!user){
+        router.push("/login")
+        return;
+      }
+
+
       try {
         const res = await providerApi.getDashboard();
         setDashboard(res.data);
       } catch (err) {
         console.error("Failed to load provider dashboard", err);
+        router.push("/login")
       } finally {
         setLoading(false);
       }

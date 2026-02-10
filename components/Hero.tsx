@@ -2,30 +2,36 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/app/contexts/AuthContext";
 import Cookies from "js-cookie";
 
 export default function Hero() {
   const { user } = useAuth();
+  const [dashboardLink, setDashboardLink] = useState("/login");
 
-  const getDashboardLink = () => {
+  useEffect(() => {
+    const user_role = Cookies.get("user_role");
 
-    const user_role = Cookies.get("user_role")
+    if (!user_role) {
+      setDashboardLink("/login");
+      return;
+    }
 
-
-    if (!user_role) return "/login";
-      
     switch (user_role) {
       case "customer":
-        return "/dashboard";
+        setDashboardLink("/dashboard");
+        break;
       case "provider":
-        return "/provider/dashboard";
+        setDashboardLink("/provider/dashboard");
+        break;
       case "admin":
-        return "/admin/dashboard";
+        setDashboardLink("/admin/dashboard");
+        break;
       default:
-        return "/login";
+        setDashboardLink("/login");
     }
-  };
+  }, []);
 
   return (
     <section className="relative w-full overflow-hidden">
@@ -69,7 +75,7 @@ export default function Hero() {
                 <Link href="#get-started" className="btn-primary px-8 py-2.5 md:py-3 rounded-full border-[#b9903c]">
                   Book Now
                 </Link>
-                <Link href={getDashboardLink()} className="text-white border-white/60 border-[1px] px-6 md:px-8 py-2.5 md:py-3 rounded-full">
+                <Link href={dashboardLink} className="text-white border-white/60 border-[1px] px-6 md:px-8 py-2.5 md:py-3 rounded-full">
                   My Dashboard
                 </Link>
               </div>

@@ -14,6 +14,8 @@ import StatCard from "@/components/dashboard/StatCard";
 import ActionCard from "@/components/dashboard/ActionCard";
 import { customerApi } from "@/lib/customerApi";
 import { signOut } from "next-auth/react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 /* ---------------- TYPES ---------------- */
 
@@ -39,6 +41,7 @@ export default function DashboardPage() {
     favouriteProviders: 0,
   });
   const [bookings, setBookings] = useState<RecentBookingUI[]>([]);
+  const router = useRouter();
 
 
 
@@ -68,10 +71,20 @@ export default function DashboardPage() {
   }
 
   useEffect(() => {
-    const loadDashboard = async () => {
-    // fetchDashboard();
 
+
+
+
+    const loadDashboard = async () => {
   
+      const user = Cookies.get("user_role") === "customer" ? true : false;
+      if(!user){
+        router.push("/login")
+        return;
+      }
+
+
+      
    
       try {
         const res = await customerApi.getDashboard();

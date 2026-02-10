@@ -66,7 +66,8 @@ export default function LoginClient({
   
     useEffect(()=>{
      
-        // Only proceed if session is authenticated and we haven't already processed it
+
+
         if(status === "authenticated" && data && data.user?.email)
         {
             googleSignIn(data)
