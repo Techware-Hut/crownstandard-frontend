@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useToast } from "../../../contexts/ToastContext";
 
 interface Booking {
@@ -68,11 +68,33 @@ export default function AdminBookingsPage() {
     id: "",
   });
   const [cancelReason, setCancelReason] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchBookings();
     fetchStats();
   }, []);
+
+
+  const filteredBookings = useMemo(() => {
+  if (!search.trim()) return bookings;
+
+  const q = search.toLowerCase();
+
+  return bookings.filter((b) => {
+    return (
+      b._id.toLowerCase().includes(q) ||
+      b.customerId?.name?.toLowerCase().includes(q) ||
+      b.customerId?.email?.toLowerCase().includes(q) ||
+      b.providerId?.name?.toLowerCase().includes(q) ||
+      b.serviceAddress?.city?.toLowerCase().includes(q) ||
+      b.serviceAddress?.state?.toLowerCase().includes(q) ||
+      b.status?.toLowerCase().includes(q) ||
+      b.payment?.status?.toLowerCase().includes(q)
+    );
+  });
+}, [bookings, search]);
+
 
   /* ---------------- STATS API ---------------- */
   const fetchStats = async () => {
@@ -185,6 +207,30 @@ export default function AdminBookingsPage() {
               ))}
             </div>
           </div>
+
+
+      <div className="bg-white p-4 rounded shadow mb-4">
+        <h3 className="font-semibold mb-2">Search Bookings</h3>
+
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by ID, name, email, city, status..."
+            className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
+          />
+
+          {/* <button
+            onClick={() => {}}
+            className="px-4 py-2 bg-gray-800 text-white rounded"
+          >
+            Search
+          </button> */}
+        </div>
+      </div>
+
+
         </>
       )}
 
@@ -209,7 +255,7 @@ export default function AdminBookingsPage() {
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
-        {bookings.map((b) => (
+        {filteredBookings.map((b) => (
           <tr key={b._id}>
             <td className="px-6 py-4 whitespace-nowrap">
               <div>
