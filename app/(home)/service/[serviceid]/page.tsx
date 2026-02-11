@@ -1,3 +1,5 @@
+
+
 import { notFound } from "next/navigation";
 import BannerSection from "@/components/BannerSection";
 import {
@@ -65,6 +67,7 @@ export default async function ServiceDetailPage({
     }
 
     const service = normalizeService(fetched);
+
 
     return (
         <>

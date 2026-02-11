@@ -1,4 +1,6 @@
 // app/how-to-get-started/page.tsx
+"use client"
+
 import {
     ShieldCheck, Users, UserPlus, Clock, FileCheck, Settings,
     CheckCircle2, MapPin, CalendarDays, CreditCard, Star,
@@ -9,8 +11,16 @@ import BannerSection from "@/components/BannerSection";
 import Image from "next/image";
 import FAQSection from "@/components/FAQSection";
 import BottomCTA from "@/components/BottomCTA";
+import { useRouter } from "next/navigation";
 
 export default function HowToGetStartedPage() {
+    const router = useRouter();
+    const go_to_registerpage =(type :string) =>{
+
+        router.push("/register?type="+type)
+
+    }
+
     const faqs: { group: string; items: { q: string; a: string }[] }[] = [
         {
             group: "Getting Started",
@@ -217,7 +227,7 @@ export default function HowToGetStartedPage() {
 
                             </div>
                             <div className="absolute bottom-0 w-full p-6 pb-0 md:p-8 md:pb-0 md:pr-0">
-                                <CTAButton size="lg" variant="primaryGradient" className="w-full mt-7">
+                                <CTAButton onClick={()=> go_to_registerpage("customer")} size="lg" variant="primaryGradient" className="w-full mt-7">
                                     Get Started as Customer
                                 </CTAButton>
                             </div>
@@ -357,7 +367,7 @@ export default function HowToGetStartedPage() {
                                 </ol>
                             </div>
                             <div className="absolute bottom-0 w-full p-6 pb-0 md:pb-0 md:p-8 md:pr-0">
-                                <CTAButton size="lg" variant="primaryGradient" className="w-full mt-7">
+                                <CTAButton onClick={()=> go_to_registerpage("provider")} size="lg" variant="primaryGradient" className="w-full mt-7">
                                     Get Started as Provider
                                 </CTAButton>
                             </div>

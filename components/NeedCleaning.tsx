@@ -1,7 +1,38 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+
 
 export default function NeedCleaning() {
+
+    const [dashboardLink, setDashboardLink] = useState("/login");
+
+  useEffect(() => {
+    const user_role = Cookies.get("user_role");
+
+    if (!user_role) {
+      setDashboardLink("/login");
+      return;
+    }
+
+    switch (user_role) {
+      case "customer":
+        setDashboardLink("/dashboard");
+        break;
+      case "provider":
+        setDashboardLink("/provider/dashboard");
+        break;
+      case "admin":
+        setDashboardLink("/admin/dashboard");
+        break;
+      default:
+        setDashboardLink("/login");
+    }
+  }, []);
+
+
   return (
     <section id="about" className="px-5">
       <div className="grid items-center gap-4 md:gap-6 lg:gap-10 md:grid-cols-2">
@@ -59,20 +90,20 @@ export default function NeedCleaning() {
           {/* buttons */}
           <div className="flex flex-wrap gap-3">
             {/* gold filled */}
-            <Link href="#services" className="px-6 py-2.5 md:py-3 text-white rounded-full bg-brand-gold">
+            <Link href="services" className="px-6 py-2.5 md:py-3 text-white rounded-full bg-brand-gold">
               Find Cleaners
             </Link>
 
             {/* outline */}
             <Link
-              href="#"
+              href={dashboardLink}
               className="px-6 py-2.5 md:py-3 bg-white font-semibold border rounded-full text-slate-800 border-slate-300 hover:bg-slate-50"
             >
               Dashboard
             </Link>
 
             {/* dark filled */}
-            <Link href="#" className="px-6 py-2.5 md:py-3 rounded-full btn-dark">
+            <Link href="dashboard/my-bookings" className="px-6 py-2.5 md:py-3 rounded-full btn-dark">
               My Bookings
             </Link>
           </div>

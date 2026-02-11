@@ -57,9 +57,9 @@ export default function BottomCTA() {
                                 <Link href="/contact" className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold bg-[#BB9239] text-white shadow-sm hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#BB9239]/80">
                                     Contact Support
                                 </Link>
-                                <button className="inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white transition-colors border rounded-full border-white/60 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
+                                <Link href={"/"} className="inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white transition-colors border rounded-full border-white/60 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
                                     Back to Home
-                                </button>
+                                </Link>
                             </div>
                         </div>
 

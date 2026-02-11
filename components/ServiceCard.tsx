@@ -1,6 +1,8 @@
+"use client"
 import Image from "next/image";
 import { renderStars } from "@/utils/renderStars";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export type Service = {
   id: string;
@@ -18,6 +20,16 @@ export type Service = {
 };
 
 export default function ServiceCard({ service, provider}: { service: Service, provider : boolean }) {
+
+    const router = useRouter();
+
+    const go_to_servicepage = ()=>{
+        if(!localStorage.getItem("user"))
+            router.push("/login")
+        else
+            router.push(`/service/${service.id}`)
+
+    }
 
     return (
 <article className="overflow-hidden bg-white border border-gray-200 shadow-sm rounded-xl">
@@ -70,12 +82,13 @@ export default function ServiceCard({ service, provider}: { service: Service, pr
             </div>
         </div>
         {!provider &&
-            <Link
-                href={`/service/${service.id}`}
+            <button
+                // href={`/service/${service.id}`}
+                onClick={go_to_servicepage}
                 className="block w-full py-2 mt-3 text-sm font-medium text-center text-white bg-gray-900 rounded-lg hover:bg-black"
             >
                 Book This Service
-            </Link>
+            </button>
         }
     </div>
 </article>

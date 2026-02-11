@@ -4,14 +4,23 @@ import { useEffect, useState } from "react";
 import BookingCard from "@/components/dashboard/bookings/BookingCard";
 import { bookingApi } from "@/lib/bookingApi";
 import { BookingCus } from "@/types/booking";
+import { useRouter } from "next/navigation";
 
 export default function MyBookingsPage() {
   const [bookings, setBookings] = useState<BookingCus[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const loadBookings = async () => {
       try {
+
+        if(!localStorage.getItem("user")){
+          router.push("/login")
+          return;
+
+        }
+        
         const res = await bookingApi.getMyBookings();
 
         const normalizeStatus = (status: string): "Pending" | "Accepted" | "Cancelled" | "Completed" => {

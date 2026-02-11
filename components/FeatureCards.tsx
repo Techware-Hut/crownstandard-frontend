@@ -105,7 +105,7 @@ export default function FeatureCards() {
           desc="Book your cleaning service in just 3 steps. Select date, time, and preferences."
           cta="Start Booking"
           icon={<CalendarClock className="w-12 h-12" />}
-          href="#get-started"
+          href="how-to-get-started"
         />
 
         <FeatureCard
@@ -114,7 +114,7 @@ export default function FeatureCards() {
           desc="All service providers are verified, insured, and highly rated by customers."
           cta="Browse Service"
           icon={<ShieldStarIcon className="w-12 h-12" />}
-          href="#services"
+          href="services"
         />
 
         <FeatureCard
@@ -122,7 +122,7 @@ export default function FeatureCards() {
           desc="Track bookings, chat with providers, and leave reviews — all in one place."
           cta="My Bookings"
           icon={<StarsBadgeIcon className="w-12 h-12" />}
-          href="#"
+          href="dashboard/my-bookings"
         />
       </div>
     </section>
