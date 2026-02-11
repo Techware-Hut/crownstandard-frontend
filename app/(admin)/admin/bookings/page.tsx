@@ -165,10 +165,10 @@ export default function AdminBookingsPage() {
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Stat title="Total Bookings" value={stats.overview.totalBookings} />
-            <Stat title="Total Revenue" value={`$${stats.overview.totalRevenue}`} />
+            <Stat title="Total Revenue" value={`$${stats.overview.totalRevenue.toFixed(2)}`} />
             <Stat
               title="Avg Booking Value"
-              value={`$${stats.overview.avgBookingValue}`}
+              value={`$${stats.overview.avgBookingValue.toFixed(2)}`}
             />
           </div>
 
