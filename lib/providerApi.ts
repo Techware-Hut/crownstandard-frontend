@@ -190,6 +190,7 @@ getEarnings: async (period: "weekly" | "monthly" | "yearly"): Promise<EarningsRe
   return res.data;
 },
 
+// getProfileDetails : async
 
 
 };

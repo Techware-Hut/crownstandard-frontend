@@ -152,6 +152,7 @@ function OverviewTab() {
 
       try {
         const res = await providerApi.getDashboard();
+ 
         setDashboard(res.data);
       } catch (err) {
         console.error("Failed to load provider dashboard", err);

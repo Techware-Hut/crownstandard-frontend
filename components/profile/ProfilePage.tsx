@@ -38,7 +38,7 @@ const CANADA_CITIES = [
 
 export default function ProfilePage({ role }: ProfilePageProps) {
     const [editable, setEditable] = useState(false);
-    const [country, setCountry] = useState("USA");
+    const [country, setCountry] = useState("CANADA");
 
     const isProvider = role === "provider";
     const states = country === "USA" ? USA_STATES : CANADA_PROVINCES;
@@ -81,8 +81,9 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                                 onChange={(e) => setCountry(e.target.value)}
                                 className="w-full px-3 py-2 text-sm border rounded-md focus:ring-2 focus:ring-[#b9903c] focus:outline-none"
                             >
-                                <option value="USA">USA</option>
                                 <option value="CANADA">CANADA</option>
+                                <option value="USA">USA</option>
+                   
                             </select>
                         </div>
                         <InputField label="Address" placeholder="Street address..." />
