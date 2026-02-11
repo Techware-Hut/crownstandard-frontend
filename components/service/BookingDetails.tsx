@@ -6,6 +6,39 @@ import LabeledInput from "@/components/ui/LabeledInput";
 import { bookingApi } from "@/lib/bookingApi";
 import { formatMoney } from "@/types/service";
 
+
+const provinces = [
+  "Alberta",
+  "British Columbia",
+  "Manitoba",
+  "New Brunswick",
+  "Newfoundland and Labrador",
+  "Northwest Territories",
+  "Nova Scotia",
+  "Nunavut",
+  "Ontario",
+  "Prince Edward Island",
+  "Quebec",
+  "Saskatchewan",
+  "Yukon",
+];
+
+const tax : Record<string, number> = {
+  "Alberta": 0.05,
+  "British Columbia": 0.12,
+  "Manitoba": 0.12,
+  "New Brunswick": 0.15,
+  "Newfoundland and Labrador": 0.15,
+  "Northwest Territories": 0.05,
+  "Nova Scotia": 0.15,
+  "Nunavut": 0.05,
+  "Ontario": 0.13,
+  "Prince Edward Island": 0.15,
+  "Quebec": 0.14975,
+  "Saskatchewan": 0.11,
+  "Yukon": 0.05
+};
+
 export default function ServiceBookingForm({ service }: any) {
   const pricing = service.pricing;
   const router = useRouter();
@@ -24,6 +57,9 @@ export default function ServiceBookingForm({ service }: any) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+
+
 
 const scheduledAt = useMemo(() => {
   if (!date || !time) return "";
@@ -56,6 +92,11 @@ const scheduledAt = useMemo(() => {
       setError(null);
 
       if (!scheduledAt) throw new Error("Select date & time");
+      else if(!addressLine1) throw new Error("Please enter address");
+      else if(!city) throw new Error("Please enter city")
+      else if(!stateValue)throw new Error("Please enter state / province")
+     else if(!postalCode)throw new Error("Please enter postal code")
+
 
       const bookingPayload = {
         serviceId: service.id,
@@ -77,8 +118,8 @@ const scheduledAt = useMemo(() => {
       // Redirect to payment route
       router.push(`/payment/${bookingRes.booking._id}`);
     } catch (err: any) {
-      // setError(err.message || "Something went wrong");
-      console.log(err)
+      setError(err.message || "Something went wrong");
+      //console.log(err)
     } finally {
       setLoading(false);
     }
@@ -133,6 +174,7 @@ const scheduledAt = useMemo(() => {
           <div className="mt-6 space-y-4">
             <input
               placeholder="Address"
+              required
               value={addressLine1}
               onChange={(e) => setAddressLine1(e.target.value)}
               className="w-full h-11 border rounded-lg px-3"
@@ -145,12 +187,25 @@ const scheduledAt = useMemo(() => {
                 onChange={(e) => setCity(e.target.value)}
                 className="h-11 border rounded-lg px-3"
               />
-              <input
+              {/* <input
                 placeholder="State"
                 value={stateValue}
                 onChange={(e) => setStateValue(e.target.value)}
                 className="h-11 border rounded-lg px-3"
-              />
+              /> */}
+              <select
+                  value={stateValue}
+                  onChange={(e) => setStateValue(e.target.value)}
+                  className="h-11 border rounded-lg px-3"
+                >
+                  <option value="">Select State / Province</option>
+
+                  {provinces.map((province) => (
+                    <option key={province} value={province}>
+                      {province}
+                    </option>
+                  ))}
+              </select>
               <input
                 placeholder="Postal Code"
                 value={postalCode}
@@ -194,14 +249,14 @@ const scheduledAt = useMemo(() => {
               Tax
             </span>
             <span>
-              13%
+              {(tax[stateValue] * 100 ) || 0}% 
             </span>
           </div>
 
           <div className="flex justify-between mt-2 font-semibold">
             <span>Total</span>
             <span>
-              {formatMoney((pricing.amount * duration) + ((pricing.amount * duration) * (13/100)) , pricing.currency)}
+              {formatMoney((pricing.amount * duration) + ((pricing.amount * duration) * (tax[stateValue] || 0)) , pricing.currency)}
             </span>
           </div>
 

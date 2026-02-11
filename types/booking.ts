@@ -26,6 +26,7 @@ export interface BookingCus {
     currency: string;
     basePrice: number;
     priceUnit: string;
+    tax:number;
     minHours: number;
     totalHours: number;
     quotedSubtotal: number;

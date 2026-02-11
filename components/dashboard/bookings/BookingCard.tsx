@@ -64,9 +64,10 @@ export default function BookingCard({ booking }: { booking: BookingCus }) {
             <span>
               Total: {" "}
               <span className="font-semibold">
-                ${booking.pricingSnapshot.totalPayable} {booking.pricingSnapshot.currency}
+                ${booking.pricingSnapshot.totalPayable + (booking.pricingSnapshot.totalPayable * booking.pricingSnapshot.tax)} {booking.pricingSnapshot.currency}
               </span>
-              {" "}({booking.pricingSnapshot.totalHours}h × ${booking.pricingSnapshot.basePrice}/{booking.pricingSnapshot.priceUnit.replace('_', ' ')})
+              {" "}({booking.pricingSnapshot.totalHours}h × ${booking.pricingSnapshot.basePrice}/{booking.pricingSnapshot.priceUnit.replace('_', ' ')}) + Tax {(booking.pricingSnapshot.tax * 100)}%
+
             </span>
           </div>
         )}
