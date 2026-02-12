@@ -38,22 +38,34 @@ const CANADA_CITIES = [
 ];
 
 export default function ProfilePage({ role }: ProfilePageProps) {
-    const [editable, setEditable] = useState(false);
-    const [profile, setProfile] = useState<ProviderProfile>()
+    // const [editable, setEditable] = useState(false);
+    const [profile, setProfile] = useState<ProviderProfile>({})
+
     const [country, setCountry] = useState("CANADA");
+    const [editMode, setEditMode] = useState(false)
 
     const isProvider = role === "provider";
     const states = country === "USA" ? USA_STATES : CANADA_PROVINCES;
     const cities = country === "USA" ? USA_CITIES : CANADA_CITIES;
 
     const getProfile =async ()=>{
-    const providerProfile = await providerApi.getProfileDetails();
-    setProfile(providerProfile)
+
+        const providerProfile = await providerApi.getProfileDetails();
+        setProfile(providerProfile)
+    }
+
+    const saveData = async()=>{
+        console.log(profile)
+        const res = await providerApi.updateProfileDetails(profile);
+
+        console.log(res)
     }
 
     useEffect(()=>{
         getProfile();
     },[])
+
+
 
     return (
         <main className="relative min-h-screen bg-white">
@@ -78,9 +90,9 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                     
                    
                         <div className="grid grid-cols-1 gap-2 lg:gap-4 grid-cols-1">
-                            <InputField  label="Full Name" value={profile?.name || ""} placeholder="Enter full name..." />
-                            <InputField label="Email Address" value={profile?.email || ""} placeholder="Enter email..." />
-                            <InputField label="Phone Number" value={profile?.number?.toString() || ""} placeholder="+91 9876543210" />
+                            <InputField onChange={(e)=> setProfile((prev)=> ({...prev, name : e.target.value}))} readonly={!editMode}  label="Full Name"  value={profile?.name || ""} placeholder="Enter full name..." />
+                            <InputField  readonly={true} label="Email Address" value={profile?.email || ""} placeholder="Enter email..." />
+                            <InputField onChange={(e)=> setProfile((prev)=> ({...prev, phone : e.target.value}))}readonly={!editMode} label="Phone Number" value={profile?.phone?.toString() || ""} placeholder="Enter phone number..." />
                         </div>
 
                         <div>
@@ -88,8 +100,18 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                                 Country
                             </label>
                             <select 
+                                disabled={!editMode}
                                 value={profile?.address?.country || 'CANADA'}
-                                onChange={(e) => setCountry(e.target.value)}
+                                onChange={(e) =>
+                                setProfile(prev => ({
+                                    ...prev,
+                                    address: {
+                                    ...prev?.address, 
+                                    country: e.target.value
+                                    },
+                                }))
+                                }
+
                                 className="w-full px-3 py-2 text-sm border rounded-md focus:ring-2 focus:ring-[#b9903c] focus:outline-none"
                             >
                                 <option value="CANADA">CANADA</option>
@@ -97,21 +119,65 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                    
                             </select>
                         </div>
-                        <InputField label="Address" value={profile?.address.street || ""} placeholder="Street address..." />
+                        <InputField  readonly={!editMode} label="Address" value={profile?.address?.line1 || ""} placeholder="Street address..." 
+                        
+                         onChange={(e) =>
+                                setProfile(prev => ({
+                                    ...prev,
+                                    address: {
+                                    ...prev?.address, 
+                                    line1: e.target.value
+                                    },
+                                }))
+                        }
+                        />
         
 
                         <div className="grid grid-cols-3 gap-2 lg:gap-4">
                             <SelectField 
                                 label="City" 
-                                placeholder="Select city"
+                                placeholder={profile?.address?.city || "Select city"}
                                 options={cities}
+                                disabled={!editMode}
+                                // value={"Toronto"}
+                                onChange={(e) =>
+                                setProfile(prev => ({
+                                    ...prev,
+                                    address: {
+                                    ...prev?.address, 
+                                    city: e.target.value
+                                    },
+                                }))
+                                }
                             />
                             <SelectField 
                                 label={"State / Province"} 
-                                placeholder={country === "USA" ? "Select State / Province" : "Select province"}
+                                placeholder={profile?.address?.state || "Select State / Province"}
                                 options={states}
+                                value={profile.address?.state}
+                                disabled={!editMode}
+                                    onChange={(e) =>
+                                setProfile(prev => ({
+                                    ...prev,
+                                    address: {
+                                    ...prev?.address, 
+                                    state: e.target.value
+                                    },
+                                }))
+                                }
+
                             />
-                            <InputField  label="Zip Code / Postal Code" value={profile?.address?.zipCode?.toString() || ""} placeholder="Zip Code / Postal Code" />
+                            <InputField
+                                onChange={(e) =>
+                                    setProfile(prev => ({
+                                        ...prev,
+                                        address: {
+                                        ...prev?.address, 
+                                        postalCode: Number(e.target.value)
+                                        },
+                                    }))
+                                }
+                                readonly={!editMode} label="Zip Code / Postal Code" value={profile?.address?.postalCode?.toString() || ""} placeholder="Zip Code / Postal Code" />
   
                         </div>
 
@@ -130,9 +196,14 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                         </div>
                         <button
                             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-full bg-[#b9903c] hover:bg-amber-700"
-                            onClick={() => setEditable(!editable)}
+                            onClick={() => {
+                                setEditMode(!editMode)
+                                
+                                if(editMode)
+                                    saveData();
+                            }}
                         >
-                            <Pencil className="w-4 h-4" /> Edit Profile
+                            {editMode ? "Save" : <><Pencil className="w-4 h-4" /> Edit Profile </>}
                         </button>
                     </div>
                 </section>
@@ -155,12 +226,15 @@ function InputField({
     label,
     placeholder,
     value,
-    readonly=true
+    readonly=true,
+    onChange
+    
 }: {
     label: string;
     placeholder: string;
     value : string
-    readonly? : boolean
+    readonly : boolean,
+      onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
     return (
         <div>
@@ -170,8 +244,9 @@ function InputField({
             <input
                 type="text"
                 placeholder={placeholder}
-                defaultValue={value}
+                value={value}
                 readOnly={readonly}
+                onChange={onChange}
                 className="w-full px-3 py-2 text-sm border rounded-md focus:ring-2 focus:ring-[#b9903c] focus:outline-none"
             />
         </div>
@@ -183,18 +258,26 @@ function SelectField({
     label,
     placeholder,
     options,
+    disabled,
+    value,
+    onChange
+
+    
 }: {
     label: string;
     placeholder: string;
     options: string[];
+    disabled : boolean,
+    value? : string,
+    onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }) {
     return (
         <div>
             <label className="block mb-1 text-sm font-medium text-gray-700">
                 {label}
             </label>
-            <select className="w-full px-3 py-2 text-sm border rounded-md focus:ring-2 focus:ring-[#b9903c] focus:outline-none">
-                <option value="">{placeholder}</option>
+            <select onChange={onChange} disabled={disabled} className="w-full px-3 py-2 text-sm border rounded-md focus:ring-2 focus:ring-[#b9903c] focus:outline-none">
+                <option value={value}>{placeholder}</option>
                 {options.map((option) => (
                     <option key={option} value={option}>
                         {option}
