@@ -25,9 +25,6 @@ export default function Hero() {
       case "provider":
         setDashboardLink("/provider/dashboard");
         break;
-      case "admin":
-        setDashboardLink("/admin/dashboard");
-        break;
       default:
         setDashboardLink("/login");
     }

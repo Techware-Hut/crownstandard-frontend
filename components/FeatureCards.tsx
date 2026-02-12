@@ -1,5 +1,9 @@
+"use client"
 import { CalendarClock } from "lucide-react";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import { CalendarIcon, ShieldStarIcon, StarsBadgeIcon } from "./Icons";
+
 
 function PatternBG({ dark }: { dark?: boolean }) {
   // subtle top-right pattern like the mock (SVG data URI)
@@ -92,7 +96,34 @@ function FeatureCard({
   );
 }
 
+
 export default function FeatureCards() {
+  const [dashboardLink, setDashboardLink] = useState("/login");
+
+  useEffect(() => {
+    const user_role = Cookies.get("user_role");
+
+    if (!user_role) {
+      setDashboardLink("/login");
+      return;
+    }
+
+    console.log(user_role)
+    switch (user_role) {
+      case "customer":
+        setDashboardLink("/dashboard/my-booking");
+        break;
+      case "provider":
+        setDashboardLink("/provider/dashboard");
+        break;
+      case "admin":
+        setDashboardLink("/admin/dashboard");
+        break;
+      default:
+        setDashboardLink("/login");
+    }
+  }, []);
+
   return (
     <section className="relative">
       {/* gold band behind cards (height matches mock) */}
@@ -122,7 +153,7 @@ export default function FeatureCards() {
           desc="Track bookings, chat with providers, and leave reviews — all in one place."
           cta="My Bookings"
           icon={<StarsBadgeIcon className="w-12 h-12" />}
-          href="dashboard/my-bookings"
+          href={dashboardLink}
         />
       </div>
     </section>

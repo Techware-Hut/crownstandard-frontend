@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 export default function NeedCleaning() {
 
     const [dashboardLink, setDashboardLink] = useState("/login");
+    const [myBookingLink, setMybookingLink] = useState("/login")
 
   useEffect(() => {
     const user_role = Cookies.get("user_role");
@@ -20,12 +21,11 @@ export default function NeedCleaning() {
     switch (user_role) {
       case "customer":
         setDashboardLink("/dashboard");
+        setMybookingLink("/dashboard/my-booking")
         break;
       case "provider":
         setDashboardLink("/provider/dashboard");
-        break;
-      case "admin":
-        setDashboardLink("/admin/dashboard");
+        setMybookingLink("/provider/dashboard")
         break;
       default:
         setDashboardLink("/login");
@@ -103,7 +103,7 @@ export default function NeedCleaning() {
             </Link>
 
             {/* dark filled */}
-            <Link href="dashboard/my-bookings" className="px-6 py-2.5 md:py-3 rounded-full btn-dark">
+            <Link href={myBookingLink} className="px-6 py-2.5 md:py-3 rounded-full btn-dark">
               My Bookings
             </Link>
           </div>
