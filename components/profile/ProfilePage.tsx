@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Pencil, Plus } from "lucide-react";
+import { providerApi, ProviderProfile } from "@/lib/providerApi";
 
 interface ProfilePageProps {
     role: "provider" | "customer";
@@ -38,11 +39,21 @@ const CANADA_CITIES = [
 
 export default function ProfilePage({ role }: ProfilePageProps) {
     const [editable, setEditable] = useState(false);
+    const [profile, setProfile] = useState<ProviderProfile>()
     const [country, setCountry] = useState("CANADA");
 
     const isProvider = role === "provider";
     const states = country === "USA" ? USA_STATES : CANADA_PROVINCES;
     const cities = country === "USA" ? USA_CITIES : CANADA_CITIES;
+
+    const getProfile =async ()=>{
+    const providerProfile = await providerApi.getProfileDetails();
+    setProfile(providerProfile)
+    }
+
+    useEffect(()=>{
+        getProfile();
+    },[])
 
     return (
         <main className="relative min-h-screen bg-white">
@@ -67,9 +78,9 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                     
                    
                         <div className="grid grid-cols-1 gap-2 lg:gap-4 grid-cols-1">
-                            <InputField label="Full Name" placeholder="Enter full name..." />
-                            <InputField label="Email Address" placeholder="Enter email..." />
-                            <InputField label="Phone Number" placeholder="+91 9876543210" />
+                            <InputField  label="Full Name" value={profile?.name || ""} placeholder="Enter full name..." />
+                            <InputField label="Email Address" value={profile?.email || ""} placeholder="Enter email..." />
+                            <InputField label="Phone Number" value={profile?.number?.toString() || ""} placeholder="+91 9876543210" />
                         </div>
 
                         <div>
@@ -77,7 +88,7 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                                 Country
                             </label>
                             <select 
-                                value={country}
+                                value={profile?.address?.country || 'CANADA'}
                                 onChange={(e) => setCountry(e.target.value)}
                                 className="w-full px-3 py-2 text-sm border rounded-md focus:ring-2 focus:ring-[#b9903c] focus:outline-none"
                             >
@@ -86,7 +97,7 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                    
                             </select>
                         </div>
-                        <InputField label="Address" placeholder="Street address..." />
+                        <InputField label="Address" value={profile?.address.street || ""} placeholder="Street address..." />
         
 
                         <div className="grid grid-cols-3 gap-2 lg:gap-4">
@@ -100,7 +111,7 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                                 placeholder={country === "USA" ? "Select State / Province" : "Select province"}
                                 options={states}
                             />
-                            <InputField label="Zip Code / Postal Code" placeholder="Zip Code / Postal Code" />
+                            <InputField  label="Zip Code / Postal Code" value={profile?.address?.zipCode?.toString() || ""} placeholder="Zip Code / Postal Code" />
   
                         </div>
 
@@ -143,9 +154,13 @@ export default function ProfilePage({ role }: ProfilePageProps) {
 function InputField({
     label,
     placeholder,
+    value,
+    readonly=true
 }: {
     label: string;
     placeholder: string;
+    value : string
+    readonly? : boolean
 }) {
     return (
         <div>
@@ -155,6 +170,8 @@ function InputField({
             <input
                 type="text"
                 placeholder={placeholder}
+                defaultValue={value}
+                readOnly={readonly}
                 className="w-full px-3 py-2 text-sm border rounded-md focus:ring-2 focus:ring-[#b9903c] focus:outline-none"
             />
         </div>
@@ -312,6 +329,7 @@ function InfoCard({ title }: { title: string }) {
 function Preference({
     label,
     checked = false,
+    
 }: {
     label: string;
     checked?: boolean;

@@ -49,6 +49,21 @@ export interface ProviderDashboardResponse {
    SERVICE TYPES
 ====================================================== */
 
+interface address {
+  country : string,
+  city : string,
+  state: string,
+  street : string,
+  zipCode : number,
+}
+
+export interface ProviderProfile {
+    address : address,
+    name : string,
+    number : number,
+    email : string
+}
+
 export interface ProviderService {
   _id: string;
   providerId: string;
@@ -190,7 +205,10 @@ getEarnings: async (period: "weekly" | "monthly" | "yearly"): Promise<EarningsRe
   return res.data;
 },
 
-// getProfileDetails : async
+getProfileDetails : async () : Promise<ProviderProfile> =>{
+    const res = await axios.get(`/provider/profile`);
+    return res.data;
+}
 
 
 };
