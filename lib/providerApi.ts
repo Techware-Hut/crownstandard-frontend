@@ -49,19 +49,26 @@ export interface ProviderDashboardResponse {
    SERVICE TYPES
 ====================================================== */
 
-export interface address {
-  line1? : string,
-  city ?: string,
-  state?: string,
-  country ?: string,
-  postalCode ?: number,
+export interface ProviderAddress {
+  line1?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: number;
+  location?: {
+    type: "Point";
+    coordinates: [number, number];
+  };
 }
 
+// Backward-compatible alias for older imports/usages.
+export type address = ProviderAddress;
+
 export interface ProviderProfile {
-    address? : address,
-    name? : string,
-    phone? : string,
-    email? : string
+  address?: ProviderAddress;
+  name?: string;
+  phone?: string;
+  email?: string;
 }
 
 export interface ProviderService {
@@ -115,7 +122,6 @@ export interface CreateServiceResponse {
   message: string;
 }
 
-
 export interface ProviderBookingsResponse {
   success: boolean;
   data: any[];
@@ -155,7 +161,6 @@ export interface EarningsResponse {
   period: string;
 }
 
-
 /* ======================================================
    API
 ====================================================== */
@@ -168,56 +173,50 @@ export const providerApi = {
   },
 
   /* -------- My Services -------- */
-getMyServices: async (): Promise<ProviderServicesResponse> => {
-  const res = await axios.get("/service/my");
-  return res.data;
-},
+  getMyServices: async (): Promise<ProviderServicesResponse> => {
+    const res = await axios.get("/service/my");
+    return res.data;
+  },
 
-createService: async (data: CreateServiceData): Promise<CreateServiceResponse> => {
-  const res = await axios.post("/service", data);
-  return res.data;
-},
-getProviderBookings: async (): Promise<ProviderBookingsResponse> => {
-  const res = await axios.get("/provider/bookings");
-  return res.data;
-},
+  createService: async (data: CreateServiceData): Promise<CreateServiceResponse> => {
+    const res = await axios.post("/service", data);
+    return res.data;
+  },
+  getProviderBookings: async (): Promise<ProviderBookingsResponse> => {
+    const res = await axios.get("/provider/bookings");
+    return res.data;
+  },
 
-// Add to providerApi object in lib/providerApi.ts
+  // Add to providerApi object in lib/providerApi.ts
 
-acceptBooking: async (bookingId: string): Promise<BookingActionResponse> => {
-  const res = await axios.post(`/bookings/${bookingId}/accept`);
-  return res.data;
-},
+  acceptBooking: async (bookingId: string): Promise<BookingActionResponse> => {
+    const res = await axios.post(`/bookings/${bookingId}/accept`);
+    return res.data;
+  },
 
-verifyOtp: async (bookingId: string, otp: string): Promise<BookingActionResponse> => {
-  const res = await axios.post(`/bookings/${bookingId}/verify-otp`, { otp });
-  return res.data;
-},
+  verifyOtp: async (bookingId: string, otp: string): Promise<BookingActionResponse> => {
+    const res = await axios.post(`/bookings/${bookingId}/verify-otp`, { otp });
+    return res.data;
+  },
 
-completeBooking: async (bookingId: string): Promise<BookingActionResponse> => {
-  const res = await axios.post(`/bookings/${bookingId}/complete`);
-  return res.data;
-},
+  completeBooking: async (bookingId: string): Promise<BookingActionResponse> => {
+    const res = await axios.post(`/bookings/${bookingId}/complete`);
+    return res.data;
+  },
 
+  getEarnings: async (period: "weekly" | "monthly" | "yearly"): Promise<EarningsResponse> => {
+    const res = await axios.get(`/provider/earnings?period=${period}`);
+    return res.data;
+  },
 
-getEarnings: async (period: "weekly" | "monthly" | "yearly"): Promise<EarningsResponse> => {
-  const res = await axios.get(`/provider/earnings?period=${period}`);
-  return res.data;
-},
-
-getProfileDetails : async () : Promise<ProviderProfile> =>{
+  getProfileDetails: async (): Promise<ProviderProfile> => {
     const res = await axios.get(`/provider/profile`);
     return res.data;
-},
+  },
 
-updateProfileDetails : async(data : ProviderProfile)=>{
-      console.log(data)
-   const res = await axios.post(`provider/update`, data);
-  return res.data;
-}
-
-
+  updateProfileDetails: async (data: ProviderProfile) => {
+    console.log(data);
+    const res = await axios.post(`provider/update`, data);
+    return res.data;
+  },
 };
-
-
-
