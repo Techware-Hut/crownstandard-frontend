@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import BannerSection from "@/components/BannerSection";
 import ServiceCard from "@/components/ServiceCard";
 import ServiceCardSkeleton from "@/components/ServiceCardSkeleton";
-import { servicesApi } from "@/lib/servicesApi";
+import { FlatService, GroupedProvider, servicesApi } from "@/lib/servicesApi";
 import Cookies from "js-cookie";
 
 type UiService = {
@@ -23,19 +23,19 @@ type UiService = {
   provider: string;
 };
 
-const FILTER_TABS = [
-    "All Services",
-    "Basic Cleaning",
-    "Residential",
-    "Commercial",
-    "Deep Cleaning",
-    "Regular Cleaning",
-    "Move In/Out",
-];
+type Coordinates = {
+  lat: number;
+  lng: number;
+};
 
+const LOCATION_STORAGE_KEY = "customer_location";
+const DEFAULT_RADIUS_KM = 25;
+
+const isGroupedProvider = (
+  item: GroupedProvider | FlatService
+): item is GroupedProvider => Array.isArray((item as GroupedProvider).services);
 
 export default function ServicesPage() {
-  const [activeTab, setActiveTab] = useState("All Services");
   const [showFilters, setShowFilters] = useState(true);
   const [search, setSearch] = useState("");
   const [price, setPrice] = useState(200);
@@ -46,20 +46,38 @@ export default function ServicesPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [provider, setProvider] = useState(false)
+  const [provider, setProvider] = useState(false);
+  const [customerLocation, setCustomerLocation] = useState<Coordinates | null>(null);
+  const [locationReady, setLocationReady] = useState(false);
 
 
-  const checkProvider = ()=>{
-
+  const checkProvider = () => {
     const isProvider = Cookies.get("user_role") === "provider" ? true : false;
-    setProvider(isProvider)
+    setProvider(isProvider);
+  };
 
-  }
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    checkProvider();
+
+    const raw = localStorage.getItem(LOCATION_STORAGE_KEY);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw) as Coordinates;
+        if (typeof parsed.lat === "number" && typeof parsed.lng === "number") {
+          setCustomerLocation(parsed);
+        }
+      } catch (parseError) {
+        console.error("Failed to parse stored customer location", parseError);
+      }
+    }
+
+    setLocationReady(true);
+  }, []);
 
 
   useEffect(() => {
-
-
+    if (!locationReady) return;
 
     const fetchServices = async () => {
       try {
@@ -67,29 +85,66 @@ export default function ServicesPage() {
         setError(null);
 
         const res = await servicesApi.getServices({
+          lat: customerLocation?.lat,
+          lng: customerLocation?.lng,
+          radius: customerLocation ? DEFAULT_RADIUS_KM : undefined,
           minPrice: 25,
           maxPrice: price,
           page: 1,
           limit: 10,
         });
 
-        const mapped: UiService[] = res.data.flatMap((provider, providerIndex) =>
-          provider.services.map((service, serviceIndex) => ({
-            id: service._id, // ← IMPORTANT
-            title: service.title,
-            slug: service.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
-        description: "Professional service provided by a verified vendor.",
 
-            price: service.basePrice,
-            duration: service.priceUnit === "per_hour" ? "Per hour" : "Per service",
-            location: provider.name, // Use provider name as location since no distance
-            rating: service.ratingSummary?.avg ?? 0,
-            reviews: service.ratingSummary?.count ?? 0,
-            imageUrl: service.media?.[0] || "/ServiceCleaning.png",
-            badge: "Verified",
-            provider: provider.name,
-          }))
-        );
+
+        const mapped: UiService[] = (res.data ?? []).flatMap((item) => {
+          if (isGroupedProvider(item)) {
+            return item.services.map((service) => ({
+              id: service._id,
+              title: service.title,
+              slug: service.title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""),
+              description: "Professional service provided by a verified vendor.",
+              price: service.basePrice,
+              duration: service.priceUnit === "per_hour" ? "Per hour" : "Per service",
+              location:
+                typeof item.distance === "number"
+                  ? `${item.distance.toFixed(1)} km away`
+                  : item.name,
+              rating: service.ratingSummary?.avg ?? 0,
+              reviews: service.ratingSummary?.count ?? 0,
+              imageUrl: service.media?.[0] || "/ServiceCleaning.png",
+              badge: "Verified",
+              provider: item.name,
+            }));
+          }
+
+          return [
+            {
+              id: item._id,
+              title: item.title,
+              slug: (item.slug || item.title)
+                .toLowerCase()
+                .replace(/\s+/g, "-")
+                .replace(/[^a-z0-9-]/g, ""),
+              description: item.description || "Professional service provided by a verified vendor.",
+              price: item.basePrice,
+              duration: item.priceUnit === "per_hour" ? "Per hour" : "Per service",
+              location:
+                typeof item.distanceKm === "number"
+                  ? `${item.distanceKm.toFixed(1)} km away`
+                  : [
+                      item.provider?.serviceAddress?.city,
+                      item.provider?.serviceAddress?.state,
+                    ]
+                      .filter(Boolean)
+                      .join(", ") || "Location unavailable",
+              rating: item.ratingSummary?.avg ?? 0,
+              reviews: item.ratingSummary?.count ?? 0,
+              imageUrl: item.media?.[0] || "/ServiceCleaning.png",
+              badge: "Verified",
+              provider: item.provider?.name || "Unknown provider",
+            },
+          ];
+        });
 
         setServices(mapped);
         setTotal(res.total);
@@ -102,8 +157,7 @@ export default function ServicesPage() {
     };
 
     fetchServices();
-    checkProvider();
-  }, [price, minRating, sortBy]);
+  }, [price, minRating, sortBy, customerLocation, locationReady]);
 
   const filtered = services
     .filter((s) => {

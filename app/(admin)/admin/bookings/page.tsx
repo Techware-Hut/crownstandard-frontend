@@ -454,8 +454,10 @@ const BookingDetails = ({ booking }: { booking: Booking }) => (
       <b>Payment</b>
       <p>Status: {booking.payment.status}</p>
       <p>Total: ${booking.payment.amount}</p>
-      <p>Platform Fee: ${booking.payment.applicationFee}</p>
-      <p>Provider Share: ${booking.payment.transferAmount}</p>
+      {/* <p>Platform Fee: ${booking.payment.applicationFee}</p>
+      <p>Provider Share: ${booking.payment.transferAmount}</p> */}
+      <p>Platform Fee: ${booking.payment.amount * 0.1 }</p>
+      <p>Provider Share: ${booking.payment.amount * 0.9}</p>
     </section>
 
     <section>

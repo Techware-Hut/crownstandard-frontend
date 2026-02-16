@@ -1,6 +1,5 @@
 // lib/servicesApi.ts
 import axios from './axios';
-import { ProviderService } from './providerApi';
 
 export interface ServiceFilters {
   lat?: number;
@@ -18,10 +17,10 @@ export interface ServiceResponse {
   total: number;
   page: number;
   limit: number;
-  data: Provider[];
+  data: GroupedProvider[] | FlatService[];
 }
 
-export interface Provider {
+export interface GroupedProvider {
   _id: string;
   name: string;
   profilePhoto: string;
@@ -39,6 +38,26 @@ export interface Service {
   ratingSummary: {
     avg: number;
     count: number;
+  };
+}
+
+export interface FlatService extends Service {
+  slug?: string;
+  description?: string;
+  categoryId?: string;
+  createdAt?: string;
+  distanceKm?: number | null;
+  provider?: {
+    _id: string;
+    name: string;
+    email?: string;
+    serviceAddress?: {
+      line1?: string;
+      city?: string;
+      state?: string;
+      country?: string;
+      postalCode?: string;
+    };
   };
 }
 
@@ -86,6 +105,7 @@ export const servicesApi = {
     if (filters?.limit) params.append('limit', filters.limit.toString());
 
     const response = await axios.get(`/services?${params.toString()}`);
+    console.log(response.data)
     return response.data;
   },
 

@@ -8,12 +8,13 @@ import Input from "@/components/ui/Input";
 import Image from "next/image";
 import Link from "next/link";
 import ForgotPasswordModal from "@/components/auth/ForgotPasswordModal";
-import { useEffect, useState } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useCallback, useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { Session } from "next-auth";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE 
 
+const LOCATION_STORAGE_KEY = "customer_location";
 
 
 export default function LoginClient({
@@ -30,14 +31,41 @@ export default function LoginClient({
   const [error, setError] = useState<string | null>(null);
 
 
-  const { data, status, update } = useSession()
+  const { data, status } = useSession()
 
+  const persistCustomerLocation = useCallback(async () => {
+    if (typeof window === "undefined" || type !== "customer" || !("geolocation" in navigator)) {
+      return;
+    }
+
+    const location = await new Promise<{ lat: number; lng: number } | null>((resolve) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) =>
+          resolve({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          }),
+        () => resolve(null),
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 300000,
+        }
+      );
+    });
+
+    if (!location) return;
+
+    localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(location));
+    document.cookie = `customer_lat=${location.lat}; path=/`;
+    document.cookie = `customer_lng=${location.lng}; path=/`;
+  }, [type]);
 
 // console.log(session.)
 
 
 
-  const googleSignIn = async (user : Session)=>{
+  const googleSignIn = useCallback(async (user: Session) => {
       try {
           const res = await fetch(`${API_BASE}/auth/oauth/google`, {
               method: "POST",
@@ -58,29 +86,21 @@ export default function LoginClient({
           document.cookie = `user_role=${responseData.user.role}`
           localStorage.setItem("user","true")
           localStorage.setItem('google', "true")
+          await persistCustomerLocation();
           router.push(responseData.user.role === "provider" ? "/provider/dashboard" : "/dashboard");
       } catch (err) {
           console.error("Google sign-in error:", err);
           setError(err instanceof Error ? err.message : "Google sign-in failed");
       }
-  }
+  }, [persistCustomerLocation, router, type]);
 
 
   
     useEffect(()=>{
-     
-
-        if(status === "authenticated")
-        {
-            googleSignIn(data)
-
-            console.log(status)
-
-        }
-
-
-      
-    },[status])
+      if (status === "authenticated" && data) {
+        googleSignIn(data);
+      }
+    }, [status, data, googleSignIn])
 
 
 
@@ -104,6 +124,7 @@ export default function LoginClient({
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message ?? "Login failed");
 
+      await persistCustomerLocation();
       router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
 
       localStorage.setItem("user","true")
