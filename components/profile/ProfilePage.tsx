@@ -51,14 +51,15 @@ export default function ProfilePage({ role }: ProfilePageProps) {
     const getProfile =async ()=>{
 
         const providerProfile = await providerApi.getProfileDetails();
+      
         setProfile(providerProfile)
     }
 
     const saveData = async()=>{
-        console.log(profile)
+
         const res = await providerApi.updateProfileDetails(profile);
 
-        console.log(res)
+
     }
 
     useEffect(()=>{
