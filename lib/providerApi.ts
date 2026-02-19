@@ -71,6 +71,34 @@ export interface ProviderProfile {
   email?: string;
 }
 
+export interface StripeConnectStatus {
+  hasAccount: boolean;
+  accountId?: string;
+  detailsSubmitted?: boolean;
+  chargesEnabled?: boolean;
+  payoutsEnabled?: boolean;
+  onboardingComplete?: boolean;
+}
+
+export interface StripeConnectStatusResponse {
+  success?: boolean;
+  data?: StripeConnectStatus;
+  hasAccount?: boolean;
+  accountId?: string;
+  detailsSubmitted?: boolean;
+  chargesEnabled?: boolean;
+  payoutsEnabled?: boolean;
+  onboardingComplete?: boolean;
+}
+
+export interface StripeOnboardingLinkResponse {
+  success?: boolean;
+  data?: {
+    url?: string;
+  };
+  url?: string;
+}
+
 export interface ProviderService {
   _id: string;
   providerId: string;
@@ -124,7 +152,7 @@ export interface CreateServiceResponse {
 
 export interface ProviderBookingsResponse {
   success: boolean;
-  data: any[];
+  data: unknown[];
   pagination?: {
     page: number;
     total: number;
@@ -135,7 +163,7 @@ export interface ProviderBookingsResponse {
 export interface BookingActionResponse {
   success: boolean;
   message: string;
-  data?: any;
+  data?: unknown;
 }
 
 //earning
@@ -217,6 +245,24 @@ export const providerApi = {
   updateProfileDetails: async (data: ProviderProfile) => {
     console.log(data);
     const res = await axios.post(`provider/update`, data);
+    return res.data;
+  },
+
+  getStripeConnectStatus: async (): Promise<StripeConnectStatusResponse> => {
+    const res = await axios.get("/provider/stripe/account/status");
+    return res.data;
+  },
+
+  createStripeConnectAccount: async (name : string, email : string) => {
+    const res = await axios.post("/provider/stripe/account", {
+      name: name,
+      email : email
+    });
+    return res.data;
+  },
+
+  createStripeOnboardingLink: async (): Promise<StripeOnboardingLinkResponse> => {
+    const res = await axios.post("/provider/stripe/account/onboarding");
     return res.data;
   },
 };

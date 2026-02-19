@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { Pencil, Plus } from "lucide-react";
-import { providerApi, ProviderProfile } from "@/lib/providerApi";
+import {
+    providerApi,
+    ProviderProfile,
+    StripeConnectStatusResponse,
+} from "@/lib/providerApi";
 
 interface ProfilePageProps {
     role: "provider" | "customer";
@@ -41,12 +45,12 @@ export default function ProfilePage({ role }: ProfilePageProps) {
     // const [editable, setEditable] = useState(false);
     const [profile, setProfile] = useState<ProviderProfile>({})
 
-    const [country, setCountry] = useState("CANADA");
     const [editMode, setEditMode] = useState(false)
 
     const isProvider = role === "provider";
-    const states = country === "USA" ? USA_STATES : CANADA_PROVINCES;
-    const cities = country === "USA" ? USA_CITIES : CANADA_CITIES;
+    const selectedCountry = profile?.address?.country || "CANADA";
+    const states = selectedCountry === "USA" ? USA_STATES : CANADA_PROVINCES;
+    const cities = selectedCountry === "USA" ? USA_CITIES : CANADA_CITIES;
 
     const getProfile =async ()=>{
 
@@ -57,7 +61,7 @@ export default function ProfilePage({ role }: ProfilePageProps) {
 
     const saveData = async()=>{
 
-        const res = await providerApi.updateProfileDetails(profile);
+        await providerApi.updateProfileDetails(profile);
 
 
     }
@@ -211,7 +215,8 @@ export default function ProfilePage({ role }: ProfilePageProps) {
 
                 {/* Conditional Sections */}
                 {isProvider ? (
-                    <ProviderExtras />
+                    <ProviderExtras 
+                    profile={profile}/>
                 ) : (
                     <CustomerExtras />
                 )}
@@ -290,10 +295,92 @@ function SelectField({
 }
 
 /* ---------- Provider-Specific Section ---------- */
-function ProviderExtras() {
+function ProviderExtras({profile} : {profile : ProviderProfile}) {
+    const [status, setStatus] = useState({
+        hasAccount: false,
+        detailsSubmitted: false,
+        chargesEnabled: false,
+        payoutsEnabled: false,
+        onboardingComplete: false,
+    });
+    const [loadingStatus, setLoadingStatus] = useState(true);
+    const [connectError, setConnectError] = useState<string | null>(null);
+    const [openingOnboardingLink, setOpeningOnboardingLink] = useState(false);
+
+    const normalizeStatus = useCallback((raw: StripeConnectStatusResponse) => {
+        const payload = raw.data ?? raw;
+        console.log("payload", payload)
+        const hasAccount = Boolean(payload.hasAccount || payload.accountId);
+        const detailsSubmitted = Boolean(payload.detailsSubmitted);
+        const chargesEnabled = Boolean(payload.chargesEnabled);
+        const payoutsEnabled = Boolean(payload.payoutsEnabled);
+
+        return {
+            hasAccount,
+            detailsSubmitted,
+            chargesEnabled,
+            payoutsEnabled,
+            onboardingComplete:
+                Boolean(payload.onboardingComplete) ||
+                (detailsSubmitted && chargesEnabled && payoutsEnabled),
+        };
+    }, []);
+
+    const loadConnectStatus = useCallback(async () => {
+        setLoadingStatus(true);
+        setConnectError(null);
+        try {
+            const res = await providerApi.getStripeConnectStatus();
+            console.log(res)
+            const nextStatus = normalizeStatus(res);
+            console.log(nextStatus)
+            setStatus(nextStatus);
+        } catch (error) {
+            setConnectError("Unable to load Stripe account status.");
+            console.error("Stripe status fetch failed", error);
+        } finally {
+            setLoadingStatus(false);
+        }
+    }, [normalizeStatus]);
+
+    useEffect(() => {
+        loadConnectStatus();
+    }, [loadConnectStatus]);
+
+    const handleStartOnboarding = async () => {
+        setConnectError(null);
+        try {
+            await providerApi.createStripeConnectAccount(profile.name || "", profile.email || "");
+            await loadConnectStatus();
+        } catch (error) {
+            setConnectError("Unable to create a Stripe Connect account.");
+            console.error("Stripe account creation failed", error);
+        }
+    };
+
+    const handleOpenOnboardingLink = async () => {
+        setConnectError(null);
+        setOpeningOnboardingLink(true);
+        try {
+            const res = await providerApi.createStripeOnboardingLink();
+            const onboardingUrl = res.url || res.data?.url;
+
+            if (!onboardingUrl) {
+                throw new Error("Stripe onboarding link is missing in response.");
+            }
+
+            window.location.assign(onboardingUrl);
+        } catch (error) {
+            setConnectError("Unable to open Stripe onboarding right now.");
+            console.error("Stripe onboarding link fetch failed", error);
+        } finally {
+            setOpeningOnboardingLink(false);
+        }
+    };
+
     return (
         <>
-            <section className="p-6 mb-8 mt-5 text-white bg-gray-900 rounded-xl">
+            {/* <section className="p-6 mb-8 mt-5 text-white bg-gray-900 rounded-xl">
                 <div className="flex items-center justify-between">
                     <div>
                         <h3 className="flex items-center gap-2 text-sm font-semibold text-[#b9903c]">
@@ -308,9 +395,68 @@ function ProviderExtras() {
                         <Pencil className="w-4 h-4" /> Edit Rate
                     </button>
                 </div>
+            </section> */}
+
+            <section className="p-6 mb-8 bg-[#F3F1ED] rounded-xl">
+                <div className="flex flex-col gap-3 mb-5 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h3 className="text-xl font-bold text-[#b9903c]">Stripe Connect</h3>
+                        <p className="text-sm text-gray-600">
+                            Complete onboarding to receive payouts and manage your account.
+                        </p>
+                    </div>
+                    <button
+                        onClick={loadConnectStatus}
+                        className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border rounded-full hover:bg-gray-50"
+                    >
+                        Refresh Status
+                    </button>
+                </div>
+
+                {loadingStatus ? (
+                    <p className="text-sm text-gray-600">Loading Stripe status...</p>
+                ) : (
+                    <div className="flex flex-wrap gap-2 mb-4 text-xs">
+                        <StatusBadge label="Account Created" active={status.hasAccount} />
+                        <StatusBadge label="Details Submitted" active={status.detailsSubmitted} />
+                        <StatusBadge label="Charges Enabled" active={status.chargesEnabled} />
+                        <StatusBadge label="Payouts Enabled" active={status.payoutsEnabled} />
+                    </div>
+                )}
+
+                {connectError && (
+                    <p className="mb-4 text-sm font-medium text-red-600">{connectError}</p>
+                )}
+
+
+
+                {!status.hasAccount && !loadingStatus && (
+                    <button
+                        onClick={handleStartOnboarding}
+                        className="px-4 py-2 text-sm font-medium text-white rounded-full bg-[#b9903c] hover:bg-amber-700"
+                    >
+                        Create Stripe Account
+                    </button>
+                )}
+
+                {status.hasAccount && (
+                    <div className="space-y-4">
+                        <button
+                            onClick={handleOpenOnboardingLink}
+                            disabled={openingOnboardingLink}
+                            className="px-4 py-2 text-sm font-medium text-white rounded-full bg-[#b9903c] hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-70"
+                        >
+                            {openingOnboardingLink
+                                ? "Opening Stripe..."
+                                : status.onboardingComplete
+                                  ? "Manage Stripe Account"
+                                  : "Continue Stripe Onboarding"}
+                        </button>
+                    </div>
+                )}
             </section>
 
-            <div className="grid grid-cols-1 bg-[#F6F4EF] gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 bg-[#F6F4EF] md:grid-cols-2">
                 <InfoCard title="Location Management" />
                 <InfoCard title="Booking Preferences" />
             </div>
@@ -410,22 +556,14 @@ function InfoCard({ title }: { title: string }) {
     );
 }
 
-function Preference({
-    label,
-    checked = false,
-    
-}: {
-    label: string;
-    checked?: boolean;
-}) {
+function StatusBadge({ label, active }: { label: string; active: boolean }) {
     return (
-        <label className="flex items-start gap-2">
-            <input
-                type="checkbox"
-                defaultChecked={checked}
-                className="mt-1 border-gray-300 rounded text-amber-600 focus:ring-amber-500"
-            />
-            <span>{label}</span>
-        </label>
+        <span
+            className={`px-2.5 py-1 rounded-full font-medium ${
+                active ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-700"
+            }`}
+        >
+            {label}
+        </span>
     );
 }

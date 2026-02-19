@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@stripe/connect-js": "^3.3.34",
+    "@stripe/react-connect-js": "^3.3.33",
     "@stripe/react-stripe-js": "^5.4.1",
     "@stripe/stripe-js": "^8.6.1",
     "axios": "^1.13.2",
