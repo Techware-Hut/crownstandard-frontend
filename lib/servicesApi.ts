@@ -105,7 +105,6 @@ export const servicesApi = {
     if (filters?.limit) params.append('limit', filters.limit.toString());
 
     const response = await axios.get(`/services?${params.toString()}`);
-    console.log(response.data)
     return response.data;
   },
 

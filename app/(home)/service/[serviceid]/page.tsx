@@ -16,7 +16,7 @@ import { servicesApi } from "@/lib/servicesApi";
 async function getService(id: string): Promise<Service | null> {
   if (!id) return null;
 
-  console.log(id)
+
   try {
     const response = await servicesApi.getServiceById(id);
     return {

@@ -397,7 +397,7 @@ function ProviderExtras({profile} : {profile : ProviderProfile}) {
                 </div>
             </section> */}
 
-            <section className="p-6 mb-8 bg-[#F3F1ED] rounded-xl">
+            <section className="p-6 mt-5 mb-2 bg-[#F3F1ED] rounded-xl">
                 <div className="flex flex-col gap-3 mb-5 md:flex-row md:items-center md:justify-between">
                     <div>
                         <h3 className="text-xl font-bold text-[#b9903c]">Stripe Connect</h3>
@@ -441,6 +441,7 @@ function ProviderExtras({profile} : {profile : ProviderProfile}) {
 
                 {status.hasAccount && (
                     <div className="space-y-4">
+                        {!status.onboardingComplete &&
                         <button
                             onClick={handleOpenOnboardingLink}
                             disabled={openingOnboardingLink}
@@ -448,10 +449,10 @@ function ProviderExtras({profile} : {profile : ProviderProfile}) {
                         >
                             {openingOnboardingLink
                                 ? "Opening Stripe..."
-                                : status.onboardingComplete
-                                  ? "Manage Stripe Account"
-                                  : "Continue Stripe Onboarding"}
+                                : !status.onboardingComplete &&
+                                     "Continue Stripe Onboarding"}
                         </button>
+                        }
                     </div>
                 )}
             </section>

@@ -38,7 +38,7 @@ export default function CTASection({ patternUrl }: Props) {
 
             <div className="flex flex-wrap justify-center gap-4 mt-8">
               <Link
-                href="#services"
+                href="services"
                 className="px-6 py-3 font-medium text-white rounded-full bg-brand-gold hover:opacity-90"
               >
                 Book a Service

@@ -108,7 +108,6 @@ export default function FeatureCards() {
       return;
     }
 
-    console.log(user_role)
     switch (user_role) {
       case "customer":
         setDashboardLink("/dashboard/my-booking");
