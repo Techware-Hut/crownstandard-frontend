@@ -81,9 +81,9 @@ export default function LoginClient({
 
           // Refresh the session to ensure authentication is updated
           // await update();
-          document.cookie = `auth_token=${responseData.token}`
-          document.cookie = `user_id=${responseData.user.id}`
-          document.cookie = `user_role=${responseData.user.role}`
+          // document.cookie = `auth_token=${responseData.token}`
+          // document.cookie = `user_id=${responseData.user.id}`
+          // document.cookie = `user_role=${responseData.user.role}`
           localStorage.setItem("user","true")
           localStorage.setItem('google', "true")
           await persistCustomerLocation();
