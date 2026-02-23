@@ -8,6 +8,7 @@ import {
     ProviderProfile,
     StripeConnectStatusResponse,
 } from "@/lib/providerApi";
+import { useRouter } from "next/navigation";
 
 interface ProfilePageProps {
     role: "provider" | "customer";
@@ -56,6 +57,7 @@ export default function ProfilePage({ role }: ProfilePageProps) {
 
         const providerProfile = await providerApi.getProfileDetails();
       
+  
         setProfile(providerProfile)
     }
 
@@ -216,7 +218,8 @@ export default function ProfilePage({ role }: ProfilePageProps) {
                 {/* Conditional Sections */}
                 {isProvider ? (
                     <ProviderExtras 
-                    profile={profile}/>
+                    profile={profile}
+                    country={selectedCountry}/>
                 ) : (
                     <CustomerExtras />
                 )}
@@ -295,7 +298,7 @@ function SelectField({
 }
 
 /* ---------- Provider-Specific Section ---------- */
-function ProviderExtras({profile} : {profile : ProviderProfile}) {
+function ProviderExtras({profile, country} : {profile : ProviderProfile, country : string}) {
     const [status, setStatus] = useState({
         hasAccount: false,
         detailsSubmitted: false,
@@ -307,9 +310,10 @@ function ProviderExtras({profile} : {profile : ProviderProfile}) {
     const [connectError, setConnectError] = useState<string | null>(null);
     const [openingOnboardingLink, setOpeningOnboardingLink] = useState(false);
 
+    const router = useRouter()
+
     const normalizeStatus = useCallback((raw: StripeConnectStatusResponse) => {
         const payload = raw.data ?? raw;
-        console.log("payload", payload)
         const hasAccount = Boolean(payload.hasAccount || payload.accountId);
         const detailsSubmitted = Boolean(payload.detailsSubmitted);
         const chargesEnabled = Boolean(payload.chargesEnabled);
@@ -331,9 +335,7 @@ function ProviderExtras({profile} : {profile : ProviderProfile}) {
         setConnectError(null);
         try {
             const res = await providerApi.getStripeConnectStatus();
-            console.log(res)
             const nextStatus = normalizeStatus(res);
-            console.log(nextStatus)
             setStatus(nextStatus);
         } catch (error) {
             setConnectError("Unable to load Stripe account status.");
@@ -350,7 +352,8 @@ function ProviderExtras({profile} : {profile : ProviderProfile}) {
     const handleStartOnboarding = async () => {
         setConnectError(null);
         try {
-            await providerApi.createStripeConnectAccount(profile.name || "", profile.email || "");
+      
+            await providerApi.createStripeConnectAccount(profile.name || "", profile.email || "", country === "CANADA" ? "CA" : "USA");
             await loadConnectStatus();
         } catch (error) {
             setConnectError("Unable to create a Stripe Connect account.");
@@ -377,6 +380,12 @@ function ProviderExtras({profile} : {profile : ProviderProfile}) {
             setOpeningOnboardingLink(false);
         }
     };
+
+    const stripeDashboard = async ()=>{
+        const dashboardUrl = await providerApi.getStripeDashboard(); 
+        console.log(dashboardUrl.url)
+        router.push(dashboardUrl.url)
+    }
 
     return (
         <>
@@ -441,6 +450,14 @@ function ProviderExtras({profile} : {profile : ProviderProfile}) {
 
                 {status.hasAccount && (
                     <div className="space-y-4">
+                        <button
+                            onClick={stripeDashboard}
+                            disabled={openingOnboardingLink}
+                            className="px-4 mr-3 py-2 text-sm font-medium text-white rounded-full bg-[#b9903c] hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-70"
+                        >
+                            Dashboard
+                        </button>
+
                         {!status.onboardingComplete &&
                         <button
                             onClick={handleOpenOnboardingLink}

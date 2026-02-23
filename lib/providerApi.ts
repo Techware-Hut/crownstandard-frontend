@@ -45,6 +45,10 @@ export interface ProviderDashboardResponse {
   };
 }
 
+export interface ProviderStripeDashboardResponse{
+  url : string
+}
+
 /* ======================================================
    SERVICE TYPES
 ====================================================== */
@@ -221,6 +225,14 @@ export const providerApi = {
     return res.data;
   },
 
+  getStripeDashboard : async (): Promise<ProviderStripeDashboardResponse> => {
+
+    const res = await axios.get("/provider/stripe/loginLink")
+
+    return res.data
+    
+  },
+
   /* -------- My Services -------- */
   getMyServices: async (): Promise<ProviderServicesResponse> => {
     const res = await axios.get("/service/my");
@@ -274,10 +286,11 @@ export const providerApi = {
     return res.data;
   },
 
-  createStripeConnectAccount: async (name : string, email : string) => {
+  createStripeConnectAccount: async (name : string, email : string, country : string) => {
     const res = await axios.post("/provider/stripe/account", {
       name: name,
-      email : email
+      email : email,
+      country :  country
     });
     return res.data;
   },
