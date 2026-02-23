@@ -139,4 +139,12 @@ export const bookingApi = {
     });
     return response.data;
   },
+
+  cancelBooking : async (bookingId : string)=> {
+    const response = await axios.post("/cancelBooking",{
+      "bookingId" : bookingId
+    })
+    return response;
+  }
+
 };

@@ -1,8 +1,24 @@
+import { bookingApi } from "@/lib/bookingApi";
 import { BookingCus } from "@/types/booking";
 import { MapPin, CalendarDays, Clock, User, Info, DollarSign } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function BookingCard({ booking }: { booking: BookingCus }) {
+
+
+  const router = useRouter();
   const isPending = booking.status === "Pending";
+
+
+  const cancelBooking = async ()=>{
+    try{
+      const res = await bookingApi.cancelBooking(booking.id)
+      window.location.reload();
+    }
+    catch(e){
+      alert("Failed to cancel")
+    }
+  }
 
   return (
     <div
@@ -64,9 +80,9 @@ export default function BookingCard({ booking }: { booking: BookingCus }) {
             <span>
               Total: {" "}
               <span className="font-semibold">
-                ${booking.pricingSnapshot.totalPayable + (booking.pricingSnapshot.totalPayable * booking.pricingSnapshot.tax)} {booking.pricingSnapshot.currency}
+                ${booking.pricingSnapshot.totalPayable + (booking.pricingSnapshot.totalPayable * booking.pricingSnapshot.tax || 0)} {booking.pricingSnapshot.currency}
               </span>
-              {" "}({booking.pricingSnapshot.totalHours}h × ${booking.pricingSnapshot.basePrice}/{booking.pricingSnapshot.priceUnit.replace('_', ' ')}) + Tax {(booking.pricingSnapshot.tax * 100)}%
+              {" "}({booking.pricingSnapshot.totalHours}h × ${booking.pricingSnapshot.basePrice}/{booking.pricingSnapshot.priceUnit.replace('_', ' ')}) + Tax {(booking.pricingSnapshot.tax || 0 * 100)}%
 
             </span>
           </div>
@@ -97,10 +113,13 @@ export default function BookingCard({ booking }: { booking: BookingCus }) {
         </div>
       </div>
 
+
       {/* Footer */}
       {isPending && (
         <div className="flex flex-col gap-3 pt-4 mt-5 border-t border-gray-200 sm:flex-row sm:items-center sm:justify-between">
-          <button className="px-4 py-2 text-sm font-semibold text-red-700 transition bg-red-100 rounded-full hover:bg-red-200">
+          <button 
+          onClick={cancelBooking}
+          className="px-4 py-2 text-sm font-semibold text-red-700 transition bg-red-100 rounded-full hover:bg-red-200">
             Cancel Booking (${booking.cancelFee?.toFixed(2)})
           </button>
 

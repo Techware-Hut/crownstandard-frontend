@@ -53,7 +53,7 @@ export default function MyBookingsPage() {
           instruction: b.specialInstructions || "—",
           status: normalizeStatus(b.status),
          paymentStatus: "succeeded",
-          cancelFee: b.pricingSnapshot.totalPayable * 0.15,
+          cancelFee: ((b.pricingSnapshot.totalPayable) + (b.pricingSnapshot.totalPayable * b.pricingSnapshot.tax)) * 0.15,
           pricingSnapshot: b.pricingSnapshot,
         }));
 
