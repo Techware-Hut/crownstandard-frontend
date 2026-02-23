@@ -152,11 +152,32 @@ export interface CreateServiceResponse {
 
 export interface ProviderBookingsResponse {
   success: boolean;
-  data: unknown[];
+  data: ProviderBooking[];
   pagination?: {
     page: number;
     total: number;
     totalPages: number;
+  };
+}
+
+export interface ProviderBooking {
+  _id: string;
+  status: string;
+  scheduledAt: string;
+  durationHours: number;
+  serviceId: {
+    title: string;
+  };
+  customerId: {
+    name: string;
+  };
+  serviceAddress: {
+    city: string;
+    state: string;
+  };
+  pricingSnapshot: {
+    currency: string;
+    providerShare: number;
   };
 }
 

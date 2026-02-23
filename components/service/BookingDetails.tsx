@@ -39,6 +39,28 @@ const tax : Record<string, number> = {
   "Yukon": 0.05
 };
 
+
+  const provinceMap :Record<string, string>= {
+    A: "Newfoundland and Labrador",
+    B: "Nova Scotia",
+    C: "Prince Edward Island",
+    E: "New Brunswick",
+    G: "Quebec",
+    H: "Quebec",
+    J: "Quebec",
+    K: "Ontario",
+    L: "Ontario",
+    M: "Ontario",
+    N: "Ontario",
+    P: "Ontario",
+    R: "Manitoba",
+    S: "Saskatchewan",
+    T: "Alberta",
+    V: "British Columbia",
+    Y: "Yukon"
+  };
+
+
 export default function ServiceBookingForm({ service }: any) {
   const pricing = service.pricing;
   const router = useRouter();
@@ -125,6 +147,32 @@ const scheduledAt = useMemo(() => {
     }
   };
 
+
+function getProvinceFromPostalCode(postalCode :string) {
+      if (!postalCode) return null;
+
+      // Normalize input (remove spaces and uppercase)
+      const code = postalCode.replace(/\s+/g, '').toUpperCase();
+
+      const firstLetter = code[0];
+
+        // Special handling for X (Nunavut & Northwest Territories)
+  if (firstLetter === "X") {
+    const fsa = code.substring(0, 3);
+
+    const nunavutFSAs = ["X0A", "X0B", "X0C"];
+    const nwtFSAs = ["X0E", "X0G", "X1A"];
+
+    if (nunavutFSAs.includes(fsa)) return "Nunavut";
+    if (nwtFSAs.includes(fsa)) return "Northwest Territories";
+
+    return "Northwest Territories or Nunavut";
+  }
+
+  return provinceMap[firstLetter] || "";
+}
+
+
   return (
     <section className="mt-10 bg-white border rounded-2xl shadow-sm">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr,420px]">
@@ -209,7 +257,11 @@ const scheduledAt = useMemo(() => {
               <input
                 placeholder="Postal Code"
                 value={postalCode}
-                onChange={(e) => setPostalCode(e.target.value)}
+                onChange={(e) => {
+                  setPostalCode(e.target.value)
+                  setStateValue(getProvinceFromPostalCode(e.target.value) || "")
+
+                }}
                 className="h-11 border rounded-lg px-3"
               />
             </div>
