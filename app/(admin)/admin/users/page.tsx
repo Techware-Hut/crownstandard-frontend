@@ -31,6 +31,13 @@ interface Pagination {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const defaultFilters = {
+    role: '',
+    status: '',
+    search: '',
+    page: 1,
+    limit: 10
+  };
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
     limit: 10,
@@ -38,13 +45,8 @@ export default function UsersPage() {
     totalPages: 0
   });
   
-  const [filters, setFilters] = useState({
-    role: '',
-    status: '',
-    search: '',
-    page: 1,
-    limit: 10
-  });
+  const [filters, setFilters] = useState(defaultFilters);
+  const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
     fetchUsers();
@@ -88,6 +90,19 @@ export default function UsersPage() {
     setFilters(prev => ({ ...prev, page: newPage }));
   };
 
+  const handleSearch = () => {
+    setFilters(prev => ({
+      ...prev,
+      search: searchInput.trim(),
+      page: 1
+    }));
+  };
+
+  const handleClear = () => {
+    setSearchInput('');
+    setFilters(defaultFilters);
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -127,8 +142,11 @@ export default function UsersPage() {
             type="text"
             placeholder="Search users..."
             className="px-3 py-2 border border-gray-300 rounded-md"
-            value={filters.search}
-            onChange={(e) => handleFilterChange('search', e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSearch();
+            }}
           />
           
           <select
@@ -140,6 +158,22 @@ export default function UsersPage() {
             <option value="10">10 per page</option>
             <option value="20">20 per page</option>
           </select>
+        </div>
+        <div className="flex items-center gap-3 mt-4">
+          <button
+            type="button"
+            onClick={handleSearch}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            Search
+          </button>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+          >
+            Clear
+          </button>
         </div>
       </div>
 

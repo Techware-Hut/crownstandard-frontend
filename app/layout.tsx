@@ -7,6 +7,9 @@ import Providers from './providers';
 export const metadata = {
     title: "Crown Standard",
     description: "Premium cleaning services by trusted professionals.",
+    icons :{
+        icon: "/logo.png"
+    }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
