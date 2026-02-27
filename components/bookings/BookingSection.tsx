@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Filter, Check, X } from "lucide-react";
+import { Filter, MessageCircle } from "lucide-react";
 import { providerApi } from "@/lib/providerApi";
+import { useRouter } from "next/navigation";
 
 type BookingUI = {
   id: string;
@@ -17,6 +18,7 @@ type BookingUI = {
 };
 
 export default function BookingSection() {
+  const router = useRouter();
   const [bookings, setBookings] = useState<BookingUI[]>([]);
   const [loading, setLoading] = useState(true);
   const [otpModal, setOtpModal] = useState<{ open: boolean; bookingId: string }>({ open: false, bookingId: "" });
@@ -179,7 +181,19 @@ export default function BookingSection() {
                       }`}>
                         {booking.status}
                       </span>
-                      {getActionButton(booking)}
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => 
+                            //router.push("/conversation/" + booking.id)
+                            console.log(booking.id)
+                            }
+                          className="inline-flex items-center gap-1 px-3 py-1 text-xs text-white rounded-full bg-gray-900 hover:bg-gray-800"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5" />
+                          Chat
+                        </button>
+                        {getActionButton(booking)}
+                      </div>
                     </div>
                   </div>
                 </div>

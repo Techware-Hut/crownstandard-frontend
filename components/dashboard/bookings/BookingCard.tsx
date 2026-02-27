@@ -1,6 +1,6 @@
 import { bookingApi } from "@/lib/bookingApi";
 import { BookingCus } from "@/types/booking";
-import { MapPin, CalendarDays, Clock, User, Info, DollarSign } from "lucide-react";
+import { MapPin, CalendarDays, Clock, User, Info, DollarSign, MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function BookingCard({ booking }: { booking: BookingCus }) {
@@ -115,6 +115,16 @@ export default function BookingCard({ booking }: { booking: BookingCus }) {
 
 
       {/* Footer */}
+      <div className={`pt-4 mt-5 ${isPending ? "" : "border-t border-gray-200"}`}>
+        <button
+          onClick={() => router.push("/conversation")}
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white transition rounded-full bg-gray-900 hover:bg-gray-800"
+        >
+          <MessageCircle className="w-4 h-4" />
+          Chat
+        </button>
+      </div>
+
       {isPending && (
         <div className="flex flex-col gap-3 pt-4 mt-5 border-t border-gray-200 sm:flex-row sm:items-center sm:justify-between">
           <button 
