@@ -2,7 +2,7 @@ import NextAuth, { type NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 
 
-console.log("ClientId", process.env.GOOGLE_ID)
+
 const authOptions: NextAuthOptions = {
 
   // Configure one or more authentication providers
