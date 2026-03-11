@@ -68,6 +68,7 @@ export default function MyBookingsPage() {
     loadBookings();
   }, []);
 
+
   return (
     <div className="min-h-screen px-6 pt-6 md:pt-8 lg:pt-16 pb-10 container 3xl:max-w-[1280px]">
       <h1 className="mb-1 text-2xl lg:text-3xl font-bold text-gray-900">

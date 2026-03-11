@@ -145,6 +145,15 @@ export const bookingApi = {
       "bookingId" : bookingId
     })
     return response;
+  },
+
+  getThreadId : async (bookingId : string)=>{
+
+      const response = await axios.post("/chat/threads",{
+        bookingId
+      })
+
+      return response.data
   }
 
 };

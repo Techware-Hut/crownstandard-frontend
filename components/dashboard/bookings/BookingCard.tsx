@@ -20,6 +20,14 @@ export default function BookingCard({ booking }: { booking: BookingCus }) {
     }
   }
 
+  const gotoChat = async (id : string)=>{
+    
+    const data =  await bookingApi.getThreadId(id);
+
+    router.push("/conversation/" + data.thread._id)
+  }
+
+
   return (
     <div
       className={`relative border rounded-xl p-6 bg-white shadow-sm ${
@@ -117,7 +125,7 @@ export default function BookingCard({ booking }: { booking: BookingCus }) {
       {/* Footer */}
       <div className={`pt-4 mt-5 ${isPending ? "" : "border-t border-gray-200"}`}>
         <button
-          onClick={() => router.push("/conversation")}
+          onClick={() => gotoChat(booking.id)}
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white transition rounded-full bg-gray-900 hover:bg-gray-800"
         >
           <MessageCircle className="w-4 h-4" />

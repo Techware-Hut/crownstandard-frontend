@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Filter, MessageCircle } from "lucide-react";
 import { providerApi } from "@/lib/providerApi";
 import { useRouter } from "next/navigation";
+import { bookingApi } from "@/lib/bookingApi";
 
 type BookingUI = {
   id: string;
@@ -42,6 +43,7 @@ export default function BookingSection() {
         image: "/ServiceCleaning.png",
       }));
 
+
       setBookings(mappedBookings);
     } catch (err) {
       console.error("Failed to load bookings", err);
@@ -49,6 +51,12 @@ export default function BookingSection() {
       setLoading(false);
     }
   };
+
+  const gotoChat = async (id : string)=>{
+    const data =  await bookingApi.getThreadId(id);
+
+    router.push("/conversation/" + data.thread._id)
+  }
 
   useEffect(() => {
     loadBookings();
@@ -183,10 +191,7 @@ export default function BookingSection() {
                       </span>
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => 
-                            //router.push("/conversation/" + booking.id)
-                            console.log(booking.id)
-                            }
+                          onClick={()=>gotoChat(booking.id)}
                           className="inline-flex items-center gap-1 px-3 py-1 text-xs text-white rounded-full bg-gray-900 hover:bg-gray-800"
                         >
                           <MessageCircle className="w-3.5 h-3.5" />
