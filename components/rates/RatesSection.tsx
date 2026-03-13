@@ -18,7 +18,7 @@ export default function RatesSection() {
       <div>
         <h2 className="text-2xl font-bold text-gray-900">Your Hourly Rates</h2>
         <p className="mt-1 text-sm text-gray-500">
-          Set competitive rates for your cleaning services. Crown Standard keeps{" "}
+          Set your own hourly rates for your cleaning services. Crown Standard keeps{" "}
           <span className="font-medium text-gray-700">10% commission</span> on bookings,
           but you keep <span className="font-medium text-gray-700">100% of all tips!</span>
         </p>

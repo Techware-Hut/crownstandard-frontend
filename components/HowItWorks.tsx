@@ -134,7 +134,7 @@ export default function HowCrownWorks() {
               {
                 title: "Choose Work & Get Paid",
                 desc:
-                  "Accept jobs that fit your availability and receive secure, on-time payments.",
+                  "Set your own hourly rates, accept jobs that fit your availability and receive secure, on-time payments.",
               },
               {
                 title: "Build Your Reputation",
