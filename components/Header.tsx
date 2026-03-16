@@ -20,6 +20,7 @@ export default function Header() {
  
   const logOut = ()=>{
     localStorage.removeItem("user")
+    localStorage.removeItem("user_role")
     Cookies.remove("user_role")
     Cookies.remove('user_id')
     if(localStorage.getItem("google")){

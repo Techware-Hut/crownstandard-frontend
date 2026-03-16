@@ -77,8 +77,9 @@ export default function DashboardPage() {
   
     const loadDashboard = async () => {
   
-      const user = Cookies.get("user_role") === "customer" ? true : false;
-      if(!user){
+      // const user = Cookies.get("user_role") === "customer" ? true : false;
+      const user = localStorage.getItem("user_role")
+      if(user !== "customer"){
         router.push("/login")
         return;
       }

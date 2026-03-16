@@ -143,8 +143,9 @@ function OverviewTab() {
   useEffect(() => {
     const loadDashboard = async () => {
 
-      const user = Cookies.get("user_role") === "provider" ? true : false;
-      if(!user){
+      // const user = Cookies.get("user_role") === "provider" ? true : false;
+      const user = localStorage.getItem("user_role")
+      if(user !== "provider"){
         router.push("/login")
         return;
       }

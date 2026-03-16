@@ -125,9 +125,10 @@ export default function LoginClient({
       if (!res.ok) throw new Error(data?.message ?? "Login failed");
 
       await persistCustomerLocation();
+      localStorage.setItem("user_role", type);
+      localStorage.setItem("user","true")
       router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
 
-      localStorage.setItem("user","true")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
