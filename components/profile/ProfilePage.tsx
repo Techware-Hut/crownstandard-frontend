@@ -56,7 +56,8 @@ export default function ProfilePage({ role }: ProfilePageProps) {
     const getProfile =async ()=>{
 
         const providerProfile = await providerApi.getProfileDetails();
-      
+        
+        console.log(providerProfile)
   
         setProfile(providerProfile)
     }
@@ -65,6 +66,12 @@ export default function ProfilePage({ role }: ProfilePageProps) {
 
         await providerApi.updateProfileDetails(profile);
 
+
+    }
+
+    const changePhoto = async (imageFile : any)=>{
+
+        await providerApi.updateProfilePhoto(imageFile)
 
     }
 
@@ -192,14 +199,47 @@ export default function ProfilePage({ role }: ProfilePageProps) {
 
                     {/* Right Avatar Section */}
                     <div className="flex flex-col items-center justify-start sm:border-l-4 pt-6">
-                        <div className="flex items-center justify-center w-20 h-20 mb-4 overflow-hidden bg-gray-200 rounded-full ring-1 ring-gray-300">
+                   <div className="relative flex items-center justify-center w-20 h-20 mb-4 overflow-hidden bg-gray-200 rounded-full ring-1 ring-gray-300 group cursor-pointer">
+    
                             <Image
-                                src="/avatar-placeholder.png"
-                                alt="Profile"
-                                width={64}
-                                height={64}
-                                className="object-cover rounded-full"
+                            src={profile.photo ?? "/icons8-customer-90.png"}
+
+                            alt="Profile"
+                            width={64}
+                            height={64}
+                            className={profile.photo ? "object-cover rounded-full" : ""}
                             />
+
+                             {/* Hidden input */}
+                            <input
+                            id="fileUpload"
+                            type="file"
+                            name="change"
+                            className="hidden"
+                            onChange={(e) => {
+
+                                const file = e.target.files?.[0]
+                                if(!file) return;
+                                const url = URL.createObjectURL(file)
+                                setProfile({
+                                    ...profile,
+                                    photo :  url
+                                })
+
+                                changePhoto(file)
+                            }}
+                            />
+
+                            {/* Overlay trigger */}
+                            <label
+                            htmlFor="fileUpload"
+                            className="absolute inset-0 flex items-center justify-center bg-black/50 text-white text-xs font-medium rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition"
+                            >
+                            Change Photo
+                            </label>
+                            
+                            
+
                         </div>
                         <button
                             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-full bg-[#b9903c] hover:bg-amber-700"

@@ -73,6 +73,7 @@ export interface ProviderProfile {
   name?: string;
   phone?: string;
   email?: string;
+  photo? : string;
 }
 
 export interface StripeConnectStatus {
@@ -276,9 +277,32 @@ export const providerApi = {
   },
 
   updateProfileDetails: async (data: ProviderProfile) => {
-    console.log(data);
+
     const res = await axios.post(`provider/update`, data);
+
     return res.data;
+  },
+
+  updateProfilePhoto: async (imageFile : any)=>{
+
+     try {
+    // 1. Create FormData
+    const formData = new FormData();
+    formData.append("file", imageFile); // field name must match backend
+
+    // 2. Send POST request
+    const res = await axios.post("provider/changephoto", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.log("Server response:", res.data);
+  } catch (err) {
+    console.error("Upload failed:", err);
+  }
+    
+   
   },
 
   getStripeConnectStatus: async (): Promise<StripeConnectStatusResponse> => {

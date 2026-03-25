@@ -22,6 +22,9 @@ export default function MyBookingsPage() {
         }
         
         const res = await bookingApi.getMyBookings();
+        res.data.map((data)=>{
+          console.log(data.status)
+        })
 
         const normalizeStatus = (status: string): "Pending" | "Accepted" | "Cancelled" | "Completed" => {
           switch (status) {
@@ -41,7 +44,7 @@ export default function MyBookingsPage() {
           }
         };
 
-        const mapped: BookingCus[] = res.data.map((b) => ({
+        const mapped: BookingCus[] = res.data.filter(data=> data.status !== "pending_payment").map((b) => ({
           id: b._id,
           serviceName: b.serviceId.title,
           price: b.pricingSnapshot.totalPayable,
