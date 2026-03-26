@@ -2,9 +2,27 @@
 
 import { useState } from "react";
 import { Filter } from "lucide-react";
+import AvailabilityModal, {
+  AvailabilitySlotInput,
+} from "@/components/modals/AvailabilityModal";
+
+type AvailabilitySlot = AvailabilitySlotInput & { id: string };
 
 export default function AvailabilitySection() {
   const [immediateBooking, setImmediateBooking] = useState(false);
+  const [availabilityOpen, setAvailabilityOpen] = useState(false);
+  const [availabilitySlots, setAvailabilitySlots] = useState<AvailabilitySlot[]>(
+    []
+  );
+
+  const handleSaveAvailability = (slot: AvailabilitySlotInput) => {
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    setAvailabilitySlots(() => [{ ...slot, id }]);
+  };
+
+  const handleRemoveSlot = (id: string) => {
+    setAvailabilitySlots((prev) => prev.filter((slot) => slot.id !== id));
+  };
 
   return (
     <div className="mt-8 space-y-8">
@@ -50,25 +68,62 @@ export default function AvailabilitySection() {
           </div>
 
           <div className="flex gap-2 sm:gap-3 mt-3 sm:mt-0">
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 border bg-white border-gray-300 rounded-full hover:bg-gray-50">
+            {/* <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 border bg-white border-gray-300 rounded-full hover:bg-gray-50">
               <Filter className="w-4 h-4" /> Filter By
-            </button>
-            <button className="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-full hover:bg-gray-800">
-              Save Availability
+            </button> */}
+            <button
+              onClick={() => setAvailabilityOpen(true)}
+              className="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-full hover:bg-gray-800"
+            >
+              {availabilitySlots.length > 0
+                ? "Edit Availability"
+                : "Add Availability"}
             </button>
           </div>
         </div>
 
         {/* Placeholder (empty state) */}
         <div className="p-2 py-4 sm:p-6 bg-[#F6F4EF] rounded-xl min-h-[200px] flex flex-col items-center justify-center">
-          <p className="text-sm text-gray-500">
-            Configure your weekly or specific date availability here.
-          </p>
-          <p className="mt-1 text-xs text-gray-400">
-            (Feature coming soon)
-          </p>
+          {availabilitySlots.length === 0 ? (
+            <>
+              <p className="text-sm text-gray-500">
+                Configure your weekly or specific date availability here.
+              </p>
+            </>
+          ) : (
+            <div className="w-full max-w-xl space-y-3">
+              {availabilitySlots.map((slot) => (
+                <div
+                  key={slot.id}
+                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-[#E2B44A]/30"
+                >
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">
+                      {slot.days.join(", ")}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {slot.start} - {slot.end}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleRemoveSlot(slot.id)}
+                    className="text-xs font-medium text-red-600 hover:text-red-700"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+      <AvailabilityModal
+        open={availabilityOpen}
+        onClose={() => setAvailabilityOpen(false)}
+        onSave={handleSaveAvailability}
+        initialValue={availabilitySlots[0] ?? null}
+      />
     </div>
   );
 }

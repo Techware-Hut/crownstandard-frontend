@@ -484,7 +484,7 @@ function ProviderExtras({profile, country} : {profile : ProviderProfile, country
                         onClick={handleStartOnboarding}
                         className="px-4 py-2 text-sm font-medium text-white rounded-full bg-[#b9903c] hover:bg-amber-700"
                     >
-                        Create Stripe Account
+                        Create / Connect Stripe Account
                     </button>
                 )}
 
