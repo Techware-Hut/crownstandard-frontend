@@ -149,6 +149,19 @@ export interface CreateServiceData {
   exclusions: string[];
 }
 
+export interface UpdateServiceData {
+  title?: string;
+  description?: string;
+  basePrice?: number;
+  priceUnit?: string;
+  minHours?: number;
+  categoryId?: string;
+  includes?: string[];
+  exclusions?: string[];
+  isActive?: boolean;
+  isVisible?: boolean;
+}
+
 export interface CreateServiceResponse {
   success: boolean;
   data: ProviderService;
@@ -242,6 +255,11 @@ export const providerApi = {
 
   createService: async (data: CreateServiceData): Promise<CreateServiceResponse> => {
     const res = await axios.post("/service", data);
+    return res.data;
+  },
+
+  updateService: async (serviceId: string, data: UpdateServiceData) => {
+    const res = await axios.patch(`/service/${serviceId}`, data);
     return res.data;
   },
   getProviderBookings: async (): Promise<ProviderBookingsResponse> => {

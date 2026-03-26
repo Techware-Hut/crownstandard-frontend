@@ -113,6 +113,7 @@ export const servicesApi = {
     const response = await axios.get(`/services/${id}`);
     return response.data;
   }
+
 };
 
      
