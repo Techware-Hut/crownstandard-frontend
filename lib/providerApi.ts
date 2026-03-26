@@ -297,7 +297,7 @@ export const providerApi = {
       },
     });
 
-    console.log("Server response:", res.data);
+
   } catch (err) {
     console.error("Upload failed:", err);
   }
