@@ -57,7 +57,7 @@ export default function ProfilePage({ role }: ProfilePageProps) {
 
         const providerProfile = await providerApi.getProfileDetails();
         
-        console.log(providerProfile)
+
   
         setProfile(providerProfile)
     }
