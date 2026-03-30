@@ -1,44 +1,25 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Filter, Plus } from "lucide-react";
+import { Filter, Plus, PencilLine } from "lucide-react";
 import CreateServiceModal from "@/components/modals/CreateServiceModal";
+import EditServiceModal from "@/components/modals/EditServiceModal";
 import Link from "next/link";
-import { providerApi } from "@/lib/providerApi";
-
-type ServiceUI = {
-  id: string;
-  title: string;
-  category: string;
-  price: string;
-  rating: string;
-  image: string;
-  isActive: boolean;
-};
+import { providerApi, ProviderService } from "@/lib/providerApi";
 
 export default function ServiceSection() {
   const [open, setOpen] = useState(false);
-  const [services, setServices] = useState<ServiceUI[]>([]);
+  const [services, setServices] = useState<ProviderService[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editOpen, setEditOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<ProviderService | null>(null);
 
   const loadServices = useCallback(async () => {
     try {
       setLoading(true);
       const res = await providerApi.getMyServices();
       
-      const mappedServices: ServiceUI[] = res.data.map((service) => ({
-        id: service._id,
-        title: service.title,
-        category: "Service",
-        price: `${service.currency} ${service.basePrice}/${service.priceUnit.replace('_', ' ')}`,
-        rating: service.ratingSummary?.count && service.ratingSummary.count > 0 
-          ? `${service.ratingSummary.avg.toFixed(1)} (${service.ratingSummary.count})`
-          : "No reviews",
-        image: service.media?.[0] || "/ServiceCleaning.png",
-        isActive: service.isActive,
-      }));
-
-      setServices(mappedServices);
+      setServices(res.data);
     } catch (err) {
       console.error("Failed to load services", err);
     } finally {
@@ -53,6 +34,16 @@ export default function ServiceSection() {
   const handleServiceCreated = () => {
     loadServices(); // Refresh the services list
     setOpen(false);
+  };
+
+  const handleEditOpen = (service: ProviderService) => {
+    setSelectedService(service);
+    setEditOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setEditOpen(false);
+    setSelectedService(null);
   };
 
   return (
@@ -88,38 +79,55 @@ export default function ServiceSection() {
           </div>
         ) : services.length > 0 ? (
           <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {services.map((service) => (
-              <div
-                key={service.id}
-                className="p-4 bg-white shadow-sm rounded-2xl hover:shadow-md"
-              >
-                <div className="flex gap-4">
-                  <div className="relative w-16 h-16 overflow-hidden rounded-md ring-1 ring-gray-200">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
+            {services.map((service) => {
+              const ratingLabel = service.ratingSummary?.count && service.ratingSummary.count > 0
+                ? `${service.ratingSummary.avg.toFixed(1)} (${service.ratingSummary.count})`
+                : "No reviews";
+              const priceLabel = `${service.currency} ${service.basePrice}/${service.priceUnit.replace('_', ' ')}`;
+              const imageSrc = service.media?.[0] || "/ServiceCleaning.png";
 
-                  <div className="flex-1 space-y-1">
-                    <p className="font-semibold text-gray-900">{service.title}</p>
-                    <p className="text-sm text-gray-500">{service.category}</p>
-                    <p className="text-xs text-gray-400">{service.rating}</p>
-                    <div className="text-sm font-semibold text-gray-900">
-                      {service.price}
+              return (
+                <div
+                  key={service._id}
+                  className="p-4 bg-white shadow-sm rounded-2xl hover:shadow-md"
+                >
+                  <div className="flex gap-4 items-start">
+                    <div className="relative w-16 h-16 overflow-hidden rounded-md ring-1 ring-gray-200">
+                      <img
+                        src={imageSrc}
+                        alt={service.title}
+                        className="object-cover w-full h-full"
+                      />
                     </div>
-                    <div className={`text-xs px-2 py-1 rounded-full w-fit ${
-                      service.isActive 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {service.isActive ? 'Active' : 'Inactive'}
+
+                    <div className="flex-1 space-y-1">
+                      <p className="font-semibold text-gray-900">{service.title}</p>
+                      <p className="text-sm text-gray-500">Service</p>
+                      <p className="text-xs text-gray-400">{ratingLabel}</p>
+                      <div className="text-sm font-semibold text-gray-900">
+                        {priceLabel}
+                      </div>
+                      <div className={`text-xs px-2 py-1 rounded-full w-fit ${
+                        service.isActive 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {service.isActive ? 'Active' : 'Inactive'}
+                      </div>
                     </div>
+
+                    <button
+                      onClick={() => handleEditOpen(service)}
+                      className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700 transition hover:bg-amber-100 hover:text-amber-800"
+                      aria-label={`Edit ${service.title}`}
+                    >
+                      <PencilLine className="h-4 w-4" />
+                      Edit
+                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -143,6 +151,13 @@ export default function ServiceSection() {
         open={open}
         onClose={() => setOpen(false)}
         onSubmit={handleServiceCreated}
+      />
+
+      <EditServiceModal
+        open={editOpen}
+        service={selectedService}
+        onClose={handleEditClose}
+        onSubmit={loadServices}
       />
     </div>
   );

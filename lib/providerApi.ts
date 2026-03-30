@@ -149,6 +149,19 @@ export interface CreateServiceData {
   exclusions: string[];
 }
 
+export interface UpdateServiceData {
+  title?: string;
+  description?: string;
+  basePrice?: number;
+  priceUnit?: string;
+  minHours?: number;
+  categoryId?: string;
+  includes?: string[];
+  exclusions?: string[];
+  isActive?: boolean;
+  isVisible?: boolean;
+}
+
 export interface CreateServiceResponse {
   success: boolean;
   data: ProviderService;
@@ -244,6 +257,11 @@ export const providerApi = {
     const res = await axios.post("/service", data);
     return res.data;
   },
+
+  updateService: async (serviceId: string, data: UpdateServiceData) => {
+    const res = await axios.patch(`/service/${serviceId}`, data);
+    return res.data;
+  },
   getProviderBookings: async (): Promise<ProviderBookingsResponse> => {
     const res = await axios.get("/provider/bookings");
     return res.data;
@@ -297,7 +315,7 @@ export const providerApi = {
       },
     });
 
-    console.log("Server response:", res.data);
+
   } catch (err) {
     console.error("Upload failed:", err);
   }
