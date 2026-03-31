@@ -32,6 +32,7 @@ export default function ConversationDetailPage() {
           participants: t.participants,
           lastMessage: t.lastMessage?.text || "No messages yet",
           lastActivityAt: t.lastActivityAt,
+          online: t.online || false, 
         };
       });
 
