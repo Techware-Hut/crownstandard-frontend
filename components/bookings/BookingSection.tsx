@@ -179,8 +179,8 @@ export default function BookingSection() {
                     <p className="text-sm text-gray-600">{booking.location}</p>
                     <p className="text-sm text-gray-600">{booking.datetime}</p>
                     <p className="font-semibold text-gray-900">{booking.price}</p>
-                    <div className="flex items-center justify-between gap-2">
-                      <span className={`text-xs px-2 py-1 rounded-full ${
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className={`inline-flex min-w-fit items-center whitespace-nowrap rounded-md px-3 py-1 text-xs font-medium ${
                         booking.status.includes('In Progress') 
                           ? 'bg-yellow-100 text-yellow-800'
                           : booking.status.includes('Completed')

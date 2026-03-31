@@ -36,7 +36,7 @@ export default function ConversationIndexPage() {
         };
       });
 
-      console.log(formatted,"formted")
+
 
       setThreads(formatted);
     } catch (err) {
