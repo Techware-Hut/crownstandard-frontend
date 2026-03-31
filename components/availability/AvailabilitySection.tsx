@@ -17,6 +17,7 @@ export default function AvailabilitySection() {
 
   const handleSaveAvailability = (slot: AvailabilitySlotInput) => {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    
     setAvailabilitySlots(() => [{ ...slot, id }]);
   };
 
