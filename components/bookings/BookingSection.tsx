@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Filter, MessageCircle } from "lucide-react";
 import { providerApi } from "@/lib/providerApi";
 import { useRouter } from "next/navigation";
@@ -18,13 +18,32 @@ type BookingUI = {
   image: string;
 };
 
+type BookingFilter =
+  | "all"
+  | "action_required"
+  | "upcoming"
+  | "in_progress"
+  | "completed"
+  | "cancelled";
+
+const FILTER_OPTIONS: { value: BookingFilter; label: string }[] = [
+  { value: "all", label: "All Bookings" },
+  { value: "action_required", label: "Action Required" },
+  { value: "in_progress", label: "In Progress" },
+  { value: "completed", label: "Completed" },
+  { value: "cancelled", label: "Cancelled" },
+];
+
 export default function BookingSection() {
   const router = useRouter();
   const [bookings, setBookings] = useState<BookingUI[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedFilter, setSelectedFilter] = useState<BookingFilter>("all");
+  const [filterMenuOpen, setFilterMenuOpen] = useState(false);
   const [otpModal, setOtpModal] = useState<{ open: boolean; bookingId: string }>({ open: false, bookingId: "" });
   const [otp, setOtp] = useState("");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const filterMenuRef = useRef<HTMLDivElement | null>(null);
 
   const loadBookings = async () => {
     try {
@@ -61,6 +80,45 @@ export default function BookingSection() {
   useEffect(() => {
     loadBookings();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        filterMenuRef.current &&
+        !filterMenuRef.current.contains(event.target as Node)
+      ) {
+        setFilterMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const filteredBookings = useMemo(() => {
+    switch (selectedFilter) {
+      case "action_required":
+        return bookings.filter((booking) =>
+          ["pending_provider_accept", "accepted", "in_progress"].includes(booking.rawStatus)
+        );
+      case "upcoming":
+        return bookings.filter((booking) =>
+          ["pending_provider_accept", "accepted"].includes(booking.rawStatus)
+        );
+      case "in_progress":
+        return bookings.filter((booking) => booking.rawStatus === "in_progress");
+      case "completed":
+        return bookings.filter((booking) => booking.rawStatus === "completed");
+      case "cancelled":
+        return bookings.filter((booking) => booking.rawStatus === "cancelled");
+      case "all":
+      default:
+        return bookings;
+    }
+  }, [bookings, selectedFilter]);
+
+  const activeFilterLabel =
+    FILTER_OPTIONS.find((option) => option.value === selectedFilter)?.label ?? "All Bookings";
 
   const handleAccept = async (bookingId: string) => {
     try {
@@ -148,9 +206,49 @@ export default function BookingSection() {
         </div>
 
         <div className="flex gap-2 sm:gap-3 mt-3 sm:mt-0">
-          <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-300 rounded-full hover:bg-gray-50">
-            <Filter className="w-4 h-4" /> Filter By
-          </button>
+          <div className="relative" ref={filterMenuRef}>
+            <button
+              onClick={() => setFilterMenuOpen((prev) => !prev)}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-300 rounded-full hover:bg-gray-50"
+            >
+              <Filter className="w-4 h-4" /> Filter By
+            </button>
+
+            {filterMenuOpen && (
+              <div className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg">
+                <div className="border-b border-gray-100 px-4 py-3">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                    Booking Filter
+                  </p>
+                  <p className="mt-1 text-sm text-gray-600">{activeFilterLabel}</p>
+                </div>
+
+                <div className="p-2">
+                  {FILTER_OPTIONS.map((option) => {
+                    const isActive = option.value === selectedFilter;
+
+                    return (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setSelectedFilter(option.value);
+                          setFilterMenuOpen(false);
+                        }}
+                        className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm transition ${
+                          isActive
+                            ? "bg-gray-900 text-white"
+                            : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        <span>{option.label}</span>
+                        {isActive && <span className="text-xs">Active</span>}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
           <button className="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-full hover:bg-gray-800">
             View All
           </button>
@@ -162,9 +260,23 @@ export default function BookingSection() {
           <div className="flex items-center justify-center py-12">
             <p className="text-gray-500">Loading bookings...</p>
           </div>
-        ) : bookings.length > 0 ? (
+        ) : filteredBookings.length > 0 ? (
           <div className="w-full space-y-4">
-            {bookings.map((booking) => (
+            <div className="flex items-center justify-between px-1">
+              <p className="text-sm text-gray-500">
+                Showing {filteredBookings.length} of {bookings.length} bookings
+              </p>
+              {selectedFilter !== "all" && (
+                <button
+                  onClick={() => setSelectedFilter("all")}
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                >
+                  Clear filter
+                </button>
+              )}
+            </div>
+
+            {filteredBookings.map((booking) => (
               <div key={booking.id} className="p-4 bg-white shadow-sm rounded-2xl hover:shadow-md">
                 <div className="flex gap-4">
                   <div className="relative w-16 h-16 overflow-hidden rounded-md ring-1 ring-gray-200">
@@ -207,10 +319,22 @@ export default function BookingSection() {
           </div>
         ) : (
           <div className="py-8 text-center">
-            <h3 className="text-lg font-medium text-gray-700">No bookings yet</h3>
+            <h3 className="text-lg font-medium text-gray-700">
+              {selectedFilter === "all" ? "No bookings yet" : `No ${activeFilterLabel.toLowerCase()} found`}
+            </h3>
             <p className="mt-1 text-sm text-gray-500">
-              You'll see your upcoming bookings here once customers request your services.
+              {selectedFilter === "all"
+                ? "You'll see your upcoming bookings here once customers request your services."
+                : "Try a different filter or clear the current one to see more bookings."}
             </p>
+            {selectedFilter !== "all" && (
+              <button
+                onClick={() => setSelectedFilter("all")}
+                className="mt-5 px-5 py-2 text-sm font-medium text-white bg-gray-900 rounded-full hover:bg-gray-800"
+              >
+                Show All Bookings
+              </button>
+            )}
           </div>
         )}
       </div>
