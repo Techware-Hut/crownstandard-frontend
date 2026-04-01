@@ -16,14 +16,15 @@ interface AvailabilityModalProps {
   initialValue?: AvailabilitySlotInput | null;
 }
 
-const DAYS = [
+export const DAYS = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
-  "Sunday",
+
 ];
 
 export default function AvailabilityModal({

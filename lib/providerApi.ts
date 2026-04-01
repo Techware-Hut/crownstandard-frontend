@@ -262,6 +262,19 @@ export const providerApi = {
     const res = await axios.patch(`/service/${serviceId}`, data);
     return res.data;
   },
+
+  getAvailibility : async ()=>{
+
+    const res = await axios.get(`/provider/availability`)
+    console.log(res)
+
+  },
+
+  updateAvailibility : async (data : any)=>{
+
+    const res = await axios.patch("/provider/update-availability", data)
+    console.log(res)
+  },
   getProviderBookings: async (): Promise<ProviderBookingsResponse> => {
     const res = await axios.get("/provider/bookings");
     return res.data;

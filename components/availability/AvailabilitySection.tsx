@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { Filter } from "lucide-react";
 import AvailabilityModal, {
-  AvailabilitySlotInput,
+  AvailabilitySlotInput, DAYS
 } from "@/components/modals/AvailabilityModal";
+import { providerApi } from "@/lib/providerApi";
 
 type AvailabilitySlot = AvailabilitySlotInput & { id: string };
 
@@ -15,8 +16,15 @@ export default function AvailabilitySection() {
     []
   );
 
-  const handleSaveAvailability = (slot: AvailabilitySlotInput) => {
+  const handleSaveAvailability = async (slot: AvailabilitySlotInput) => {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    
+    const daysArray = slot.days.map((day)=> DAYS.indexOf(day))
+    const data = {
+      days : daysArray,
+      time : `${slot.start} - ${slot.end}` 
+    }
+    providerApi.updateAvailibility(data)
     
     setAvailabilitySlots(() => [{ ...slot, id }]);
   };
@@ -24,6 +32,12 @@ export default function AvailabilitySection() {
   const handleRemoveSlot = (id: string) => {
     setAvailabilitySlots((prev) => prev.filter((slot) => slot.id !== id));
   };
+
+  const loadSlots = async()=>{
+
+     await providerApi.getAvailibility();
+
+  }
 
   return (
     <div className="mt-8 space-y-8">
