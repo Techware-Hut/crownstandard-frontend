@@ -210,6 +210,11 @@ export default function Header() {
               >
                 Services
               </Link>
+
+              <Link href="/contact" className="px-3 py-2 rounded-lg hover:bg-cs-gold/10"
+              onClick={()=> setOpen(false)}>
+              Contact
+              </Link>
             </nav>
 
             <div className="grid gap-2 mt-3">
