@@ -9,6 +9,14 @@ import { providerApi } from "@/lib/providerApi";
 
 type AvailabilitySlot = AvailabilitySlotInput & { id: string };
 
+type SaveSlot ={
+  days : [],
+  time : {
+    startTime : string,
+    endTime : string,
+  }
+}
+
 export default function AvailabilitySection() {
   const [immediateBooking, setImmediateBooking] = useState(false);
   const [availabilityOpen, setAvailabilityOpen] = useState(false);
@@ -38,8 +46,16 @@ export default function AvailabilitySection() {
 
   const loadSlots = async()=>{
 
-     await providerApi.getAvailibility();
-
+    const userId = localStorage.getItem("userId")
+   const data : SaveSlot = await providerApi.getAvailibility(userId ?? "");
+    const slot : AvailabilitySlotInput ={
+      days : data.days.map((i, d)=> DAYS[i]),
+      start : data.time.startTime,
+      end : data.time.endTime
+    }
+  const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    setAvailabilitySlots(()=>[{...slot, id}])
+   
   }
 
   useEffect(()=>{

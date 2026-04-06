@@ -127,6 +127,7 @@ export default function LoginClient({
       await persistCustomerLocation();
       localStorage.setItem("user_role", type);
       localStorage.setItem("user","true")
+     localStorage.setItem("userId", data.user.id)
       router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
 
     } catch (err) {

@@ -1,4 +1,5 @@
 import axios from "./axios";
+import { AvailabilitySlotInput } from "@/components/modals/AvailabilityModal";
 
 /* ======================================================
    DASHBOARD TYPES
@@ -271,11 +272,11 @@ export const providerApi = {
     return res.data;
   },
 
-  getAvailibility : async ()=>{
-
-    const res = await axios.get(`/provider/availability`)
-    console.log(res)
-
+  getAvailibility : async (userId : string) =>{
+    const res = await axios.post("/provider/availability",
+    {"userId": userId},
+    );
+    return res.data;
   },
 
   updateAvailibility : async (data : AvailabilityData)=>{
