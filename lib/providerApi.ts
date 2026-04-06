@@ -205,6 +205,14 @@ export interface BookingActionResponse {
   data?: unknown;
 }
 
+
+export interface AvailabilityData {
+  days : number[],
+  time :{
+    startTime : string,
+    endTime : string,
+  }
+}
 //earning
 
 /* ======================================================
@@ -270,7 +278,7 @@ export const providerApi = {
 
   },
 
-  updateAvailibility : async (data : any)=>{
+  updateAvailibility : async (data : AvailabilityData)=>{
 
     const res = await axios.patch("/provider/update-availability", data)
     console.log(res)

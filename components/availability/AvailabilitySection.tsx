@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Filter } from "lucide-react";
 import AvailabilityModal, {
   AvailabilitySlotInput, DAYS
@@ -22,7 +22,10 @@ export default function AvailabilitySection() {
     const daysArray = slot.days.map((day)=> DAYS.indexOf(day))
     const data = {
       days : daysArray,
-      time : `${slot.start} - ${slot.end}` 
+      time : {
+        startTime : slot.start,
+        endTime : slot.end
+      }
     }
     providerApi.updateAvailibility(data)
     
@@ -38,6 +41,10 @@ export default function AvailabilitySection() {
      await providerApi.getAvailibility();
 
   }
+
+  useEffect(()=>{
+      loadSlots();
+  },[])
 
   return (
     <div className="mt-8 space-y-8">
