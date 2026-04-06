@@ -46,9 +46,9 @@ export default function AvailabilitySection() {
 
   const loadSlots = async()=>{
 
-    const userId = localStorage.getItem("userId")
+   const userId = localStorage.getItem("userId")
    const data : SaveSlot = await providerApi.getAvailibility(userId ?? "");
-    const slot : AvailabilitySlotInput ={
+   const slot : AvailabilitySlotInput ={
       days : data.days.map((i, d)=> DAYS[i]),
       start : data.time.startTime,
       end : data.time.endTime
