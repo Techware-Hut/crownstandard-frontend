@@ -429,22 +429,6 @@ function ProviderExtras({profile, country} : {profile : ProviderProfile, country
 
     return (
         <>
-            {/* <section className="p-6 mb-8 mt-5 text-white bg-gray-900 rounded-xl">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h3 className="flex items-center gap-2 text-sm font-semibold text-[#b9903c]">
-                            Hourly Rate
-                        </h3>
-                        <p className="text-xs text-gray-400">
-                            Set your hourly cleaning rate (minimum $25.00/hour)
-                        </p>
-                        <p className="mt-3 text-xl font-semibold">$25.00/hour</p>
-                    </div>
-                    <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gray-800 border rounded-full hover:bg-gray-700">
-                        <Pencil className="w-4 h-4" /> Edit Rate
-                    </button>
-                </div>
-            </section> */}
 
             <section className="p-6 mt-5 mb-2 bg-[#F3F1ED] rounded-xl">
                 <div className="flex flex-col gap-3 mb-5 md:flex-row md:items-center md:justify-between">
