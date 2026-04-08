@@ -312,20 +312,21 @@ export default function DashboardPage() {
         </section>
 
   
-          <section className="mt-8 rounded-xl border border-red-200 bg-red-50 p-6">
+          {/* <section className="mt-8 rounded-xl border border-red-200 bg-red-50 p-6">
               <h2 className="text-lg font-bold text-red-700">Danger Zone</h2>
               <p className="mt-2 text-sm text-red-600">
                   Permanently delete this account and remove access to your profile.
               </p>
               <button
                   type="button"
-                  onClick={handleDeleteMyAccount}
+                  // onClick={handleDeleteMyAccount}
                   disabled={isDeletingAccount}
+                  onClick={()=>{router.push("/delete-account")}}
                   className="mt-4 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
               >
                   {isDeletingAccount ? "Deleting Account..." : "Delete My Account"}
               </button>
-          </section>
+          </section> */}
       </div>
 
       <div className="absolute bottom-0 w-full h-64 bg-gray-900" />

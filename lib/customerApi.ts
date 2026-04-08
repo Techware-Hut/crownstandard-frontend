@@ -65,8 +65,31 @@ export const customerApi = {
 
   updateProfileDetails: async (data: CustomerProfile) => {
 
-    const res = await axios.patch(`/api/customer/profile-update`, data);
+    const res = await axios.patch(`/customer/profile-update`, data);
     return res.data;
   },
+
+  
+  updateProfilePhoto: async (imageFile : any)=>{
+  
+       try {
+      // 1. Create FormData
+      const formData = new FormData();
+      formData.append("file", imageFile); // field name must match backend
+  
+      // 2. Send POST request
+      const res = await axios.post("customer/changephoto", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+  
+    } catch (err) {
+      console.error("Upload failed:", err);
+    }
+      
+     
+    },
 
 };
