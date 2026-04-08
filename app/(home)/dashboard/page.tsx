@@ -16,6 +16,7 @@ import { customerApi } from "@/lib/customerApi";
 import { signOut } from "next-auth/react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import {usersApi} from "@/lib/usersApi";
 
 /* ---------------- TYPES ---------------- */
 
@@ -42,6 +43,7 @@ export default function DashboardPage() {
   });
   const [bookings, setBookings] = useState<RecentBookingUI[]>([]);
   const router = useRouter();
+      const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
 
 
@@ -69,6 +71,41 @@ export default function DashboardPage() {
       throw error;
     }
   }
+
+      const clearUserSession = async () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("user_role");
+        Cookies.remove("user_role");
+        Cookies.remove("user_id");
+
+        if (localStorage.getItem("google")) {
+            localStorage.removeItem("google");
+            await signOut({ redirect: false });
+        }
+    }
+  
+      const handleDeleteMyAccount = async () => {
+          const confirmed = window.confirm(
+              "Delete your account permanently? This action cannot be undone."
+          );
+  
+          if (!confirmed) return;
+  
+          setIsDeletingAccount(true);
+          try {
+              const response = await usersApi.deleteMyAccount();
+              await clearUserSession();
+              window.alert(response.message || "Your account has been deleted.");
+              router.push("/");
+              router.refresh();
+          } catch (error) {
+              const message =
+                  error instanceof Error ? error.message : "Unable to delete account.";
+              window.alert(message);
+          } finally {
+              setIsDeletingAccount(false);
+          }
+      };
 
   useEffect(() => {
 
@@ -266,6 +303,22 @@ export default function DashboardPage() {
             )}
           </div>
         </section>
+
+  
+          <section className="mt-8 rounded-xl border border-red-200 bg-red-50 p-6">
+              <h2 className="text-lg font-bold text-red-700">Danger Zone</h2>
+              <p className="mt-2 text-sm text-red-600">
+                  Permanently delete this account and remove access to your profile.
+              </p>
+              <button
+                  type="button"
+                  onClick={handleDeleteMyAccount}
+                  disabled={isDeletingAccount}
+                  className="mt-4 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                  {isDeletingAccount ? "Deleting Account..." : "Delete My Account"}
+              </button>
+          </section>
       </div>
 
       <div className="absolute bottom-0 w-full h-64 bg-gray-900" />
