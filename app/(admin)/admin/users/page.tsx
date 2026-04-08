@@ -1,6 +1,7 @@
 // Create: app/(admin)/admin/users/page.tsx
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { usersApi } from '@/lib/usersApi';
 
 interface User {
   _id: string;
@@ -31,6 +32,7 @@ interface Pagination {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
   const defaultFilters = {
     role: '',
     status: '',
@@ -48,11 +50,7 @@ export default function UsersPage() {
   const [filters, setFilters] = useState(defaultFilters);
   const [searchInput, setSearchInput] = useState('');
 
-  useEffect(() => {
-    fetchUsers();
-  }, [filters]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -76,7 +74,11 @@ export default function UsersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({
@@ -101,6 +103,31 @@ export default function UsersPage() {
   const handleClear = () => {
     setSearchInput('');
     setFilters(defaultFilters);
+  };
+
+  const handleDeleteUser = async (user: User) => {
+    const confirmed = window.confirm(
+      `Delete ${user.name}'s account permanently? This action cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    setDeletingUserId(user._id);
+    try {
+      const response = await usersApi.deleteUserAccount(user._id);
+      setUsers((prev) => prev.filter((entry) => entry._id !== user._id));
+      setPagination((prev) => ({
+        ...prev,
+        total: Math.max(0, prev.total - 1),
+      }));
+      window.alert(response.message || 'User account deleted successfully.');
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Unable to delete user account.';
+      window.alert(message);
+    } finally {
+      setDeletingUserId(null);
+    }
   };
 
   if (loading) return <div>Loading...</div>;
@@ -192,6 +219,7 @@ export default function UsersPage() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Verified</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -234,6 +262,18 @@ export default function UsersPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(user.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    {user.email !== "admin@crownstandard.com" &&
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteUser(user)}
+                      disabled={deletingUserId === user._id}
+                      className="rounded-md bg-red-600 px-3 py-2 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      {deletingUserId === user._id ? 'Deleting...' : 'Delete'}
+                    </button>
+                    }
                   </td>
                 </tr>
               ))}
