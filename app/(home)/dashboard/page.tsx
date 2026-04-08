@@ -210,7 +210,7 @@ export default function DashboardPage() {
         </section>
 
         {/* Actions */}
-<section className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+<section className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
   <ActionCard
     title="Book Service"
     subtitle="Find and book cleaning services"
@@ -225,10 +225,17 @@ export default function DashboardPage() {
     title="Favourites"
     subtitle="Your saved providers"
   />
+  
   <ActionCard
     title="Messages"
     subtitle="Chat with service provider"
     href="/conversation"
+  />
+
+    <ActionCard
+    title="Profile"
+    subtitle="Chat with service provider"
+    href="/profile"
   />
 </section>
 

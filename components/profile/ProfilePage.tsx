@@ -12,6 +12,7 @@ import {
 } from "@/lib/providerApi";
 import { useRouter } from "next/navigation";
 import { usersApi } from "@/lib/usersApi";
+import { customerApi } from "@/lib/customerApi";
 
 interface ProfilePageProps {
     role: "provider" | "customer";
@@ -60,16 +61,23 @@ export default function ProfilePage({ role }: ProfilePageProps) {
 
     const getProfile =async ()=>{
 
-        const providerProfile = await providerApi.getProfileDetails();
-        
-
-  
-        setProfile(providerProfile)
+        if(isProvider){
+            const providerProfile = await providerApi.getProfileDetails();
+            setProfile(providerProfile)
+        } else {
+            const customerProfile = await customerApi.getProfileDetails();
+            setProfile(customerProfile)
+        }
     }
 
     const saveData = async()=>{
 
-        await providerApi.updateProfileDetails(profile);
+        if(isProvider){
+            await providerApi.updateProfileDetails(profile);
+        } else {
+            await customerApi.updateProfileDetails(profile)
+        }
+
 
 
     }

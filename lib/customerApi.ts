@@ -19,6 +19,26 @@ export interface DashboardBooking {
   };
 }
 
+export interface CustomerAddress {
+  line1?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: number;
+  location?: {
+    type: "Point";
+    coordinates: [number, number];
+  };
+}
+
+export interface CustomerProfile {
+  address?: CustomerAddress;
+  name?: string;
+  phone?: string;
+  email?: string;
+  photo? : string;
+}
+
 export interface CustomerDashboardResponse {
   success: boolean;
   data: {
@@ -36,5 +56,17 @@ export const customerApi = {
   getDashboard: async (): Promise<CustomerDashboardResponse> => {
     const res = await axios.get("/customer/dashboard");
     return res.data;
-  }
+  },
+
+  getProfileDetails: async (): Promise<CustomerProfile> => {
+    const res = await axios.get(`/customer/profile`);
+    return res.data;
+  },
+
+  updateProfileDetails: async (data: CustomerProfile) => {
+
+    const res = await axios.patch(`/api/customer/profile-update`, data);
+    return res.data;
+  },
+
 };
