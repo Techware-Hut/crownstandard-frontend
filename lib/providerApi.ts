@@ -251,7 +251,6 @@ export const providerApi = {
   getStripeDashboard : async (): Promise<ProviderStripeDashboardResponse> => {
 
     const res = await axios.get("/provider/stripe/loginLink")
-
     return res.data
     
   },

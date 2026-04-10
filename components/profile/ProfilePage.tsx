@@ -108,28 +108,28 @@ export default function ProfilePage({ role }: ProfilePageProps) {
         }
     };
 
-    const handleDeleteMyAccount = async () => {
-        const confirmed = window.confirm(
-            "Delete your account permanently? This action cannot be undone."
-        );
+    // const handleDeleteMyAccount = async () => {
+    //     const confirmed = window.confirm(
+    //         "Delete your account permanently? This action cannot be undone."
+    //     );
 
-        if (!confirmed) return;
+    //     if (!confirmed) return;
 
-        setIsDeletingAccount(true);
-        try {
-            const response = await usersApi.deleteMyAccount();
-            await clearUserSession();
-            window.alert(response.message || "Your account has been deleted.");
-            router.push("/");
-            router.refresh();
-        } catch (error) {
-            const message =
-                error instanceof Error ? error.message : "Unable to delete account.";
-            window.alert(message);
-        } finally {
-            setIsDeletingAccount(false);
-        }
-    };
+    //     setIsDeletingAccount(true);
+    //     try {
+    //         const response = await usersApi.deleteMyAccount();
+    //         await clearUserSession();
+    //         window.alert(response.message || "Your account has been deleted.");
+    //         router.push("/");
+    //         router.refresh();
+    //     } catch (error) {
+    //         const message =
+    //             error instanceof Error ? error.message : "Unable to delete account.";
+    //         window.alert(message);
+    //     } finally {
+    //         setIsDeletingAccount(false);
+    //     }
+    // };
 
 
     return (

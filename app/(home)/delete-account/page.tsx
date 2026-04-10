@@ -1,6 +1,10 @@
 "use client";
 
+import { usersApi } from "@/lib/usersApi";
 import React, { useState } from "react";
+import Cookies from "js-cookie";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type ApiResponse = {
   success: boolean;
@@ -12,6 +16,20 @@ const DeleteAccountPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
 
+  const router = useRouter();
+
+  const clearUserSession = async () => {
+      localStorage.removeItem("user");
+      localStorage.removeItem("user_role");
+      Cookies.remove("user_role");
+      Cookies.remove("user_id");
+
+      if (localStorage.getItem("google")) {
+          localStorage.removeItem("google");
+          await signOut({ redirect: false });
+      }
+  };
+
   const handleDelete = async (): Promise<void> => {
     if (!otp.trim()) {
       setMessage("Please enter OTP");
@@ -22,10 +40,14 @@ const DeleteAccountPage: React.FC = () => {
     setMessage("");
 
     try {
-      const response = await fakeDeleteAPI(otp);
+      const response = await usersApi.deleteMyAccount(otp);
 
       if (response.success) {
         setMessage("Account deleted successfully");
+          await clearUserSession();
+          window.alert(response.message || "Your account has been deleted.");
+          router.push("/");
+          router.refresh();
       } else {
         setMessage(response.message || "Invalid OTP");
       }
@@ -36,18 +58,6 @@ const DeleteAccountPage: React.FC = () => {
     }
   };
 
-  // Mock API (replace with real API)
-  const fakeDeleteAPI = (otp: string): Promise<ApiResponse> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (otp === "123456") {
-          resolve({ success: true });
-        } else {
-          resolve({ success: false, message: "Invalid OTP" });
-        }
-      }, 1500);
-    });
-  };
 
   return (
     <div style={styles.container}>

@@ -35,8 +35,13 @@ async function deleteRequest(path: string): Promise<DeleteUserResponse> {
 }
 
 export const usersApi = {
-  deleteMyAccount: async (): Promise<DeleteUserResponse> => {
-   return await deleteRequest("/auth/me");
+  deleteMyAccount: async (otp : string) => {
+     try{
+        const data = await axios.delete("/auth/me", {data : {otp}})
+        return data.data
+     }catch(e){
+
+     }
   },
 
   deleteUserAccount: async (userId: string): Promise<DeleteUserResponse> => {
