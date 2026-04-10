@@ -85,7 +85,9 @@ export interface SingleServiceResponse {
     provider: {
       _id: string;
       name: string;
-      providerProfile: object;
+      providerProfile: {
+        approvalStatus?: string;
+      };
     };
   };
 }

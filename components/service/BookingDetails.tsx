@@ -64,6 +64,9 @@ const tax : Record<string, number> = {
 export default function ServiceBookingForm({ service }: any) {
   const pricing = service.pricing;
   const router = useRouter();
+  const approvalStatus = service?.providerApprovalStatus;
+  const isProviderApproved =
+    !approvalStatus || ["active", "approved"].includes(String(approvalStatus).toLowerCase());
 
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -113,6 +116,9 @@ const scheduledAt = useMemo(() => {
       setLoading(true);
       setError(null);
 
+      if (!isProviderApproved) {
+        throw new Error("This provider is pending approval. Booking is not available yet.");
+      }
       if (!scheduledAt) throw new Error("Select date & time");
       else if(!addressLine1) throw new Error("Please enter address");
       else if(!city) throw new Error("Please enter city")
@@ -281,6 +287,12 @@ function getProvinceFromPostalCode(postalCode :string) {
             onChange={(e) => setSpecialInstructions(e.target.value)}
           />
 
+          {!isProviderApproved && (
+            <p className="mt-4 text-sm text-amber-700">
+              This provider is pending approval by the admin. Booking will be available once
+              they are approved.
+            </p>
+          )}
           {error && <p className="mt-4 text-red-600">{error}</p>}
         </div>
 
@@ -314,7 +326,7 @@ function getProvinceFromPostalCode(postalCode :string) {
 
           <button
             onClick={handleCreateBooking}
-            disabled={loading}
+            disabled={loading || !isProviderApproved}
             className="mt-6 w-full bg-[#BE8F2E] text-white py-3 rounded-xl"
           >
             {loading ? "Processing..." : "Create Booking"}

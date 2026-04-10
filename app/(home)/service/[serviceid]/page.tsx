@@ -38,6 +38,7 @@ async function getService(id: string): Promise<Service | null> {
         id: response.data.provider._id as ID,
         name: response.data.provider.name
       },
+      providerApprovalStatus: response.data.provider?.providerProfile?.approvalStatus ?? null,
       highlights: response.data.includes || [],
       whatsIncluded: response.data.includes || [],
       whatsExcluded: response.data.exclusions || []

@@ -6,6 +6,12 @@ export interface DeleteUserResponse {
   data?: unknown;
 }
 
+export interface UpdateUserStatusResponse {
+  success?: boolean;
+  message?: string;
+  data?: unknown;
+}
+
 async function parseDeleteResponse(response: Response): Promise<DeleteUserResponse> {
   const contentType = response.headers.get("content-type") || "";
   if (contentType.includes("application/json")) {
@@ -46,5 +52,32 @@ export const usersApi = {
 
   deleteUserAccount: async (userId: string): Promise<DeleteUserResponse> => {
     return deleteRequest(`/users/${userId}`);
+  },
+
+  updateUserStatus: async (
+    userId: string,
+    status: "active" | "inactive" | "pending",
+    approvalStatus?: string
+  ): Promise<UpdateUserStatusResponse> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/users/${userId}/status`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        status,
+        ...(approvalStatus ? { approvalStatus } : {}),
+      }),
+    });
+
+    const payload: UpdateUserStatusResponse =
+      response.headers.get("content-type")?.includes("application/json")
+        ? await response.json()
+        : { success: response.ok };
+
+    if (!response.ok) {
+      throw new Error(payload.message || "Failed to update user status.");
+    }
+
+    return payload;
   },
 };

@@ -33,6 +33,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
+  const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
   const defaultFilters = {
     role: '',
     status: '',
@@ -127,6 +128,39 @@ export default function UsersPage() {
       window.alert(message);
     } finally {
       setDeletingUserId(null);
+    }
+  };
+
+  const handleApproveProvider = async (user: User) => {
+    const confirmed = window.confirm(
+      `Approve ${user.name} as a provider? They will be able to receive bookings.`
+    );
+
+    if (!confirmed) return;
+
+    setUpdatingUserId(user._id);
+    try {
+      const response = await usersApi.updateUserStatus(user._id, "active", "active");
+      setUsers((prev) =>
+        prev.map((entry) =>
+          entry._id === user._id
+            ? {
+                ...entry,
+                status: "active",
+                providerProfile: entry.providerProfile
+                  ? { ...entry.providerProfile, approvalStatus: "active" }
+                  : { approvalStatus: "active", kyc: { verified: false }, serviceRadiusKm: 0 },
+              }
+            : entry
+        )
+      );
+      window.alert(response.message || "Provider approved successfully.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to approve provider.";
+      window.alert(message);
+    } finally {
+      setUpdatingUserId(null);
     }
   };
 
@@ -251,6 +285,17 @@ export default function UsersPage() {
                     }`}>
                       {user.status}
                     </span>
+                    {user.role === "provider" && user.providerProfile?.approvalStatus && (
+                      <div className="mt-1">
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          user.providerProfile.approvalStatus === 'active'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          Provider: {user.providerProfile.approvalStatus}
+                        </span>
+                      </div>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <div>
@@ -264,6 +309,18 @@ export default function UsersPage() {
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    {user.email !== "admin@crownstandard.com" &&
+                    user.role === "provider" &&
+                    (user.status === "pending" || user.providerProfile?.approvalStatus === "pending") && (
+                    <button
+                      type="button"
+                      onClick={() => handleApproveProvider(user)}
+                      disabled={updatingUserId === user._id}
+                      className="mb-2 rounded-md bg-green-600 px-3 py-2 text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      {updatingUserId === user._id ? 'Approving...' : 'Approve Provider'}
+                    </button>
+                    )}
                     {user.email !== "admin@crownstandard.com" &&
                     <button
                       type="button"

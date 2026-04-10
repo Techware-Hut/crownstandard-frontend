@@ -66,6 +66,7 @@ export interface Service {
   longNotice?: string | null; // "Service Notice" box
   disclaimer?: string | null; // important disclaimer box
   provider?: Provider | null;
+  providerApprovalStatus?: string | null;
   highlights: string[]; // bullet list
   whatsIncluded?: string[] | null;
   whatsExcluded?: string[] | null;
