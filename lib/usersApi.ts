@@ -1,5 +1,3 @@
-import axios from "./axios";
-
 export interface DeleteUserResponse {
   success?: boolean;
   message?: string;
@@ -10,6 +8,43 @@ export interface UpdateUserStatusResponse {
   success?: boolean;
   message?: string;
   data?: unknown;
+}
+
+export interface AdminUserProfile {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  role: "admin" | "customer" | "provider";
+  status: "active" | "inactive" | "pending";
+  emailVerified: boolean;
+  phoneVerified: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  providerProfile?: {
+    approvalStatus: string;
+    kyc: { verified: boolean };
+    serviceRadiusKm: number;
+  };
+}
+
+export interface UpdateUserPayload {
+  name: string;
+  email: string;
+  phone?: string;
+  status: "active" | "inactive" | "pending";
+  providerProfile?: {
+    approvalStatus: string;
+    serviceRadiusKm: number;
+    kyc: { verified: boolean };
+  };
+}
+
+export interface UpdateUserResponse {
+  success?: boolean;
+  message?: string;
+  data?: AdminUserProfile;
 }
 
 async function parseDeleteResponse(response: Response): Promise<DeleteUserResponse> {
@@ -42,10 +77,10 @@ async function deleteRequest(path: string): Promise<DeleteUserResponse> {
 
 export const usersApi = {
 
-   sendDeleteAccountOtp: async () => {
+  sendDeleteAccountOtp: async () => {
     try{
-      const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/auth/me/delete-otp`,  {method: "POST", credentials: "include"})
-    }catch(e){
+      await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/auth/me/delete-otp`,  {method: "POST", credentials: "include"})
+    }catch{
     }
   },
 
@@ -54,7 +89,7 @@ export const usersApi = {
      try{
         const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/auth/me/delete-account`,  {method: "DELETE", credentials: "include", body: JSON.stringify({ otp }), headers: { "Content-Type": "application/json" } })
         return data.json();
-     }catch(e){
+     }catch{
 
      }
   },
@@ -88,5 +123,28 @@ export const usersApi = {
     }
 
     return payload;
+  },
+
+  updateUser: async (
+    userId: string,
+    payload: UpdateUserPayload
+  ): Promise<UpdateUserResponse> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/users/${userId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    });
+
+    const parsed: UpdateUserResponse =
+      response.headers.get("content-type")?.includes("application/json")
+        ? await response.json()
+        : { success: response.ok };
+
+    if (!response.ok) {
+      throw new Error(parsed.message || "Failed to update user.");
+    }
+
+    return parsed;
   },
 };
