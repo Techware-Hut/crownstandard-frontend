@@ -308,7 +308,7 @@ export default function UsersPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="px-6 py-4  whitespace-nowrap text-sm">
                     {user.email !== "admin@crownstandard.com" &&
                     user.role === "provider" &&
                     (user.status === "pending" || user.providerProfile?.approvalStatus === "pending") && (
@@ -326,7 +326,7 @@ export default function UsersPage() {
                       type="button"
                       onClick={() => handleDeleteUser(user)}
                       disabled={deletingUserId === user._id}
-                      className="rounded-md bg-red-600 px-3 py-2 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
+                      className="rounded-md ml-5 bg-red-600 px-3 py-2 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
                     >
                       {deletingUserId === user._id ? 'Deleting...' : 'Delete'}
                     </button>
