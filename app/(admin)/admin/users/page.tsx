@@ -52,6 +52,7 @@ export default function UsersPage() {
   const [filters, setFilters] = useState(defaultFilters);
   const [searchInput, setSearchInput] = useState('');
   const [openUserModal, setOpenUserModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -78,6 +79,11 @@ export default function UsersPage() {
       setLoading(false);
     }
   }, [filters]);
+
+    const handleViewUser = (user: User) => {
+    setSelectedUser(user);
+    setOpenUserModal(true);
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -335,7 +341,7 @@ export default function UsersPage() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setOpenUserModal(true)}
+                      onClick={() => handleViewUser(user)}
                       disabled={deletingUserId === user._id}
                       className="rounded-md ml-5 bg-blue-600 px-3 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
                     >
@@ -343,11 +349,11 @@ export default function UsersPage() {
                     </button>
                     </>
                     }
-    
+                  <UserModal user={user} isOpen={openUserModal} onClose={() => setOpenUserModal(false)} />
                   </td>
                 </tr>
 
-                                         <UserModal user={user} isOpen={openUserModal} onClose={() => setOpenUserModal(false)} />
+
               ))}
             </tbody>
           </table>
@@ -376,6 +382,17 @@ export default function UsersPage() {
             </button>
           </div>
         </div>
+      )}
+
+      {selectedUser && (
+        <UserModal 
+          user={selectedUser} 
+          isOpen={openUserModal} 
+          onClose={() => {
+            setOpenUserModal(false);
+            setSelectedUser(null);
+          }} 
+        />
       )}
     </div>
   );
