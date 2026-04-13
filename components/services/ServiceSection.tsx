@@ -32,6 +32,8 @@ export default function ServiceSection() {
   }, [loadServices]);
 
   const handleServiceCreated = () => {
+
+    
     loadServices(); // Refresh the services list
     setOpen(false);
   };

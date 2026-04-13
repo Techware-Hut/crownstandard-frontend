@@ -62,6 +62,15 @@ export default function CreateServiceModal({
 
   const handleSubmit = async () => {
     try {
+
+     const data = await providerApi.getProfileDetails();
+
+
+     if(data.status !== "approved"){
+      alert("Your provider profile is not approved yet. Please wait for approval before creating services.");
+      return;
+     }
+    
       setLoading(true);
       
       const serviceData = {

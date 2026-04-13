@@ -75,6 +75,7 @@ export interface ProviderProfile {
   phone?: string;
   email?: string;
   photo? : string;
+  status? : string
 }
 
 export interface StripeConnectStatus {
