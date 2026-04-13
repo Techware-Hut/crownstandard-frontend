@@ -129,7 +129,7 @@ export const usersApi = {
     userId: string,
     payload: UpdateUserPayload
   ): Promise<UpdateUserResponse> => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/users/${userId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/users/${userId}/update`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
