@@ -103,14 +103,12 @@ export const usersApi = {
     status: "active" | "inactive" | "pending",
     approvalStatus?: string
   ): Promise<UpdateUserStatusResponse> => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/users/${userId}/status`, {
-      method: "PATCH",
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/users/${userId}/approve`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({
-        status,
-        ...(approvalStatus ? { approvalStatus } : {}),
-      }),
+        "approvalStatus": "approved",}),
     });
 
     const payload: UpdateUserStatusResponse =
