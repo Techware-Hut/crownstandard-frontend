@@ -1,7 +1,7 @@
 "use client";
 
 import { usersApi } from "@/lib/usersApi";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -57,6 +57,12 @@ const DeleteAccountPage: React.FC = () => {
       setLoading(false);
     }
   };
+
+  useEffect(()=>{
+
+    usersApi.sendDeleteAccountOtp()
+
+  },[])
 
 
   return (

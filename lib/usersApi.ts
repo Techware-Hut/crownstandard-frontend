@@ -41,10 +41,19 @@ async function deleteRequest(path: string): Promise<DeleteUserResponse> {
 }
 
 export const usersApi = {
+
+   sendDeleteAccountOtp: async () => {
+    try{
+      const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/auth/me/delete-otp`,  {method: "POST", credentials: "include"})
+    }catch(e){
+    }
+  },
+
+
   deleteMyAccount: async (otp : string) => {
      try{
-        const data = await axios.delete("/auth/me", {data : {otp}})
-        return data.data
+        const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/auth/me/delete-account`,  {method: "DELETE", credentials: "include", body: JSON.stringify({ otp }), headers: { "Content-Type": "application/json" } })
+        return data.json();
      }catch(e){
 
      }

@@ -2,6 +2,7 @@
 "use client";
 import { useState, useEffect, useCallback } from 'react';
 import { usersApi } from '@/lib/usersApi';
+import UserModal from '@/components/admin/usermodal';
 
 interface User {
   _id: string;
@@ -50,6 +51,7 @@ export default function UsersPage() {
   
   const [filters, setFilters] = useState(defaultFilters);
   const [searchInput, setSearchInput] = useState('');
+  const [openUserModal, setOpenUserModal] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -322,17 +324,30 @@ export default function UsersPage() {
                     </button>
                     )}
                     {user.email !== "admin@crownstandard.com" &&
+                    <>
                     <button
                       type="button"
                       onClick={() => handleDeleteUser(user)}
                       disabled={deletingUserId === user._id}
                       className="rounded-md ml-5 bg-red-600 px-3 py-2 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
                     >
-                      {deletingUserId === user._id ? 'Deleting...' : 'Delete'}
+                      {deletingUserId === user._id ? 'Suspending...' : 'Suspend'}
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => setOpenUserModal(true)}
+                      disabled={deletingUserId === user._id}
+                      className="rounded-md ml-5 bg-blue-600 px-3 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      View
+                    </button>
+                    </>
                     }
+    
                   </td>
                 </tr>
+
+                                         <UserModal user={user} isOpen={openUserModal} onClose={() => setOpenUserModal(false)} />
               ))}
             </tbody>
           </table>
