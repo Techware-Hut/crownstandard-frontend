@@ -61,6 +61,12 @@ export default function ProfilePage({ role }: ProfilePageProps) {
 
     const getProfile =async ()=>{
 
+      const user = localStorage.getItem("user_role")
+      if(!user){
+        router.push("/login")
+        return;
+      }
+
         if(isProvider){
             const providerProfile = await providerApi.getProfileDetails();
             setProfile(providerProfile)
