@@ -60,6 +60,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [loading, setLoading] = useState(true);
+    const {logout} = useAuth();
 
   useEffect(() => {
     fetchDashboard();
@@ -67,6 +68,8 @@ export default function AdminDashboard() {
 
   const fetchDashboard = async () => {
     try {
+
+
       const [statsRes, analyticsRes] = await Promise.all([
         fetch(`${API_BASE}/admin/dashboard/stats`, {
           credentials: "include",
@@ -86,6 +89,7 @@ export default function AdminDashboard() {
         setAnalytics(a.data);
       }
     } catch (err) {
+      logout();
       showToast("Failed to load dashboard", "error");
     } finally {
       setLoading(false);

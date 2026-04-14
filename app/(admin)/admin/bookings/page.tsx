@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useToast } from "../../../contexts/ToastContext";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 interface Booking {
   _id: string;
@@ -62,6 +63,7 @@ export default function AdminBookingsPage() {
   const [stats, setStats] = useState<BookingStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const {logout} = useAuth();
 
   const [cancelModal, setCancelModal] = useState<{ show: boolean; id: string }>({
     show: false,
@@ -108,6 +110,7 @@ export default function AdminBookingsPage() {
       const json = await res.json();
       setStats(json.data);
     } catch {
+      logout();
       showToast("Failed to load booking stats", "error");
     }
   };

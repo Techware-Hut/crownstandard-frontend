@@ -91,6 +91,7 @@ export default function DashboardPage() {
     
   
     const loadDashboard = async () => {
+      localStorage.removeItem('adminUser');
   
       // const user = Cookies.get("user_role") === "customer" ? true : false;
       const user = localStorage.getItem("user_role")

@@ -11,6 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 interface Analytics {
   userGrowth: Array<{
@@ -26,6 +27,8 @@ interface Analytics {
 }
 
 export default function DashboardAnalytics({ analytics }: { analytics: Analytics }) {
+
+
   const userGrowthData = analytics.userGrowth.map((u) => ({
     name: `${u._id.month}/${u._id.year}`,
     users: u.count,

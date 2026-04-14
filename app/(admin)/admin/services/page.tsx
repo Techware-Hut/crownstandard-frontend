@@ -2,6 +2,8 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useToast } from '../../../contexts/ToastContext';
+import { useAuth } from "@/app/contexts/AuthContext";
+import { log } from 'console';
 
 interface Service {
   _id: string;
@@ -52,7 +54,7 @@ export default function ServicesPage() {
     total: 0,
     totalPages: 0
   });
-  
+  const {logout} = useAuth();
   const [filters, setFilters] = useState({
     isActive: '',
     search: '',
@@ -91,7 +93,9 @@ export default function ServicesPage() {
         setPagination(data.pagination || {});
       }
     } catch (error) {
+      logout();
       console.error('Failed to fetch services:', error);
+
     } finally {
       setLoading(false);
     }

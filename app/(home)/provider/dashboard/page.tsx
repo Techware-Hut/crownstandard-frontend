@@ -142,7 +142,7 @@ function OverviewTab() {
 
   useEffect(() => {
     const loadDashboard = async () => {
-
+         localStorage.removeItem('adminUser');
       // const user = Cookies.get("user_role") === "provider" ? true : false;
       const user = localStorage.getItem("user_role")
       if(user !== "provider"){

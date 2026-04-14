@@ -20,6 +20,8 @@ export default function AdminLogin() {
     
     if (success) {
       // Redirect to /admin/dashboard instead of /admin
+      localStorage.removeItem("user_role");
+      localStorage.removeItem("user");
       router.push('/admin/dashboard');
     } else {
       setError('Invalid credentials');
