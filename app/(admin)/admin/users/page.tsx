@@ -347,14 +347,14 @@ export default function UsersPage() {
                       )}
                     {user.email !== "admin@crownstandard.com" && (
                       <>
-                        <button
+                        {/* <button
                           type="button"
                           onClick={() => handleDeleteUser(user)}
                           disabled={deletingUserId === user._id}
                           className="ml-5 rounded-md bg-red-600 px-3 py-2 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
                         >
                           {deletingUserId === user._id ? "Suspending..." : "Suspend"}
-                        </button>
+                        </button> */}
                         <button
                           type="button"
                           onClick={() => handleViewUser(user)}

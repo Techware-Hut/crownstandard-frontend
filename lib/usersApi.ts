@@ -16,7 +16,7 @@ export interface AdminUserProfile {
   email: string;
   phone?: string;
   role: "admin" | "customer" | "provider";
-  status: "active" | "inactive" | "pending";
+  status: "active" | "pending";
   emailVerified: boolean;
   phoneVerified: boolean;
   isDeleted: boolean;
@@ -33,7 +33,7 @@ export interface UpdateUserPayload {
   name: string;
   email: string;
   phone?: string;
-  status: "active" | "inactive" | "pending";
+  status: "active" | "suspend" | "delete" | "pending";
   providerProfile?: {
     approvalStatus: string;
     serviceRadiusKm: number;
@@ -96,6 +96,21 @@ export const usersApi = {
 
   deleteUserAccount: async (userId: string): Promise<DeleteUserResponse> => {
     return deleteRequest(`/users/${userId}`);
+  },
+
+  adminDeleteUser: async (userId: string): Promise<DeleteUserResponse> => {
+    const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/admin/delete-user/${userId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    const payload = await parseDeleteResponse(data);
+
+    if (!data.ok) {
+      throw new Error(payload.message || "Admin delete request failed.");
+    }
+
+    return payload;
   },
 
   updateUserStatus: async (

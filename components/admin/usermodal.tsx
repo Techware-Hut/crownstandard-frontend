@@ -14,7 +14,7 @@ interface FormState {
   name: string;
   email: string;
   phone: string;
-  status: "active" | "inactive" | "pending";
+  status: "active" | "suspend" | "delete" | "pending";
   approvalStatus: string;
   serviceRadiusKm: string;
   kycVerified: boolean;
@@ -52,6 +52,26 @@ const UserModal = ({ user, isOpen, onClose, onUserUpdated }: Props) => {
     setForm((prev) => (prev ? { ...prev, [field]: value } : prev));
   };
 
+
+  const deleteUser = async () => {
+    if (!confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await usersApi.adminDeleteUser(user._id);
+      onUserUpdated({ ...user, isDeleted: true });
+      onClose();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to delete user.";
+      window.alert(message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
   const handleSave = async () => {
     if (!canEdit) {
       onClose();
@@ -59,6 +79,15 @@ const UserModal = ({ user, isOpen, onClose, onUserUpdated }: Props) => {
     }
 
     setSaving(true);
+
+
+
+    if(form.status === "delete") {
+      await deleteUser();
+      navigation.reload();
+      return;
+    }
+
     try {
       const payload: UpdateUserPayload = {
         name: form.name.trim(),
@@ -90,7 +119,7 @@ const UserModal = ({ user, isOpen, onClose, onUserUpdated }: Props) => {
             updatedAt: new Date().toISOString(),
           };
 
-      onUserUpdated(updatedUser);
+      // onUserUpdated(updatedUser);
       onClose();
     } catch (error) {
       const message =
@@ -160,15 +189,15 @@ const UserModal = ({ user, isOpen, onClose, onUserUpdated }: Props) => {
               onChange={(e) =>
                 handleChange(
                   "status",
-                  e.target.value as "active" | "inactive" | "pending"
+                  e.target.value as "Active" | "Suspend" | "Delete"
                 )
               }
               disabled={!canEdit || saving}
               className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm disabled:bg-gray-100"
             >
               <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="pending">Pending</option>
+              <option value="suspend">Suspend</option>
+              <option value="delete">Delete</option>
             </select>
           </label>
         </div>
