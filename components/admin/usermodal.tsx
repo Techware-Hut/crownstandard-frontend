@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AdminUserProfile, UpdateUserPayload, usersApi } from "@/lib/usersApi";
-
+import { useRouter } from 'next/navigation'
 interface Props {
   user: AdminUserProfile | null;
   isOpen: boolean;
@@ -37,7 +37,11 @@ const UserModal = ({ user, isOpen, onClose, onUserUpdated }: Props) => {
   const [form, setForm] = useState<FormState | null>(null);
   const [saving, setSaving] = useState(false);
 
+    const router = useRouter()
+
   useEffect(() => {
+
+
     if (user && isOpen) {
       setForm(getInitialFormState(user));
     }
@@ -84,7 +88,9 @@ const UserModal = ({ user, isOpen, onClose, onUserUpdated }: Props) => {
 
     if(form.status === "delete") {
       await deleteUser();
-      navigation.reload();
+     // Force reload to update the user list after deletion
+     window.location.reload() 
+
       return;
     }
 
