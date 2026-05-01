@@ -10,7 +10,7 @@ export default function Footer() {
           <Link href="/privacy" className="transition hover:text-[#b9903c]">
             Privacy Policy
           </Link>
-                    <Link href="/accessibility" className="transition hover:text-[#b9903c]">
+            <Link href="/accessibility" className="transition hover:text-[#b9903c]">
             Accessibility
           </Link>
         </div>
