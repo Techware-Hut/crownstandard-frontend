@@ -158,7 +158,7 @@ export default function SupportPage() {
                                 <p className="mt-1 text-base font-medium text-gray-500">
                                     For urgent matters email us directly at{" "}
                                     <span className="font-medium text-[#b9903c]">
-                                        contact@crownstandard.com
+                                        support@crownstandard.com
                                     </span>
                                 </p>
                             </div>

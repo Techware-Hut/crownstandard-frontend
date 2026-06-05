@@ -6,6 +6,25 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/app/contexts/AuthContext";
 import Cookies from "js-cookie";
 
+function AppleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden className="h-7 w-7 fill-current">
+      <path d="M15.65 1.5c.1 1.2-.35 2.4-1.05 3.23-.77.92-2.03 1.64-3.2 1.54-.15-1.15.4-2.37 1.1-3.12.78-.85 2.14-1.54 3.15-1.65ZM19.44 17.2c-.52 1.18-.77 1.7-1.44 2.73-.93 1.44-2.24 3.24-3.86 3.26-1.44.01-1.8-.94-3.75-.93-1.95.01-2.35.95-3.8.94-1.61-.02-2.85-1.64-3.78-3.08-2.6-4.04-2.88-8.77-1.27-11.25 1.14-1.77 2.94-2.8 4.64-2.8 1.73 0 2.82.95 4.25.95 1.39 0 2.23-.95 4.23-.95 1.52 0 3.14.83 4.28 2.27-3.76 2.05-3.15 7.44.5 8.86Z" />
+    </svg>
+  );
+}
+
+function GooglePlayIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden className="h-7 w-7">
+      <path d="M3.4 2.2 13.8 12 3.4 21.8a2 2 0 0 1-.4-1.2V3.4c0-.44.15-.86.4-1.2Z" fill="#00C4CC" />
+      <path d="m16.95 15.03-3.15-3.03 3.16-3.03 3.8 2.16c1.65.94 1.65 2.83 0 3.77l-3.8 2.13Z" fill="#FFB300" />
+      <path d="M3.4 2.2c.3-.4.77-.64 1.27-.67l12.28 7.44-3.15 3.03L3.4 2.2Z" fill="#00E676" />
+      <path d="m3.4 21.8 10.4-9.8 3.15 3.03-12.28 7.44a1.8 1.8 0 0 1-1.27-.67Z" fill="#FF5252" />
+    </svg>
+  );
+}
+
 export default function Hero() {
   const { user } = useAuth();
   const [dashboardLink, setDashboardLink] = useState("/login");
@@ -69,11 +88,46 @@ export default function Hero() {
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-                <Link href="#get-started" className="btn-primary px-8 py-2.5 md:py-3 rounded-full border-[#b9903c]">
+                {/* <Link href="#get-started" className="btn-primary px-8 py-2.5 md:py-3 rounded-full border-[#b9903c]">
                   Book Now
                 </Link>
                 <Link href={dashboardLink} className="text-white border-white/60 border-[1px] px-6 md:px-8 py-2.5 md:py-3 rounded-full">
                   My Dashboard
+                </Link> */}
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-5">
+                <Link
+                  href="https://apps.apple.com/in/app/crown-standard-cleaning/id6764820454"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-w-[210px] items-center gap-3 rounded-2xl border border-white/25 bg-[#0f0f10] px-5 py-3 text-left text-white shadow-lg shadow-black/20 transition-all hover:-translate-y-0.5 hover:bg-black"
+                >
+                  <AppleIcon />
+                  <span className="leading-tight">
+                    <span className="block text-[11px] uppercase tracking-[0.18em] text-white/70">
+                      Download on the
+                    </span>
+                    <span className="block text-base font-semibold">
+                      App Store
+                    </span>
+                  </span>
+                </Link>
+                <Link
+                  href="https://play.google.com/store/apps/details?id=ca.crownstandard.crownstandard&pli=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-w-[210px] items-center gap-3 rounded-2xl border border-white/25 bg-[#0f0f10] px-5 py-3 text-left text-white shadow-lg shadow-black/20 transition-all hover:-translate-y-0.5 hover:bg-black"
+                >
+                  <GooglePlayIcon />
+                  <span className="leading-tight">
+                    <span className="block text-[11px] uppercase tracking-[0.18em] text-white/70">
+                      Get it on
+                    </span>
+                    <span className="block text-base font-semibold">
+                      Google Play
+                    </span>
+                  </span>
                 </Link>
               </div>
             </div>
