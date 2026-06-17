@@ -54,6 +54,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <SidebarLink href="/admin/users" label="Users" />
               <SidebarLink href="/admin/services" label="Services" />
               <SidebarLink href="/admin/bookings" label="Bookings" />
+              <SidebarLink href="/admin/support-center" label="Support Center" />
             </div>
           </nav>
         </aside>
