@@ -1,6 +1,7 @@
 // Update your AuthContext.tsx to use env variable
 "use client";
 import { createContext, useContext, useState, useEffect } from 'react';
+import Cookies from "js-cookie";
 
 interface User {
   id: string;
@@ -19,7 +20,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   isLoading: true,
   login: async () => false,
-  logout: () => {},
+  logout: () => { },
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -54,14 +55,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (res.ok) {
         const responseData = await res.json();
-        
+
         if (responseData.success && responseData.user) {
           const userData = {
             id: responseData.user.id,
             email: responseData.user.email,
             role: responseData.user.role
           };
-          
+
           setUser(userData);
           localStorage.setItem('adminUser', JSON.stringify(userData));
           return true;
@@ -77,6 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = () => {
+    Cookies.remove("auth_token");
     setUser(null);
     localStorage.removeItem('adminUser');
     window.location.href = '/admin/login';

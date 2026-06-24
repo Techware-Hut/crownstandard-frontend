@@ -5,6 +5,8 @@ import BookingCard from "@/components/dashboard/bookings/BookingCard";
 import { bookingApi } from "@/lib/bookingApi";
 import { BookingCus } from "@/types/booking";
 import { useRouter } from "next/navigation";
+import { ArrowRight, CalendarX } from "lucide-react";
+import Link from "next/link";
 
 export default function MyBookingsPage() {
   const [bookings, setBookings] = useState<BookingCus[]>([]);
@@ -15,14 +17,14 @@ export default function MyBookingsPage() {
     const loadBookings = async () => {
       try {
 
-        if(!localStorage.getItem("user")){
+        if (!localStorage.getItem("user")) {
           router.push("/login")
           return;
 
         }
-        
+
         const res = await bookingApi.getMyBookings();
-        res.data.map((data)=>{
+        res.data.map((data) => {
           console.log(data.status)
         })
 
@@ -44,7 +46,7 @@ export default function MyBookingsPage() {
           }
         };
 
-        const mapped: BookingCus[] = res.data.filter(data=> data.status !== "pending_payment").map((b) => ({
+        const mapped: BookingCus[] = res.data.filter(data => data.status !== "pending_payment").map((b) => ({
           id: b._id,
           serviceName: b.serviceId.title,
           price: b.pricingSnapshot.totalPayable,
@@ -55,7 +57,7 @@ export default function MyBookingsPage() {
           provider: b.providerId?.name ?? "Not assigned yet",
           instruction: b.specialInstructions || "—",
           status: normalizeStatus(b.status),
-         paymentStatus: "succeeded",
+          paymentStatus: "succeeded",
           cancelFee: ((b.pricingSnapshot.totalPayable) + (b.pricingSnapshot.totalPayable * b.pricingSnapshot.tax)) * 0.15,
           pricingSnapshot: b.pricingSnapshot,
         }));
@@ -84,8 +86,27 @@ export default function MyBookingsPage() {
       {loading && <div className="text-gray-500">Loading bookings...</div>}
 
       {!loading && bookings.length === 0 && (
-        <div className="text-gray-500">
-          You don't have any bookings yet.
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center shadow-sm">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-50">
+            <CalendarX className="h-8 w-8 text-amber-600" />
+          </div>
+
+          <h3 className="text-xl font-semibold text-gray-900">
+            No Bookings Yet
+          </h3>
+
+          <p className="mt-2 max-w-md text-sm leading-6 text-gray-500">
+            You haven't booked any cleaning services yet. Browse our available
+            services and schedule your first appointment in just a few clicks.
+          </p>
+
+          <Link
+            href="/services"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-amber-600 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-amber-700"
+          >
+            Explore Services
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       )}
 

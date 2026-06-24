@@ -12,14 +12,20 @@ import Image from "next/image";
 import FAQSection from "@/components/FAQSection";
 import BottomCTA from "@/components/BottomCTA";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function HowToGetStartedPage() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const router = useRouter();
-    const go_to_registerpage =(type :string) =>{
-
-        router.push("/register?type="+type)
-
+    const go_to_registerpage = (type: string) => {
+        router.push("/register?type=" + type)
     }
+
+    useEffect(() => {
+        const token = Cookies.get("auth_token");
+        setIsLoggedIn(!!token);
+    }, []);
 
     const faqs: { group: string; items: { q: string; a: string }[] }[] = [
         {
@@ -59,7 +65,7 @@ export default function HowToGetStartedPage() {
             items: [
                 { q: "What payment methods do you accept?", a: "Credit/debit cards and selected digital wallets." },
                 { q: "When am I charged?", a: "Customers are charged after the service is completed." },
-                {q : "Platform fess?", a : "10%"},
+                { q: "Platform fess?", a: "10%" },
                 { q: "Are there hidden fees?", a: "No hidden fees. Taxes and any extras are shown before you confirm." },
                 { q: "Refunds if I’m not satisfied?", a: "Contact support within 24 hours; we’ll make it right per our policy." },
             ],
@@ -226,11 +232,15 @@ export default function HowToGetStartedPage() {
                                 </ol>
 
                             </div>
-                            <div className="absolute bottom-0 w-full p-6 pb-0 md:p-8 md:pb-0 md:pr-0">
-                                <CTAButton onClick={()=> go_to_registerpage("customer")} size="lg" variant="primaryGradient" className="w-full mt-7">
-                                    Get Started as Customer
-                                </CTAButton>
-                            </div>
+                            {
+                                !isLoggedIn && (
+                                    <div className="absolute bottom-0 w-full p-6 pb-0 md:p-8 md:pb-0 md:pr-0">
+                                        <CTAButton onClick={() => go_to_registerpage("customer")} size="lg" variant="primaryGradient" className="w-full mt-7">
+                                            Get Started as Customer
+                                        </CTAButton>
+                                    </div>
+                                )
+                            }
                         </section>
 
                         {/* Providers */}
@@ -366,70 +376,75 @@ export default function HowToGetStartedPage() {
                                     </li>
                                 </ol>
                             </div>
-                            <div className="absolute bottom-0 w-full p-6 pb-0 md:pb-0 md:p-8 md:pr-0">
-                                <CTAButton onClick={()=> go_to_registerpage("provider")} size="lg" variant="primaryGradient" className="w-full mt-7">
-                                    Get Started as Provider
-                                </CTAButton>
-                            </div>
+
+                            {
+                                !isLoggedIn && (
+                                    <div className="absolute bottom-0 w-full p-6 pb-0 md:pb-0 md:p-8 md:pr-0">
+                                        <CTAButton onClick={() => go_to_registerpage("provider")} size="lg" variant="primaryGradient" className="w-full mt-7">
+                                            Get Started as Provider
+                                        </CTAButton>
+                                    </div>
+                                )
+                            }
                         </section>
                     </div>
                 </div>
             </div>
 
-                {/* Important info strip */}
-                <section className="relative py-12 overflow-hidden text-white sm:py-14 md:py-16">
-                    {/* background image (same as banner) */}
-                    <div className="absolute inset-0 -z-10">
-                        <Image
-                            src="/about-banner.png"
-                            alt="bg"
-                            fill
-                            priority={false}
-                            className="object-cover"
-                        />
-                        {/* dark overlay */}
-                        <div className="absolute inset-0 bg-black opacity-[88%]" />
+            {/* Important info strip */}
+            <section className="relative py-12 overflow-hidden text-white sm:py-14 md:py-16">
+                {/* background image (same as banner) */}
+                <div className="absolute inset-0 -z-10">
+                    <Image
+                        src="/about-banner.png"
+                        alt="bg"
+                        fill
+                        priority={false}
+                        className="object-cover"
+                    />
+                    {/* dark overlay */}
+                    <div className="absolute inset-0 bg-black opacity-[88%]" />
+                </div>
+
+                <div className="container 3xl:max-w-[1280px]">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl">
+                            Important Information
+                        </h2>
+                        <p className="mt-2 text-sm md:text-base text-white/85">
+                            Stay secure and get verified quickly before booking or accepting jobs.
+                        </p>
                     </div>
 
-                    <div className="container 3xl:max-w-[1280px]">
-                        <div className="max-w-4xl mx-auto text-center">
-                            <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl">
-                                Important Information
-                            </h2>
-                            <p className="mt-2 text-sm md:text-base text-white/85">
-                                Stay secure and get verified quickly before booking or accepting jobs.
-                            </p>
+                    {/* info cards grid */}
+                    <div className="grid gap-6 mt-10 sm:grid-cols-2">
+                        {/* Account Security */}
+                        <div className="p-4 border rounded-2xl bg-white/10 backdrop-blur-sm border-white/10 md:p-6">
+                            <h3 className="text-lg font-semibold text-[#BB9239] md-4 md:mb-6">Account Security</h3>
+                            <ul className="mt-3 space-y-2 text-sm text-left md:text-base text-white/85">
+                                <li>• Use a strong, unique password for your account</li>
+                                <li>• Verify your email address to ensure account security</li>
+                                <li>• Enable notifications to stay updated on your bookings</li>
+                            </ul>
                         </div>
 
-                        {/* info cards grid */}
-                        <div className="grid gap-6 mt-10 sm:grid-cols-2">
-                            {/* Account Security */}
-                            <div className="p-4 border rounded-2xl bg-white/10 backdrop-blur-sm border-white/10 md:p-6">
-                                <h3 className="text-lg font-semibold text-[#BB9239] md-4 md:mb-6">Account Security</h3>
-                                <ul className="mt-3 space-y-2 text-sm text-left md:text-base text-white/85">
-                                    <li>• Use a strong, unique password for your account</li>
-                                    <li>• Verify your email address to ensure account security</li>
-                                    <li>• Enable notifications to stay updated on your bookings</li>
-                                </ul>
-                            </div>
-
-                            {/* Verification Process */}
-                            <div className="p-4 border rounded-2xl bg-white/10 backdrop-blur-sm border-white/10 md:p-6">
-                                <h3 className="text-lg font-semibold text-[#BB9239] md-4 md:mb-6">Verification Process</h3>
-                                <ul className="mt-3 space-y-2 text-sm text-left md:text-base text-white/85">
-                                    <li>• Provider verification typically takes 2–3 business days</li>
-                                    <li>• Ensure all uploaded documents are clear and legible</li>
-                                    <li>• All providers must have valid insurance coverage</li>
-                                </ul>
-                            </div>
+                        {/* Verification Process */}
+                        <div className="p-4 border rounded-2xl bg-white/10 backdrop-blur-sm border-white/10 md:p-6">
+                            <h3 className="text-lg font-semibold text-[#BB9239] md-4 md:mb-6">Verification Process</h3>
+                            <ul className="mt-3 space-y-2 text-sm text-left md:text-base text-white/85">
+                                <li>• Provider verification typically takes 2–3 business days</li>
+                                <li>• Ensure all uploaded documents are clear and legible</li>
+                                <li>• All providers must have valid insurance coverage</li>
+                            </ul>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
 
-                <FAQSection/>
-                <BottomCTA />
-            
+            <FAQSection />
+            <BottomCTA />
+
         </>
     );
 }
