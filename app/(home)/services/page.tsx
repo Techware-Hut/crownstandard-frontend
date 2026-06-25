@@ -132,11 +132,11 @@ export default function ServicesPage() {
                 typeof item.distanceKm === "number"
                   ? `${item.distanceKm.toFixed(1)} km away`
                   : [
-                      item.provider?.serviceAddress?.city,
-                      item.provider?.serviceAddress?.state,
-                    ]
-                      .filter(Boolean)
-                      .join(", ") || "Location unavailable",
+                    item.provider?.serviceAddress?.city,
+                    item.provider?.serviceAddress?.state,
+                  ]
+                    .filter(Boolean)
+                    .join(", ") || "Location unavailable",
               rating: item.ratingSummary?.avg ?? 0,
               reviews: item.ratingSummary?.count ?? 0,
               imageUrl: item.media?.[0] || "/ServiceCleaning.png",
@@ -190,66 +190,120 @@ export default function ServicesPage() {
       <div className="h-32 sm:h-40 lg:h-[200px] w-full bg-[#BB9239]" />
 
       <section className="relative z-10 container -mt-20">
-        <div className="p-6 bg-white rounded-2xl shadow ring-1 ring-gray-200">
-          <div className="flex justify-between mb-4">
-            <h2 className="text-2xl font-semibold">Search & Filter Services</h2>
+        <div className="overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-gray-100">
+          {/* Header */}
+          <div className="flex flex-col gap-4 border-b border-gray-100 p-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Search & Filter Services
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                Find trusted cleaning professionals near you.
+              </p>
+            </div>
+
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="px-4 py-2 text-sm border rounded-full"
+              className="rounded-full border border-[#BB9239] px-5 py-2 text-sm font-medium text-[#BB9239] transition hover:bg-[#BB9239] hover:text-white"
             >
-              {showFilters ? "Hide Filter" : "Show Filter"}
+              {showFilters ? "Hide Filters" : "Show Filters"}
             </button>
           </div>
 
+          {/* Search */}
+          <div className="p-6">
+            <div className="flex flex-col gap-3 md:flex-row">
+              <div className="relative flex-1">
+                <svg
+                  className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
 
-    
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search services or providers…"
-            className="w-[90%] px-4 py-2 mb-4 border rounded-lg"
-          />
-
-          <button onClick={()=> setSearch(search)} className="ml-5 bg-[#E4E3E8] p-2 rounded-lg">Search</button>
-     
-
-          {showFilters && (
-            <div className="grid gap-4 md:grid-cols-3">
-              <select
-                value={minRating}
-                onChange={(e) => setMinRating(e.target.value)}
-                className="px-3 py-2 border rounded-lg"
-              >
-                <option>Any Rating</option>
-                <option value="4">4+ Stars</option>
-                <option value="3">3+ Stars</option>
-              </select>
-
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 border rounded-lg"
-              >
-                <option>Most Relevant</option>
-                <option>Lowest Price</option>
-                <option>Highest Price</option>
-                <option>Top Rated</option>
-              </select>
-
-              <div>
-                <label className="block mb-1 text-sm">Max Hourly Price: ${price}</label>
                 <input
-                  type="range"
-                  min={25}
-                  max={200}
-                  step={10}
-                  value={price}
-                  onChange={(e) => setPrice(Number(e.target.value))}
-                  className="w-full"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search services or providers..."
+                  className="h-12 w-full rounded-xl border border-gray-200 pl-12 pr-4 outline-none transition focus:border-[#BB9239]"
                 />
               </div>
+
+              <button
+                onClick={() => setSearch(search)}
+                className="h-12 rounded-xl bg-[#BB9239] px-6 font-medium text-white transition hover:opacity-90"
+              >
+                Search
+              </button>
             </div>
-          )}
+
+            {/* Filters */}
+            {showFilters && (
+              <div className="mt-6 grid gap-5 rounded-2xl bg-gray-50 p-5 md:grid-cols-3">
+                {/* Rating */}
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Minimum Rating
+                  </label>
+
+                  <select
+                    value={minRating}
+                    onChange={(e) => setMinRating(e.target.value)}
+                    className="h-11 w-full rounded-xl border border-gray-200 bg-white px-3 outline-none focus:border-[#BB9239]"
+                  >
+                    <option>Any Rating</option>
+                    <option value="4">4+ Stars</option>
+                    <option value="3">3+ Stars</option>
+                  </select>
+                </div>
+
+                {/* Sort */}
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Sort By
+                  </label>
+
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="h-11 w-full rounded-xl border border-gray-200 bg-white px-3 outline-none focus:border-[#BB9239]"
+                  >
+                    <option>Most Relevant</option>
+                    <option>Lowest Price</option>
+                    <option>Highest Price</option>
+                    <option>Top Rated</option>
+                  </select>
+                </div>
+
+                {/* Price */}
+                <div>
+                  <div className="mb-2 flex items-center justify-between">
+                    <label className="text-sm font-medium text-gray-700">
+                      Max Price
+                    </label>
+
+                    <span className="rounded-full bg-[#BB9239]/10 px-3 py-1 text-sm font-semibold text-[#BB9239]">
+                      ${price}
+                    </span>
+                  </div>
+
+                  <input
+                    type="range"
+                    min={25}
+                    max={200}
+                    step={10}
+                    value={price}
+                    onChange={(e) => setPrice(Number(e.target.value))}
+                    className="w-full accent-[#BB9239]"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
@@ -264,7 +318,45 @@ export default function ServicesPage() {
           ) : error ? (
             <div className="text-center text-red-500 py-8">{error}</div>
           ) : filtered.length === 0 ? (
-            <p className="text-center text-gray-500">No services found.</p>
+            <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center shadow-sm">
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-[#BB9239]/10">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-10 w-10 text-[#BB9239]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z"
+                  />
+                </svg>
+              </div>
+
+              <h3 className="text-2xl font-bold text-gray-900">
+                No Services Found
+              </h3>
+
+              <p className="mt-2 max-w-md text-gray-500">
+                We couldn't find any services matching your search or filter criteria.
+                Try adjusting your search, rating, or price range.
+              </p>
+
+              <button
+                onClick={() => {
+                  setSearch("");
+                  setMinRating("Any Rating");
+                  setSortBy("Most Relevant");
+                  setPrice(200);
+                }}
+                className="mt-6 rounded-full bg-[#BB9239] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+              >
+                Clear Filters
+              </button>
+            </div>
           ) : (
             <>
               <p className="mb-6 text-gray-600">

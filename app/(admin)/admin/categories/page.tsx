@@ -154,7 +154,7 @@ export default function CategoriesPage() {
                 required
               />
             </div>
-            {!editingCategory && (
+            {/* {!editingCategory && (
               <div>
                 <input
                   type="text"
@@ -165,7 +165,7 @@ export default function CategoriesPage() {
                   required
                 />
               </div>
-            )}
+            )} */}
             <div>
               <textarea
                 placeholder="Description"
@@ -226,9 +226,8 @@ export default function CategoriesPage() {
                     {category.description}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs rounded-full ${
-                      category.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
+                    <span className={`px-2 py-1 text-xs rounded-full ${category.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}>
                       {category.active ? 'Active' : 'Inactive'}
                     </span>
                   </td>
@@ -244,9 +243,8 @@ export default function CategoriesPage() {
                     </button>
                     <button
                       onClick={() => toggleCategory(category._id)}
-                      className={`${
-                        category.active ? 'text-red-600 hover:text-red-800' : 'text-green-600 hover:text-green-800'
-                      }`}
+                      className={`${category.active ? 'text-red-600 hover:text-red-800' : 'text-green-600 hover:text-green-800'
+                        }`}
                     >
                       {category.active ? 'Deactivate' : 'Activate'}
                     </button>

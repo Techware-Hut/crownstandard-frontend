@@ -21,7 +21,7 @@ export default function NeedCleaning() {
     switch (user_role) {
       case "customer":
         setDashboardLink("/dashboard");
-        setMybookingLink("/dashboard/my-booking")
+        setMybookingLink("/dashboard/my-bookings")
         break;
       case "provider":
         setDashboardLink("/provider/dashboard");

@@ -18,7 +18,7 @@ export default function ServiceSection() {
     try {
       setLoading(true);
       const res = await providerApi.getMyServices();
-      
+
       setServices(res.data);
     } catch (err) {
       console.error("Failed to load services", err);
@@ -33,7 +33,7 @@ export default function ServiceSection() {
 
   const handleServiceCreated = () => {
 
-    
+
     loadServices(); // Refresh the services list
     setOpen(false);
   };
@@ -109,11 +109,10 @@ export default function ServiceSection() {
                       <div className="text-sm font-semibold text-gray-900">
                         {priceLabel}
                       </div>
-                      <div className={`text-xs px-2 py-1 rounded-full w-fit ${
-                        service.isActive 
-                          ? 'bg-green-100 text-green-800' 
+                      <div className={`text-xs px-2 py-1 rounded-full w-fit ${service.isActive
+                          ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-800'
-                      }`}>
+                        }`}>
                         {service.isActive ? 'Active' : 'Inactive'}
                       </div>
                     </div>
@@ -139,7 +138,7 @@ export default function ServiceSection() {
             <p className="mt-1 text-sm text-gray-500">
               Create your first service to start receiving bookings
             </p>
-            <button 
+            <button
               onClick={() => setOpen(true)}
               className="mt-5 px-6 py-2 text-sm font-medium text-white bg-[#B28B32] rounded-full hover:bg-[#9A7629]"
             >

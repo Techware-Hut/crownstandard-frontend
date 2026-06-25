@@ -110,7 +110,7 @@ export default function FeatureCards() {
 
     switch (user_role) {
       case "customer":
-        setDashboardLink("/dashboard/my-booking");
+        setDashboardLink("/dashboard/my-bookings");
         break;
       case "provider":
         setDashboardLink("/provider/dashboard");
