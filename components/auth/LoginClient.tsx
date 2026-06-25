@@ -86,7 +86,7 @@ export default function LoginClient({
           // document.cookie = `user_role=${responseData.user.role}`
           localStorage.setItem("user","true")
           localStorage.setItem('google', "true")
-          await persistCustomerLocation();
+          persistCustomerLocation().catch(console.error);
           router.push(responseData.user.role === "provider" ? "/provider/dashboard" : "/dashboard");
       } catch (err) {
           console.error("Google sign-in error:", err);
@@ -124,7 +124,7 @@ export default function LoginClient({
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message ?? "Login failed");
 
-      await persistCustomerLocation();
+      persistCustomerLocation().catch(console.error);
       localStorage.setItem("user_role", type);
       localStorage.setItem("user","true")
      localStorage.setItem("userId", data.user.id)
