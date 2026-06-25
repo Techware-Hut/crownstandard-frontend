@@ -5,6 +5,8 @@ import { X } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE
+
 export default function ForgotPasswordModal({
   open,
   onClose,
@@ -13,6 +15,46 @@ export default function ForgotPasswordModal({
   onClose: () => void;
 }) {
   if (!open) return null;
+
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!email.trim()) {
+      setError("Email is required.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${API_BASE}/auth/forgot-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Something went wrong.");
+        return;
+      }
+
+      alert("Password reset link sent successfully!");
+      onClose();
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
@@ -34,17 +76,26 @@ export default function ForgotPasswordModal({
         </header>
 
         {/* Form */}
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             name="email"
             type="email"
             placeholder="Enter your email"
             aria-label="Email Address"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (error) setError("");
+            }}
           />
 
+          {error && (
+            <p className="text-sm text-red-500">{error}</p>
+          )}
+
           <div className="flex items-center gap-3 pt-2">
-            <Button type="submit" full variant="dark" className="rounded-full">
-              Send Reset Link
+            <Button type="submit" disabled={loading} full variant="dark" className="rounded-full">
+              {loading ? "Please wait..." : "Send Reset Link"}
             </Button>
             <Button
               type="button"

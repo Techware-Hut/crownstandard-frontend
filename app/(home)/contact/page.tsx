@@ -1,8 +1,125 @@
+"use client";
+
 import { Clock, ShieldCheck, Headphones, Mail, Contact } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import api from "@/lib/axios";
+import { useEffect, useState } from "react";
 
 export default function SupportPage() {
+
+    const [data, setData] = useState<any>(null);
+    const [InquiryForm, setInquiryForm] = useState({
+        fullName: "",
+        email: "",
+        requestType: "Feedback",
+        priorityLevel: "Normal",
+        relatedBookingId: "",
+        message: "",
+    });
+    const [errors, setErrors] = useState({
+        fullName: "",
+        email: "",
+        message: "", 
+    });
+    const [loading, setLoading] = useState(false);
+
+    const validateForm = () => {
+        const newErrors = {
+            fullName: "",
+            email: "",
+            message: "",
+        };
+
+        let valid = true;
+
+        if (!InquiryForm.fullName.trim()) {
+            newErrors.fullName = "Full name is required";
+            valid = false;
+        }
+
+        if (!InquiryForm.email.trim()) {
+            newErrors.email = "Email is required";
+            valid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(InquiryForm.email)) {
+            newErrors.email = "Enter a valid email";
+            valid = false;
+        }
+
+        if (!InquiryForm.message.trim()) {
+            newErrors.message = "Message is required";
+            valid = false;
+        }
+        setErrors(newErrors);
+        return valid;
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+
+        setInquiryForm((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+
+        setErrors((prev) => ({
+            ...prev,
+            [name]: "",
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+        // console.log("inquiryform", InquiryForm);
+        try {
+            setLoading(true);
+            const res = await api.post("/support", InquiryForm);
+            // console.log(res.data);
+            setInquiryForm({
+                fullName: "",
+                email: "",
+                requestType: "Feedback",
+                priorityLevel: "Normal",
+                relatedBookingId: "",
+                message: "",
+            });
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchSupportData();
+    }, []);
+
+    const fetchSupportData = async () => {
+        try {
+            const res = await api.get("/contact-details");
+            setData(res.data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const formatBusinessHours = (value?: string) => {
+        if (!value || value === "Closed") return "Closed";
+
+        if (value.includes("undefined")) return "Closed";
+
+        const [start, end] = value.split(" – ");
+
+        if (!start || !end || end === "undefined") return "Closed";
+
+        return `${start} – ${end}`;
+    };
+
     const featureCards = [
         {
             title: "Quick Response",
@@ -64,33 +181,49 @@ export default function SupportPage() {
             <div className="flex flex-wrap gap-4 py-12 lg:gap-8">
                 {/* Left – Booking Details */}
                 <div className="flex-1 bg-[#F3F1ED] p-4 lg:p-8 rounded-xl border border-gray-100">
-                    <h2 className="text-2xl font-bold text-gray-900 md:text-2xl">Booking Details</h2>
-                    <p className="mb-6 text-sm text-gray-500">
+                    <h2 className="text-2xl font-bold text-gray-900 py-2 md:text-2xl">Enquiry Form</h2>
+                    {/* <p className="mb-6 text-sm text-gray-500">
                         Fill in your preferred date, time, and location
-                    </p>
+                    </p> */}
 
-                    <form className="grid grid-cols-1 gap-2 lg:gap-5 md:grid-cols-2">
+                    <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-2 lg:gap-5 md:grid-cols-2">
                         <div>
-                            <label className="text-sm font-medium text-gray-700">Full Name</label>
+                            <label className="text-sm font-medium text-gray-700">Full Name<span className="ml-1 text-red-500">*</span></label>
                             <input
+                                value={InquiryForm.fullName}
+                                onChange={handleChange}
+                                name="fullName"
                                 type="text"
                                 placeholder="Enter full name"
                                 className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md outline-none focus:ring-1 focus:ring-amber-600"
                             />
+                            {errors.fullName && (
+                                <p className="mt-1 text-sm text-red-500">
+                                    {errors.fullName}
+                                </p>
+                            )}
                         </div>
 
                         <div>
-                            <label className="text-sm font-medium text-gray-700">Email Address</label>
+                            <label className="text-sm font-medium text-gray-700">Email Address<span className="ml-1 text-red-500">*</span></label>
                             <input
+                                value={InquiryForm.email}
+                                onChange={handleChange}
                                 type="email"
+                                name="email"
                                 placeholder="you@example.com"
                                 className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md outline-none focus:ring-1 focus:ring-amber-600"
                             />
+                            {errors.email && (
+                                <p className="mt-1 text-sm text-red-500">
+                                    {errors.email}
+                                </p>
+                            )}
                         </div>
 
                         <div>
                             <label className="text-sm font-medium text-gray-700">Type of Request</label>
-                            <select className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md outline-none focus:ring-1 focus:ring-amber-600">
+                            <select value={InquiryForm.requestType} name="requestType" onChange={handleChange} className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md outline-none focus:ring-1 focus:ring-amber-600">
                                 <option>Feedback</option>
                                 <option>Dispute</option>
                                 <option>Other</option>
@@ -99,7 +232,7 @@ export default function SupportPage() {
 
                         <div>
                             <label className="text-sm font-medium text-gray-700">Priority Level</label>
-                            <select className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md outline-none focus:ring-1 focus:ring-amber-600">
+                            <select value={InquiryForm.priorityLevel} name="priorityLevel" onChange={handleChange} className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md outline-none focus:ring-1 focus:ring-amber-600">
                                 <option>Normal</option>
                                 <option>High</option>
                             </select>
@@ -110,35 +243,41 @@ export default function SupportPage() {
                                 Related Booking ID (Optional)
                             </label>
                             <input
+                                value={InquiryForm.relatedBookingId}
+                                onChange={handleChange}
+                                name="relatedBookingId"
                                 type="text"
                                 placeholder="Enter booking ID"
                                 className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md outline-none focus:ring-1 focus:ring-amber-600"
                             />
                         </div>
 
-                        <div>
-                            <label className="text-sm font-medium text-gray-700">Subject</label>
-                            <input
-                                type="text"
-                                placeholder="Enter subject"
-                                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md outline-none focus:ring-1 focus:ring-amber-600"
-                            />
-                        </div>
-
                         <div className="md:col-span-2">
-                            <label className="text-sm font-medium text-gray-700">Message</label>
-                            <input
+                            <label className="text-sm font-medium text-gray-700">Message<span className="ml-1 text-red-500">*</span></label>
+                            <textarea
+                                rows={5}
+                                name="message"
+                                value={InquiryForm.message}
+                                onChange={handleChange}
                                 placeholder="Any specific requirements or notes..."
                                 className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md outline-none focus:ring-1 focus:ring-amber-600"
-                            ></input>
+                            />
+                            {errors.message && (
+                                <p className="mt-1 text-sm text-red-500">
+                                    {errors.message}
+                                </p>
+                            )}
                         </div>
 
                         <div className="md:col-span-2">
                             <button
+                                disabled={loading}
                                 type="submit"
-                                className="w-full py-3 text-sm font-medium text-white rounded-md bg-[#b9903c] hover:bg-[#1d2432] transition-all duration-300 ease-in-out"
+                                className="w-full py-3 text-white rounded-md bg-[#b9903c] disabled:opacity-50"
                             >
-                                Submit Support Request
+                                {loading
+                                    ? "Please wait..."
+                                    : "Submit Support Request"}
                             </button>
                         </div>
                     </form>
@@ -158,27 +297,36 @@ export default function SupportPage() {
                                 <p className="mt-1 text-base font-medium text-gray-500">
                                     For urgent matters email us directly at{" "}
                                     <span className="font-medium text-[#b9903c]">
-                                        support@crownstandard.com
+                                        {data?.directEmail}
                                     </span>
                                 </p>
                             </div>
 
-                                                        <div>
+                            <div>
                                 <p className="text-lg font-medium">Phone</p>
                                 <p className="mt-1 text-base font-medium text-gray-500">
                                     <span className="font-medium text-[#b9903c]">
-                                        1-833-982-7696
+                                        {data?.phone}
                                     </span>
                                 </p>
                             </div>
 
                             <div>
                                 <p className="text-lg font-medium">Business Hours</p>
-                                <p className="mt-1 text-base font-medium text-gray-500">
-                                    Monday–Friday: 8:00 A.M – 4:00 P.M <br />
-                                    Saturday: 9:00 A.M – 3:00 P.M <br />
-                                    Sunday: Closed
-                                </p>
+                                <div className="space-y-3 text-gray-500">
+                                    <p>
+                                        <span className="font-medium">Monday – Friday:</span>{" "}
+                                        {data?.businessHours?.mondayFriday}
+                                    </p>
+                                    <p>
+                                        <span className="font-medium">Saturday:</span>{" "}
+                                        {data?.businessHours?.saturday}
+                                    </p>
+                                    <p>
+                                        <span className="font-medium">Sunday:</span>{" "}
+                                        {formatBusinessHours(data?.businessHours?.sunday)}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>

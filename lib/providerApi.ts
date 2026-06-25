@@ -32,6 +32,18 @@ export interface ProviderDashboardBooking {
   };
 }
 
+export interface UploadUrlRequest {
+  fileName: string;
+  fileType: string;
+}
+
+export interface UploadUrlResponse {
+  success: boolean;
+  uploadUrl: string;
+  fileUrl: string;
+  key: string;
+}
+
 export interface ProviderDashboardResponse {
   success: boolean;
   data: {
@@ -46,8 +58,8 @@ export interface ProviderDashboardResponse {
   };
 }
 
-export interface ProviderStripeDashboardResponse{
-  url : string
+export interface ProviderStripeDashboardResponse {
+  url: string
 }
 
 /* ======================================================
@@ -74,8 +86,8 @@ export interface ProviderProfile {
   name?: string;
   phone?: string;
   email?: string;
-  photo? : string;
-  status? : string
+  photo?: string;
+  status?: string
 }
 
 export interface StripeConnectStatus {
@@ -209,10 +221,10 @@ export interface BookingActionResponse {
 
 
 export interface AvailabilityData {
-  days : number[],
-  time :{
-    startTime : string,
-    endTime : string,
+  days: number[],
+  time: {
+    startTime: string,
+    endTime: string,
   }
 }
 //earning
@@ -249,11 +261,11 @@ export const providerApi = {
     return res.data;
   },
 
-  getStripeDashboard : async (): Promise<ProviderStripeDashboardResponse> => {
+  getStripeDashboard: async (): Promise<ProviderStripeDashboardResponse> => {
 
     const res = await axios.get("/provider/stripe/loginLink")
     return res.data
-    
+
   },
 
   /* -------- My Services -------- */
@@ -272,14 +284,14 @@ export const providerApi = {
     return res.data;
   },
 
-  getAvailibility : async (userId : string) =>{
+  getAvailibility: async (userId: string) => {
     const res = await axios.post("/provider/availability",
-    {"userId": userId},
+      { "userId": userId },
     );
     return res.data;
   },
 
-  updateAvailibility : async (data : AvailabilityData)=>{
+  updateAvailibility: async (data: AvailabilityData) => {
 
     const res = await axios.patch("/provider/update-availability", data)
     console.log(res)
@@ -312,7 +324,7 @@ export const providerApi = {
   },
 
   getProfileDetails: async (): Promise<ProviderProfile> => {
-    const res = await axios.get(`/provider/profile`);
+    const res = await axios.get(`/provider/check-readiness`);
     return res.data;
   },
 
@@ -323,26 +335,26 @@ export const providerApi = {
     return res.data;
   },
 
-  updateProfilePhoto: async (imageFile : any)=>{
+  updateProfilePhoto: async (imageFile: any) => {
 
-     try {
-    // 1. Create FormData
-    const formData = new FormData();
-    formData.append("file", imageFile); // field name must match backend
+    try {
+      // 1. Create FormData
+      const formData = new FormData();
+      formData.append("file", imageFile); // field name must match backend
 
-    // 2. Send POST request
-    const res = await axios.post("provider/changephoto", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+      // 2. Send POST request
+      const res = await axios.post("provider/changephoto", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
 
-  } catch (err) {
-    console.error("Upload failed:", err);
-  }
-    
-   
+    } catch (err) {
+      console.error("Upload failed:", err);
+    }
+
+
   },
 
   getStripeConnectStatus: async (): Promise<StripeConnectStatusResponse> => {
@@ -350,11 +362,11 @@ export const providerApi = {
     return res.data;
   },
 
-  createStripeConnectAccount: async (name : string, email : string, country : string) => {
+  createStripeConnectAccount: async (name: string, email: string, country: string) => {
     const res = await axios.post("/provider/stripe/account", {
       name: name,
-      email : email,
-      country :  country
+      email: email,
+      country: country
     });
     return res.data;
   },
@@ -363,4 +375,11 @@ export const providerApi = {
     const res = await axios.post("/provider/stripe/account/onboarding");
     return res.data;
   },
+
+  getUploadUrl: async (payload: UploadUrlRequest): Promise<UploadUrlResponse> => {
+    const res = await axios.post("/upload-url", payload);
+    return res.data;
+  },
+
+
 };

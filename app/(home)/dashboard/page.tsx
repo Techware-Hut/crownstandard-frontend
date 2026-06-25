@@ -16,7 +16,7 @@ import { customerApi } from "@/lib/customerApi";
 import { signOut } from "next-auth/react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import {usersApi} from "@/lib/usersApi";
+import { usersApi } from "@/lib/usersApi";
 
 /* ---------------- TYPES ---------------- */
 
@@ -43,7 +43,7 @@ export default function DashboardPage() {
   });
   const [bookings, setBookings] = useState<RecentBookingUI[]>([]);
   const router = useRouter();
-      const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
 
 
@@ -52,7 +52,7 @@ export default function DashboardPage() {
       const myHeaders = new Headers();
 
       myHeaders.append("Cooke", "auth_token : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTg0NmU1ZWQxN2MxOTgxMTJhNGU3Y2YiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3NzAzODI3ODMsImV4cCI6MTc3MDk4NzU4M30.remP_U9EwvQLidjx51a3e-U-x9l49zOZT9oYU9aryKA")
-      ;
+        ;
 
       const requestOptions: RequestInit = {
         method: "GET",
@@ -64,7 +64,7 @@ export default function DashboardPage() {
       const response = await fetch("http://localhost:4000/api/customer/dashboard", requestOptions);
       const result = await response.json();
       console.log(result);
-      
+
       return result;
     } catch (error) {
       console.error("Failed to fetch dashboard:", error);
@@ -72,44 +72,44 @@ export default function DashboardPage() {
     }
   }
 
-      const clearUserSession = async () => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("user_role");
-        Cookies.remove("user_role");
-        Cookies.remove("user_id");
+  const clearUserSession = async () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("user_role");
+    Cookies.remove("user_role");
+    Cookies.remove("user_id");
 
-        if (localStorage.getItem("google")) {
-            localStorage.removeItem("google");
-            await signOut({ redirect: false });
-        }
+    if (localStorage.getItem("google")) {
+      localStorage.removeItem("google");
+      await signOut({ redirect: false });
     }
-  
+  }
+
 
   useEffect(() => {
 
 
-    
-  
+
+
     const loadDashboard = async () => {
       localStorage.removeItem('adminUser');
-  
+
       // const user = Cookies.get("user_role") === "customer" ? true : false;
       const user = localStorage.getItem("user_role")
-      if(user !== "customer"){
+      if (user !== "customer") {
         router.push("/login")
         return;
       }
 
 
-      
-   
+
+
       try {
         const res = await customerApi.getDashboard();
 
         // const res = await customerApi.getDashboardNew();
-        
 
-   
+
+
 
         const d = res.data;
 
@@ -126,9 +126,8 @@ export default function DashboardPage() {
             title: b.serviceId.title,
             type: "Cleaning Service",
             location: `${b.serviceAddress.city}, ${b.serviceAddress.state}`,
-            datetime: `${new Date(b.scheduledAt).toLocaleDateString()} • ${
-              b.durationHours
-            }h`,
+            datetime: `${new Date(b.scheduledAt).toLocaleDateString()} • ${b.durationHours
+              }h`,
             price: `${b.pricingSnapshot.currency} ${b.pricingSnapshot.totalPayable}`,
             image: "/ServiceCleaning.png",
           })
@@ -189,34 +188,34 @@ export default function DashboardPage() {
         </section>
 
         {/* Actions */}
-<section className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-  <ActionCard
-    title="Book Service"
-    subtitle="Find and book cleaning services"
-    href="/services"
-  />
-  <ActionCard
-    title="My Bookings"
-    subtitle="Manage your appointments"
-    href="/dashboard/my-bookings"
-  />
-  <ActionCard
-    title="Favourites"
-    subtitle="Your saved providers"
-  />
-  
-  <ActionCard
-    title="Messages"
-    subtitle="Chat with service provider"
-    href="/conversation"
-  />
+        <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <ActionCard
+            title="Book Service"
+            subtitle="Find and book cleaning services"
+            href="/services"
+          />
+          <ActionCard
+            title="My Bookings"
+            subtitle="Manage your appointments"
+            href="/dashboard/my-bookings"
+          />
+          <ActionCard
+            title="Favourites"
+            subtitle="Your saved providers"
+          />
 
-    <ActionCard
-    title="Profile"
-    subtitle="Chat with service provider"
-    href="/profile"
-  />
-</section>
+          <ActionCard
+            title="Messages"
+            subtitle="Chat with service provider"
+            href="/conversation"
+          />
+
+          <ActionCard
+            title="Profile"
+            subtitle="Chat with service provider"
+            href="/profile"
+          />
+        </section>
 
 
         {/* Recent bookings */}
@@ -281,7 +280,7 @@ export default function DashboardPage() {
                 <p className="mb-4 text-gray-500">
                   No bookings yet. Ready to get started?
                 </p>
-                <button className="inline-flex items-center gap-2 px-6 py-3 font-medium text-white rounded-lg bg-amber-600 hover:bg-amber-700">
+                <button onClick={() => router.push("/services")} className="inline-flex items-center gap-2 px-6 py-3 font-medium text-white rounded-lg bg-amber-600 hover:bg-amber-700">
                   Book Your First Service
                   <ArrowRight className="w-4 h-4" />
                 </button>
@@ -290,8 +289,8 @@ export default function DashboardPage() {
           </div>
         </section>
 
-  
-          {/* <section className="mt-8 rounded-xl border border-red-200 bg-red-50 p-6">
+
+        {/* <section className="mt-8 rounded-xl border border-red-200 bg-red-50 p-6">
               <h2 className="text-lg font-bold text-red-700">Danger Zone</h2>
               <p className="mt-2 text-sm text-red-600">
                   Permanently delete this account and remove access to your profile.
