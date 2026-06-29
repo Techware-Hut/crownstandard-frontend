@@ -7,8 +7,7 @@ import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { signIn, signOut, useSession } from "next-auth/react";
 import LogoutModal from "./auth/LogoutModal";
-
-
+import { apiRequest } from "@/utils/api";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -27,26 +26,54 @@ export default function Header() {
     { label: "Contact", href: "/contact" },
   ];
 
-  useEffect(() => {
-    const token = Cookies.get("auth_token");
-    setIsLoggedIn(!!token);
-  }, []);
 
-  const logOut = () => {
-    Cookies.remove("auth_token");
-    localStorage.removeItem("user")
-    localStorage.removeItem("user_role")
-    Cookies.remove("user_role")
-    Cookies.remove('user_id')
-    if (localStorage.getItem("google")) {
-      signOut();
-      localStorage.removeItem("google")
-    }
+  useEffect(() => {
 
     checkUser();
-    setShowLogoutModal(false);
-    router.push("/")
-  }
+  }, []);
+
+
+  const logOut = async () => {
+    try {
+      await apiRequest("/auth/logout", {
+        method: "POST",
+      });
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("user_role");
+
+      Cookies.remove("user_role");
+      Cookies.remove("user_id");
+
+      if (localStorage.getItem("google")) {
+        await signOut({ redirect: false });
+        localStorage.removeItem("google");
+      }
+
+      setIsLoggedIn(false);
+      setShowLogoutModal(false);
+
+      router.push("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  // const logOut = () => {
+  //   Cookies.remove("auth_token");
+  //   localStorage.removeItem("user")
+  //   localStorage.removeItem("user_role")
+  //   Cookies.remove("user_role")
+  //   Cookies.remove('user_id')
+  //   if (localStorage.getItem("google")) {
+  //     signOut();
+  //     localStorage.removeItem("google")
+  //   }
+
+  //   checkUser();
+  //   setShowLogoutModal(false);
+  //   router.push("/")
+  // }
 
 
   const dashboard = () => {
@@ -54,9 +81,14 @@ export default function Header() {
     router.push(type === "provider" ? "/provider/dashboard" : "/dashboard");
   }
 
-  const checkUser = () => {
-    const token = Cookies.get("auth_token");
-    setIsLoggedIn(!!token);
+
+  const checkUser = async () => {
+    try {
+      const data = await apiRequest("/auth/me");
+      if (data.success) setIsLoggedIn(true);
+    } catch (err) {
+      setIsLoggedIn(false);
+    }
   };
 
 

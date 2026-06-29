@@ -14,6 +14,7 @@ import BottomCTA from "@/components/BottomCTA";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { apiRequest } from "@/utils/api";
 
 export default function HowToGetStartedPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,9 +24,18 @@ export default function HowToGetStartedPage() {
     }
 
     useEffect(() => {
-        const token = Cookies.get("auth_token");
-        setIsLoggedIn(!!token);
+        checkUser();
     }, []);
+
+
+    const checkUser = async () => {
+        try {
+            const data = await apiRequest("/auth/me");
+            if (data.success) setIsLoggedIn(true);
+        } catch (err) {
+            setIsLoggedIn(false);
+        }
+    };
 
     const faqs: { group: string; items: { q: string; a: string }[] }[] = [
         {
